@@ -40,11 +40,11 @@ const Junta = () => {
     useEffect(
         () => {
             if (ubication) {
-                const { id } = ubication;
+                const { correo } = ubication;
                 const junta = new JuntaService();
-                junta.getJuntas(id, setJuntas);
+                junta.getJuntas(correo, setJuntas);
                 const object = new RecintoService();
-                object.getRecintos(id, setRecintos);
+                object.getRecintos(correo, setRecintos);
             }
         },
         [ubication],

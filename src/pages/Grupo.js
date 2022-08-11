@@ -37,11 +37,11 @@ const Grupo = () => {
     useEffect(
         () => {
             if (ubication) {
-                const { id } = ubication;
+                const { correo } = ubication;
                 const grupo = new GrupoService();
-                grupo.getGrupos(id, setGrupos);
+                grupo.getGrupos(correo, setGrupos);
                 const junta = new JuntaService();
-                junta.getJuntas(id, setJuntas);
+                junta.getJuntas(correo, setJuntas);
             }
         },
         [ubication],

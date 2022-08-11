@@ -12,6 +12,8 @@ import { RecintoService } from "../service/RecintoService";
 import { useLocation } from "react-router-dom";
 import { getCiudades } from "../service/CiudadService";
 import { Dropdown } from "primereact/dropdown";
+import { getProvincias } from "../service/ProvinciaService";
+import { useStateContext } from "../contexts/ContextProvider";
 
 const Recinto = () => {
     let emptyRecinto = {
@@ -25,6 +27,7 @@ const Recinto = () => {
 
     const [recintos, setRecintos] = useState([]);
     const [ciudades, setCiudades] = useState([]);
+    const [provincias, setProvincias] = useState([]);
     const [recintoDialog, setRecintoDialog] = useState(false);
     const [deleterecintoDialog, setDeleterecintoDialog] = useState(false);
     const [deleterecintosDialog, setDeleterecintosDialog] = useState(false);
@@ -36,20 +39,18 @@ const Recinto = () => {
     const [globalFilter, setGlobalFilter] = useState(null);
     const toast = useRef(null);
     const dt = useRef(null);
-
     const ubication = useLocation().state;
-    useEffect(
-        () => {
-            if (ubication) {
-                const { id } = ubication;
-                const recinto = new RecintoService();
-                recinto.getRecintos(id, setRecintos);
-                getCiudades(setCiudades);
-            }
-        },
-        [ubication],
-        []
-    );
+    useEffect(() => {
+        if (ubication) {
+            const { correo } = ubication;
+            const recinto = new RecintoService();
+            recinto.getRecintos(correo, setRecintos);
+        }
+    }, []);
+
+    useEffect(() => {
+        getProvincias(setProvincias);
+    }, []);
 
     const openNew = () => {
         setRecinto(emptyRecinto);
@@ -165,8 +166,15 @@ const Recinto = () => {
     };
 
     const onCiudadChange = (e) => {
-        setProvincia(e.value.provincia);
         setCiudad(e.value);
+    };
+    const onProvinciaChange = (e) => {
+        const id = e.value.id;
+        setProvincia(e.value);
+        getCiudades(setCiudades);
+        //getCiudades(setCiudades, id);
+
+        //setCiudades(ciudades.filter((item) => item.provincia.id === id));
     };
 
     const leftToolbarTemplate = () => {
@@ -277,7 +285,6 @@ const Recinto = () => {
                 <div className="card">
                     <Toast ref={toast} />
                     <Toolbar className="mb-4" left={leftToolbarTemplate} right={rightToolbarTemplate}></Toolbar>
-
                     <DataTable
                         ref={dt}
                         value={recintos}
@@ -323,12 +330,12 @@ const Recinto = () => {
                             {submitted && !recinto.celular && <small className="p-invalid">Name is required.</small>}
                         </div>
                         <div>
-                            <label htmlFor="ciudad">Ciudad</label>
-                            <Dropdown id="ciudad" value={ciudad} onChange={(e) => onCiudadChange(e)} options={ciudades} optionLabel="nombre" placeholder="Select City"></Dropdown>
+                            <label htmlFor="provincia">Provincia</label>
+                            <Dropdown id="provincia" value={provincia} onChange={(e) => onProvinciaChange(e)} options={provincias} optionLabel="nombre" placeholder="Select City"></Dropdown>
                         </div>
                         <div>
-                            <label htmlFor="provincia">Provincia</label>
-                            <label>{provincia.nombre}</label>
+                            <label htmlFor="ciudad">Ciudad</label>
+                            <Dropdown id="ciudad" value={ciudad} onChange={(e) => onCiudadChange(e)} options={ciudades?.filter((resp) => resp.provincia.id === provincia.id)} optionLabel="nombre" placeholder="Select City"></Dropdown>
                         </div>
                     </Dialog>
 

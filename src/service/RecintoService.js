@@ -3,8 +3,8 @@ import axios from "axios";
 const url = "http://localhost:9090/api/v1.0/recinto/";
 
 export class RecintoService {
-    getRecintos(id, state) {
-        return axios.get(url).then((res) => res.data.success && state(res.data.result.filter((item) => item.institucion.id === id)));
+    getRecintos(correo, state) {
+        return axios.get(url).then((res) => res.data.success && state(res.data.result.filter((item) => item.institucion.correo === correo)));
     }
     postRecinto(data) {
         return axios.post(url, data);

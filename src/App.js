@@ -51,7 +51,7 @@ const App = () => {
 
     useEffect(() => {
         const appService = new AppService();
-        appService.getUser(1, setInstituto);
+        appService.getUser("institucion@gmail.com", setInstituto);
     }, []);
 
     useEffect(() => {
