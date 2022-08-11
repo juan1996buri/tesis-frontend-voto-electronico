@@ -345,7 +345,7 @@ const Junta = () => {
                             <i className="pi pi-exclamation-triangle mr-3" style={{ fontSize: "2rem" }} />
                             {junta && (
                                 <span>
-                                    Are you sure you want to delete <b>{junta.name}</b>?
+                                    ¿Está seguro que desea eliminar esta junta? <b>{junta.name}</b>
                                 </span>
                             )}
                         </div>
@@ -354,7 +354,7 @@ const Junta = () => {
                     <Dialog visible={deletejuntasDialog} style={{ width: "450px" }} header="Confirm" modal footer={deletejuntasDialogFooter} onHide={hideDeletejuntasDialog}>
                         <div className="flex align-items-center justify-content-center">
                             <i className="pi pi-exclamation-triangle mr-3" style={{ fontSize: "2rem" }} />
-                            {junta && <span>Are you sure you want to delete the selected juntas?</span>}
+                            {junta && <span>¿Está seguro que desea eliminar las juntas seleccionadas?</span>}
                         </div>
                     </Dialog>
                 </div>

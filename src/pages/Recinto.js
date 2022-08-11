@@ -331,11 +331,11 @@ const Recinto = () => {
                         </div>
                         <div>
                             <label htmlFor="provincia">Provincia</label>
-                            <Dropdown id="provincia" value={provincia} onChange={(e) => onProvinciaChange(e)} options={provincias} optionLabel="nombre" placeholder="Select City"></Dropdown>
+                            <Dropdown id="provincia" value={provincia} onChange={(e) => onProvinciaChange(e)} options={provincias} optionLabel="nombre" placeholder="Selecione provincia"></Dropdown>
                         </div>
                         <div>
                             <label htmlFor="ciudad">Ciudad</label>
-                            <Dropdown id="ciudad" value={ciudad} onChange={(e) => onCiudadChange(e)} options={ciudades?.filter((resp) => resp.provincia.id === provincia.id)} optionLabel="nombre" placeholder="Select City"></Dropdown>
+                            <Dropdown id="ciudad" value={ciudad} onChange={(e) => onCiudadChange(e)} options={ciudades?.filter((resp) => resp.provincia.id === provincia.id)} optionLabel="nombre" placeholder="Seleccione ciudad"></Dropdown>
                         </div>
                     </Dialog>
 
@@ -344,7 +344,7 @@ const Recinto = () => {
                             <i className="pi pi-exclamation-triangle mr-3" style={{ fontSize: "2rem" }} />
                             {recinto && (
                                 <span>
-                                    Are you sure you want to delete <b>{recinto.name}</b>?
+                                    ¿Está seguro que desea eliminar el recinto seleccionado? <b>{recinto.name}</b>
                                 </span>
                             )}
                         </div>
@@ -353,7 +353,7 @@ const Recinto = () => {
                     <Dialog visible={deleterecintosDialog} style={{ width: "450px" }} header="Confirm" modal footer={deleterecintosDialogFooter} onHide={hideDeleterecintosDialog}>
                         <div className="flex align-items-center justify-content-center">
                             <i className="pi pi-exclamation-triangle mr-3" style={{ fontSize: "2rem" }} />
-                            {recinto && <span>Are you sure you want to delete the selected recintos?</span>}
+                            {recinto && <span>¿Está seguro que desea eliminar los recintos seleccionados?</span>}
                         </div>
                     </Dialog>
                 </div>

@@ -293,7 +293,7 @@ const Grupo = () => {
                             <i className="pi pi-exclamation-triangle mr-3" style={{ fontSize: "2rem" }} />
                             {grupo && (
                                 <span>
-                                    Are you sure you want to delete <b>{grupo.name}</b>?
+                                    ¿Está seguro que desea eliminar este grupo? <b>{grupo.name}</b>
                                 </span>
                             )}
                         </div>
@@ -302,7 +302,7 @@ const Grupo = () => {
                     <Dialog visible={deletegruposDialog} style={{ width: "450px" }} header="Confirm" modal footer={deletegruposDialogFooter} onHide={hideDeletegruposDialog}>
                         <div className="flex align-items-center justify-content-center">
                             <i className="pi pi-exclamation-triangle mr-3" style={{ fontSize: "2rem" }} />
-                            {grupo && <span>Are you sure you want to delete the selected grupos?</span>}
+                            {grupo && <span>¿Está seguro que desea eliminar los grupos seleccionados?</span>}
                         </div>
                     </Dialog>
                 </div>
