@@ -25,6 +25,7 @@ const Junta = () => {
 
     const [juntas, setJuntas] = useState([]);
     const [recintos, setRecintos] = useState([]);
+    const [activeDeleted, setActiveDeleted] = useState(true);
     const [juntaDialog, setJuntaDialog] = useState(false);
     const [deletejuntaDialog, setDeletejuntaDialog] = useState(false);
     const [deletejuntasDialog, setDeletejuntasDialog] = useState(false);
@@ -52,6 +53,7 @@ const Junta = () => {
     );
 
     const openNew = () => {
+        setRecinto({ ...recintos[0] });
         setJunta(emptyjunta);
         setSubmitted(false);
         setJuntaDialog(true);
@@ -99,6 +101,7 @@ const Junta = () => {
 
     const editJunta = (junta) => {
         setJunta({ ...junta });
+        setRecinto({ ...junta.recinto });
         setJuntaDialog(true);
     };
 
@@ -109,12 +112,15 @@ const Junta = () => {
 
     const deletejunta = () => {
         const object = new JuntaService();
-        object.deleteJunta(junta.id);
-        let _juntas = juntas.filter((val) => val.id !== junta.id);
-        setJuntas(_juntas);
+        let _juntas;
+        object
+            .deleteJunta(junta.id)
+            .then((res) =>
+                res === 500
+                    ? toast.current.show({ severity: "error", summary: "Error Message", detail: "junta no eliminada", life: 3000 })
+                    : ((_juntas = juntas.filter((val) => val.id !== junta.id)), setJuntas(_juntas), setJunta(emptyjunta), toast.current.show({ severity: "success", summary: "Successful", detail: "junta eliminada", life: 3000 }))
+            );
         setDeletejuntaDialog(false);
-        setJunta(emptyjunta);
-        toast.current.show({ severity: "success", summary: "Successful", detail: "junta Deleted", life: 3000 });
     };
 
     const findIndexById = (id) => {
@@ -139,13 +145,17 @@ const Junta = () => {
 
     const deleteSelectedjuntas = () => {
         const object = new JuntaService();
-        selectedjuntas.map((res) => object.deleteJunta(res.id));
-
-        let _juntas = juntas.filter((val) => !selectedjuntas.includes(val));
-        setJuntas(_juntas);
+        let _juntas;
+        selectedjuntas.map((res) =>
+            object
+                .deleteJunta(res.id)
+                .then((res) =>
+                    res === 500
+                        ? toast.current.show({ severity: "error", summary: "Error Message", detail: "juntas no eliminadas", life: 3000 })
+                        : ((_juntas = juntas.filter((val) => !selectedjuntas.includes(val))), setJuntas(_juntas), setSelectedjuntas(null), toast.current.show({ severity: "success", summary: "Successful", detail: "juntas eliminadas", life: 3000 }))
+                )
+        );
         setDeletejuntasDialog(false);
-        setSelectedjuntas(null);
-        toast.current.show({ severity: "success", summary: "Successful", detail: "juntas Deleted", life: 3000 });
     };
 
     const onNameChange = (e, name) => {
@@ -336,7 +346,7 @@ const Junta = () => {
                         </div>
                         <div>
                             <label htmlFor="recinto">Recinto</label>
-                            <Dropdown id="recinto" value={recinto} onChange={(e) => onCiudadChange(e)} options={recintos} optionLabel="nombre" placeholder="Select Junta"></Dropdown>
+                            <Dropdown id="recinto" value={recinto} onChange={(e) => onCiudadChange(e)} options={recintos} optionLabel="nombre" placeholder="seleccionar junta"></Dropdown>
                         </div>
                     </Dialog>
 

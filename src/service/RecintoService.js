@@ -12,7 +12,14 @@ export class RecintoService {
     updateRecinto(data) {
         return axios.put(url, data);
     }
-    deleteRecinto(id) {
-        return axios.delete(url + id).then((res) => console.log(res));
+    async deleteRecinto(id, setActive) {
+        return axios
+            .delete(url + id)
+            .then((resp) => resp.data.success && setActive(true))
+            .catch(function (error) {
+                if (error.response) {
+                    return error.response.status;
+                }
+            });
     }
 }

@@ -5,6 +5,14 @@ const url = "http://localhost:9090/api/v1.0/ciudad/";
 export const getCiudades = async (state) => {
     await axios.get(url).then((resp) => state(resp.data.result));
 };
+export const getCiudadesAndProvincia = async (setCiudades, provincia, setCiudad) => {
+    console.log(provincia);
+    await axios.get(url).then((resp) => setCiudades(resp.data.result));
+};
+
+export const getCiudadesSeled = async (state, data) => {
+    await axios.get(url).then((resp) => console.log(resp.data.result));
+};
 
 export const createCiudad = async (provincia) => {
     return await axios.post(url, provincia);

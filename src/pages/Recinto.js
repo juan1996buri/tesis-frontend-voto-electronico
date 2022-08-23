@@ -27,6 +27,7 @@ const Recinto = () => {
 
     const [recintos, setRecintos] = useState([]);
     const [ciudades, setCiudades] = useState([]);
+    const [activeDeleted, setActiveDeleted] = useState(false);
     const [provincias, setProvincias] = useState([]);
     const [recintoDialog, setRecintoDialog] = useState(false);
     const [deleterecintoDialog, setDeleterecintoDialog] = useState(false);
@@ -46,13 +47,13 @@ const Recinto = () => {
             const recinto = new RecintoService();
             recinto.getRecintos(correo, setRecintos);
         }
-    }, []);
-
-    useEffect(() => {
         getProvincias(setProvincias);
+        getCiudades(setCiudades);
     }, []);
 
     const openNew = () => {
+        setProvincia(provincias[0]);
+        setCiudad(ciudades.find((item) => item.provincia.id === provincias[0].id));
         setRecinto(emptyRecinto);
         setSubmitted(false);
         setRecintoDialog(true);
@@ -101,6 +102,8 @@ const Recinto = () => {
 
     const editrecinto = (recinto) => {
         setRecinto({ ...recinto });
+        setProvincia({ ...recinto.ciudad.provincia });
+        setCiudad({ ...recinto.ciudad });
         setRecintoDialog(true);
     };
 
@@ -110,13 +113,16 @@ const Recinto = () => {
     };
 
     const deleterecinto = () => {
+        let _recintos;
         const object = new RecintoService();
-        object.deleteRecinto(recinto.id);
-        let _recintos = recintos.filter((val) => val.id !== recinto.id);
-        setRecintos(_recintos);
+        object
+            .deleteRecinto(recinto.id)
+            .then((res) =>
+                res === 500
+                    ? toast.current.show({ severity: "error", summary: "Error Message", detail: "recinto no eliminado", life: 3000 })
+                    : ((_recintos = recintos.filter((val) => val.id !== recinto.id)), setRecintos(_recintos), setRecinto(emptyRecinto), toast.current.show({ severity: "success", summary: "Successful", detail: "recinto Deleted", life: 3000 }))
+            );
         setDeleterecintoDialog(false);
-        setRecinto(emptyRecinto);
-        toast.current.show({ severity: "success", summary: "Successful", detail: "recinto Deleted", life: 3000 });
     };
 
     const findIndexById = (id) => {
@@ -141,13 +147,18 @@ const Recinto = () => {
 
     const deleteSelectedRecintos = () => {
         const object = new RecintoService();
-        selectedRecintos.map((res) => object.deleteRecinto(res.id));
+        let _recintos;
+        selectedRecintos.map((res) =>
+            object
+                .deleteRecinto(res.id)
+                .then((res) =>
+                    res === 500
+                        ? toast.current.show({ severity: "error", summary: "Error Message", detail: "recintos no eliminadas", life: 3000 })
+                        : ((_recintos = recintos.filter((val) => !selectedRecintos.includes(val))), setRecintos(_recintos), setDeleterecintosDialog(false), setSelectedRecintos(null), toast.current.show({ severity: "success", summary: "Successful", detail: "recintos eliminados", life: 3000 }))
+                )
+        );
 
-        let _recintos = recintos.filter((val) => !selectedRecintos.includes(val));
-        setRecintos(_recintos);
         setDeleterecintosDialog(false);
-        setSelectedRecintos(null);
-        toast.current.show({ severity: "success", summary: "Successful", detail: "recintos Deleted", life: 3000 });
     };
 
     const onNameChange = (e, name) => {
@@ -171,6 +182,7 @@ const Recinto = () => {
     const onProvinciaChange = (e) => {
         const id = e.value.id;
         setProvincia(e.value);
+        setCiudad(ciudades.find((item) => item.provincia.id === e.value.id));
         getCiudades(setCiudades);
         //getCiudades(setCiudades, id);
 

@@ -12,7 +12,14 @@ export class GrupoService {
     updateGrupo(data) {
         return axios.put(url, data);
     }
-    deleteGrupo(id) {
-        return axios.delete(url + id).then((res) => console.log(res));
+    async deleteGrupo(id, setActive) {
+        return axios
+            .delete(url + id)
+            .then((res) => res.data.success && setActive(true))
+            .catch(function (error) {
+                if (error.response) {
+                    return error.response.status;
+                }
+            });
     }
 }

@@ -13,6 +13,11 @@ export class JuntaService {
         return axios.put(url, data);
     }
     deleteJunta(id) {
-        return axios.delete(url + id).then((res) => console.log(res));
+        return axios
+            .delete(url + id)
+            .then((resp) => resp.data.success)
+            .catch(function (error) {
+                return error.response.data.status;
+            });
     }
 }

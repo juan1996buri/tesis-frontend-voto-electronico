@@ -22,6 +22,7 @@ const Grupo = () => {
 
     const [grupos, setGrupos] = useState([]);
     const [juntas, setJuntas] = useState([]);
+    const [activeDeleted, setActiveDeleted] = useState(false);
     const [grupoDialog, setGrupoDialog] = useState(false);
     const [deletegrupoDialog, setDeletegrupoDialog] = useState(false);
     const [deletegruposDialog, setDeletegruposDialog] = useState(false);
@@ -49,6 +50,7 @@ const Grupo = () => {
     );
 
     const openNew = () => {
+        setJunta({ ...juntas[0] });
         setGrupo(emptygrupo);
         setSubmitted(false);
         setGrupoDialog(true);
@@ -96,6 +98,7 @@ const Grupo = () => {
 
     const editGrupo = (grupo) => {
         setGrupo({ ...grupo });
+        setJunta({ ...grupo.junta });
         setGrupoDialog(true);
     };
 
@@ -105,13 +108,19 @@ const Grupo = () => {
     };
 
     const deletegrupo = () => {
+        let _grupos;
         const object = new GrupoService();
-        object.deleteGrupo(grupo.id);
-        let _grupos = grupos.filter((val) => val.id !== grupo.id);
-        setGrupos(_grupos);
-        setDeletegrupoDialog(false);
-        setGrupo(emptygrupo);
-        toast.current.show({ severity: "success", summary: "Successful", detail: "grupo Deleted", life: 3000 });
+        object
+            .deleteGrupo(grupo.id)
+            .then(
+                (res) => (
+                    res === 500 ? toast.current.show({ severity: "error", summary: "Error Message", detail: "grupo no eliminado" }) : (_grupos = grupos.filter((val) => val.id !== grupo.id)),
+                    setGrupos(_grupos),
+                    setDeletegrupoDialog(false),
+                    setGrupo(emptygrupo),
+                    toast.current.show({ severity: "success", summary: "Successful", detail: "grupo eliminado", life: 3000 })
+                )
+            );
     };
 
     const findIndexById = (id) => {
@@ -135,14 +144,19 @@ const Grupo = () => {
     };
 
     const deleteSelectedgrupos = () => {
+        let _grupos;
         const object = new GrupoService();
-        selectedgrupos.map((res) => object.deleteGrupo(res.id));
+        selectedgrupos.map((res) =>
+            object
+                .deleteGrupo(res.id)
+                .then((res) =>
+                    res === 50
+                        ? toast.current.show({ severity: "error", summary: "Error Message", detail: "grupos no eliminado" })
+                        : ((_grupos = grupos.filter((val) => !selectedgrupos.includes(val))), setGrupos(_grupos), setDeletegruposDialog(false), setSelectedgrupos(null), toast.current.show({ severity: "success", summary: "Successful", detail: "grupos Deleted", life: 3000 }))
+                )
+        );
 
-        let _grupos = grupos.filter((val) => !selectedgrupos.includes(val));
-        setGrupos(_grupos);
         setDeletegruposDialog(false);
-        setSelectedgrupos(null);
-        toast.current.show({ severity: "success", summary: "Successful", detail: "grupos Deleted", life: 3000 });
     };
 
     const onNameChange = (e, name) => {
