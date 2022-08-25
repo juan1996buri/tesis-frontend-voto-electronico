@@ -25,7 +25,6 @@ const Junta = () => {
 
     const [juntas, setJuntas] = useState([]);
     const [recintos, setRecintos] = useState([]);
-    const [activeDeleted, setActiveDeleted] = useState(true);
     const [juntaDialog, setJuntaDialog] = useState(false);
     const [deletejuntaDialog, setDeletejuntaDialog] = useState(false);
     const [deletejuntasDialog, setDeletejuntasDialog] = useState(false);
@@ -41,11 +40,11 @@ const Junta = () => {
     useEffect(
         () => {
             if (ubication) {
-                const { correo } = ubication;
+                const { ruc } = ubication;
                 const junta = new JuntaService();
-                junta.getJuntas(correo, setJuntas);
+                junta.getJuntas(ruc, setJuntas);
                 const object = new RecintoService();
-                object.getRecintos(correo, setRecintos);
+                object.getRecintos(ruc, setRecintos);
             }
         },
         [ubication],

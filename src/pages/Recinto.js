@@ -10,10 +10,10 @@ import { Dialog } from "primereact/dialog";
 import { InputText } from "primereact/inputtext";
 import { RecintoService } from "../service/RecintoService";
 import { useLocation } from "react-router-dom";
-import { getCiudades } from "../service/CiudadService";
 import { Dropdown } from "primereact/dropdown";
-import { getProvincias } from "../service/ProvinciaService";
 import { useStateContext } from "../contexts/ContextProvider";
+import { ProvinciaService } from "../service/ProvinciaService";
+import { CiudadService } from "../service/CiudadService";
 
 const Recinto = () => {
     let emptyRecinto = {
@@ -43,12 +43,14 @@ const Recinto = () => {
     const ubication = useLocation().state;
     useEffect(() => {
         if (ubication) {
-            const { correo } = ubication;
+            const { ruc } = ubication;
             const recinto = new RecintoService();
-            recinto.getRecintos(correo, setRecintos);
+            recinto.getRecintos(ruc, setRecintos);
         }
-        getProvincias(setProvincias);
-        getCiudades(setCiudades);
+        const provincia = new ProvinciaService();
+        provincia.getProvincias(setProvincias);
+        const ciudad = new CiudadService();
+        ciudad.getCiudades(setCiudades);
     }, []);
 
     const openNew = () => {
@@ -183,7 +185,8 @@ const Recinto = () => {
         const id = e.value.id;
         setProvincia(e.value);
         setCiudad(ciudades.find((item) => item.provincia.id === e.value.id));
-        getCiudades(setCiudades);
+        const object = new CiudadService();
+        object.getCiudades(setCiudades);
         //getCiudades(setCiudades, id);
 
         //setCiudades(ciudades.filter((item) => item.provincia.id === id));

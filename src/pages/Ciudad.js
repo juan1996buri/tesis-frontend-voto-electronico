@@ -7,9 +7,10 @@ import { Button } from "primereact/button";
 import { Toolbar } from "primereact/toolbar";
 import { Dialog } from "primereact/dialog";
 import { InputText } from "primereact/inputtext";
-import { createCiudad, eliminarCiudad, getCiudades, updateCiudad } from "../service/CiudadService";
-import { getProvincias } from "../service/ProvinciaService";
+
 import { Dropdown } from "primereact/dropdown";
+import { CiudadService } from "../service/CiudadService";
+import { ProvinciaService } from "../service/ProvinciaService";
 const Ciudad = () => {
     let emptyCiudad = {
         id: "",
@@ -32,8 +33,10 @@ const Ciudad = () => {
     const dt = useRef(null);
 
     useEffect(() => {
-        getCiudades(setCiudades);
-        getProvincias(setProvincias);
+        const ciudad = new CiudadService();
+        ciudad.getCiudades(setCiudades);
+        const provincia = new ProvinciaService();
+        provincia.getProvincias(setProvincias);
     }, []);
 
     const openNew = () => {
@@ -67,12 +70,14 @@ const Ciudad = () => {
             let _ciudades = [...ciudades];
             let _ciudad = { ...ciudad };
             if (ciudad.id) {
-                updateCiudad(ciudad);
+                const object = new CiudadService();
+                object.updateCiudad(ciudad);
                 const index = findIndexById(ciudad.id);
                 _ciudades[index] = _ciudad;
                 toast.current.show({ severity: "success", summary: "Successful", detail: "ciudad Updated", life: 3000 });
             } else {
-                createCiudad(ciudad);
+                const object = new CiudadService();
+                object.createCiudad(ciudad);
                 _ciudades.push(_ciudad);
                 toast.current.show({ severity: "success", summary: "Successful", detail: "ciudad Created", life: 3000 });
                 window.location.reload();
@@ -95,7 +100,8 @@ const Ciudad = () => {
     };
 
     const deleteCiudad = () => {
-        eliminarCiudad(ciudad.id);
+        const object = new CiudadService();
+        object.eliminarCiudad(ciudad.id);
         let _ciudades = ciudades.filter((val) => val.id !== ciudad.id);
         setCiudades(_ciudades);
         setDeleteCiudadDialog(false);

@@ -3,8 +3,8 @@ import axios from "axios";
 const url = "http://localhost:9090/api/v1.0/junta/";
 
 export class JuntaService {
-    getJuntas(correo, state) {
-        return axios.get(url).then((res) => res.data.success && state(res.data.result.filter((item) => item.recinto.institucion.correo === correo)));
+    getJuntas(ruc, state) {
+        return axios.get(url).then((res) => res.data.success && state(res.data.result.filter((item) => item.recinto.institucion.ruc === ruc)));
     }
     postJunta(data) {
         return axios.post(url, data);

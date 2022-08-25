@@ -3,8 +3,8 @@ import axios from "axios";
 const url = "http://localhost:9090/api/v1.0/grupo/";
 
 export class GrupoService {
-    getGrupos(correo, state) {
-        return axios.get(url).then((res) => state(res.data.result.filter((item) => item.junta.recinto.institucion.correo === correo)));
+    getGrupos(ruc, state) {
+        return axios.get(url).then((res) => state(res.data.result.filter((item) => item.junta.recinto.institucion.ruc === ruc)));
     }
     postGrupo(data) {
         return axios.post(url, data);

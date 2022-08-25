@@ -30,6 +30,7 @@ import { AppService } from "./service/AppService";
 import Recinto from "./pages/Recinto";
 import Junta from "./pages/Junta";
 import Grupo from "./pages/Grupo";
+import FormularioDatosInstitucion from "./pages/FormularioDatosInstitucion";
 
 const App = () => {
     const [instituto, setInstituto] = useState({});
@@ -51,7 +52,7 @@ const App = () => {
 
     useEffect(() => {
         const appService = new AppService();
-        appService.getUser("institucion@gmail.com", setInstituto);
+        appService.getUser("ruc", setInstituto);
     }, []);
 
     useEffect(() => {
@@ -174,6 +175,10 @@ const App = () => {
             icon: "pi ",
             items: [{ label: "Grupo", icon: "pi pi-fw pi-user-edit", to: "/Grupo", state: instituto }],
         },
+        {
+            icon: "pi ",
+            items: [{ label: "DatosInstitucion", icon: "pi pi-fw pi-user-edit", to: "/DatosInstitucion", state: instituto }],
+        },
     ];
 
     const addClass = (element, className) => {
@@ -217,6 +222,7 @@ const App = () => {
                     <Route path="/recinto" component={Recinto} />
                     <Route path="/junta" component={Junta} />
                     <Route path="/grupo" component={Grupo} />
+                    <Route path="/datosInstitucion" component={FormularioDatosInstitucion} />
                 </div>
                 <AppFooter layoutColorMode={layoutColorMode} />
             </div>

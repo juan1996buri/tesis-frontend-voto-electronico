@@ -22,7 +22,6 @@ const Grupo = () => {
 
     const [grupos, setGrupos] = useState([]);
     const [juntas, setJuntas] = useState([]);
-    const [activeDeleted, setActiveDeleted] = useState(false);
     const [grupoDialog, setGrupoDialog] = useState(false);
     const [deletegrupoDialog, setDeletegrupoDialog] = useState(false);
     const [deletegruposDialog, setDeletegruposDialog] = useState(false);
@@ -35,19 +34,15 @@ const Grupo = () => {
     const dt = useRef(null);
 
     const ubication = useLocation().state;
-    useEffect(
-        () => {
-            if (ubication) {
-                const { correo } = ubication;
-                const grupo = new GrupoService();
-                grupo.getGrupos(correo, setGrupos);
-                const junta = new JuntaService();
-                junta.getJuntas(correo, setJuntas);
-            }
-        },
-        [ubication],
-        []
-    );
+    useEffect(() => {
+        if (ubication) {
+            const { ruc } = ubication;
+            const grupo = new GrupoService();
+            grupo.getGrupos(ruc, setGrupos);
+            const junta = new JuntaService();
+            junta.getJuntas(ruc, setJuntas);
+        }
+    }, []);
 
     const openNew = () => {
         setJunta({ ...juntas[0] });
@@ -167,7 +162,7 @@ const Grupo = () => {
         setGrupo(_grupo);
     };
 
-    const onCiudadChange = (e) => {
+    const onJuntaChange = (e) => {
         setJunta(e.value);
     };
 
@@ -298,7 +293,8 @@ const Grupo = () => {
 
                         <div>
                             <label htmlFor="junta">Junta</label>
-                            <Dropdown id="junta" value={junta} onChange={(e) => onCiudadChange(e)} options={juntas} optionLabel="numero" placeholder="Select Junta"></Dropdown>
+                            <Dropdown id="junta" value={junta} onChange={(e) => onJuntaChange(e)} options={juntas} optionLabel="numero" placeholder="Select Junta" required autoFocus className={classNames({ "p-invalid": submitted && !junta })} />
+                            {submitted && !junta && <small className="p-invalid">Name is required.</small>}
                         </div>
                     </Dialog>
 

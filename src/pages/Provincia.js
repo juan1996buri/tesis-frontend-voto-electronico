@@ -7,7 +7,7 @@ import { Button } from "primereact/button";
 import { Toolbar } from "primereact/toolbar";
 import { Dialog } from "primereact/dialog";
 import { InputText } from "primereact/inputtext";
-import { createProvince, deleteProvincia, getProvincias, updateProvincia } from "../service/ProvinciaService";
+import { ProvinciaService } from "../service/ProvinciaService";
 
 const Provincia = () => {
     let emptyProvincia = {
@@ -27,7 +27,8 @@ const Provincia = () => {
     const dt = useRef(null);
 
     useEffect(() => {
-        getProvincias(setProvincias);
+        const provincia = new ProvinciaService();
+        provincia.getProvincias(setProvincias);
     }, []);
 
     const openNew = () => {
@@ -52,12 +53,14 @@ const Provincia = () => {
             let _provincias = [...provincias];
             let _provincia = { ...provincia };
             if (provincia.id) {
-                updateProvincia(provincia);
+                const object = new ProvinciaService();
+                object.updateProvincia(provincia);
                 const index = findIndexById(provincia.id);
                 _provincias[index] = _provincia;
                 toast.current.show({ severity: "success", summary: "Successful", detail: "provincia Updated", life: 3000 });
             } else {
-                createProvince(provincia);
+                const object = new ProvinciaService();
+                object.createProvince(provincia);
                 _provincias.push(_provincia);
                 toast.current.show({ severity: "success", summary: "Successful", detail: "provincia Created", life: 3000 });
                 window.location.reload();
@@ -79,7 +82,8 @@ const Provincia = () => {
     };
 
     const deleteprovincia = () => {
-        deleteProvincia(provincia.id, setActive);
+        const object = new ProvinciaService();
+        object.deleteProvincia(provincia.id, setActive);
         if (active) {
             let _provincias = provincias.filter((val) => val.id !== provincia.id);
             setProvincias(_provincias);
