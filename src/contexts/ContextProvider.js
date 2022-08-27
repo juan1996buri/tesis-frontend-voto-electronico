@@ -1,5 +1,5 @@
-import { AppService } from "../service/AppService";
 import React, { createContext, useContext, useEffect, useState } from "react";
+import { InstitucionService } from "../service/InstitucionService";
 
 const StateContext = createContext();
 
@@ -7,8 +7,8 @@ export const ConextProvider = ({ children }) => {
     const [institucion, setInstitucion] = useState({});
 
     useEffect(() => {
-        const object = new AppService();
-        object.getUser(1, setInstitucion);
+        const object = new InstitucionService();
+        object.getInstitucion(1, setInstitucion);
         window.institucion = institucion;
     }, []);
 

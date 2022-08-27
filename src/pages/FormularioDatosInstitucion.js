@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
 import { useLocation } from "react-router-dom";
@@ -6,6 +6,12 @@ import { TipoInstitucionService } from "../service/TipoInstitucionService";
 import { Dropdown } from "primereact/dropdown";
 import { CiudadService } from "../service/CiudadService";
 import { ProvinciaService } from "../service/ProvinciaService";
+import { classNames } from "primereact/utils";
+import { InstitucionService } from "../service/InstitucionService";
+import { Toast } from "primereact/toast";
+import { FileUpload } from "primereact/fileupload";
+import { Tooltip } from "primereact/tooltip";
+import { Image } from "primereact/image";
 
 const FormularioDatosInstitucion = () => {
     const ubication = useLocation().state;
@@ -16,19 +22,24 @@ const FormularioDatosInstitucion = () => {
     const [ciudades, setCiudades] = useState([]);
     const [provincia, setProvincia] = useState({});
     const [provincias, setProvincias] = useState([]);
+    const [submitted, setSubmitted] = useState(false);
+    const [logo, setLogo] = useState("");
+    const toast = useRef(null);
+    const fileUploadRef = useRef(null);
     useEffect(() => {
         if (ubication) {
-            setInstitucion({ ...ubication });
-            setTipoInstitucion({ ...ubication.tipoinstitucion });
+            setInstitucion(ubication);
             const tipoInstitucionService = new TipoInstitucionService();
             tipoInstitucionService.getTiposInstituciones(setTipoInstituciones);
 
+            setTipoInstitucion(ubication.tipoInstitucion);
             const provincia = new ProvinciaService();
             provincia.getProvincias(setProvincias);
             const ciudad = new CiudadService();
             ciudad.getCiudades(setCiudades);
             setProvincia(ubication.ciudad.provincia);
             setCiudad(ubication.ciudad);
+            setSubmitted(false);
         }
     }, []);
     const onNameChange = (e, name) => {
@@ -38,25 +49,71 @@ const FormularioDatosInstitucion = () => {
         setInstitucion(_institucion);
     };
     const onTipoInstitucionChange = (e) => {
-        setTipoInstitucion(e.value);
+        const { name, value } = e.target;
+        setTipoInstitucion(value);
+        setInstitucion({ ...institucion, [name]: value });
     };
     const onProvinciaChange = (e) => {
-        const id = e.value.id;
         setProvincia(e.value);
         setCiudad(ciudades.find((item) => item.provincia.id === e.value.id));
         const object = new CiudadService();
         object.getCiudades(setCiudades);
-        //getCiudades(setCiudades, id);
-
-        //setCiudades(ciudades.filter((item) => item.provincia.id === id));
     };
     const onCiudadChange = (e) => {
         setCiudad(e.value);
     };
+    const savegrupo = () => {
+        setSubmitted(true);
+
+        if (institucion.id) {
+            institucion.ciudad = ciudad;
+            institucion.ciudad.provincia = provincia;
+            institucion.logo = logo;
+            const object = new InstitucionService();
+            object.updateInstitucion(institucion);
+            ubication.nombre = institucion.nombre;
+            ubication.correo = institucion.correo;
+            ubication.tipoInstitucion = institucion.tipoInstitucion;
+            ubication.numero = institucion.numero;
+            ubication.ruc = institucion.ruc;
+            ubication.activo = institucion.activo;
+            ubication.logo = institucion.logo;
+            ubication.telefono = institucion.telefono;
+            ubication.ciudad = ciudad;
+            ubication.provincia = provincia;
+            ubication.direccion = institucion.direccion;
+            ubication.tipoInstitucion = tipoInstitucion;
+            ubication.logo = logo;
+            toast.current.show({ severity: "success", summary: "Successful", detail: "Institucion actualizado", life: 3000 });
+        }
+    };
+
+    const onUpload = async (e) => {
+        //e.options.props.customUpload = false;
+        const file = e.files[0];
+        const reader = new FileReader();
+
+        let blob = await fetch(file.objectURL).then((r) => r.blob()); //blob:url
+        reader.readAsDataURL(blob);
+        reader.onloadend = function () {
+            const base64data = reader.result;
+            setLogo(base64data);
+        };
+        toast.current.show({ severity: "info", summary: "Success", detail: "Imagen cargada" });
+    };
+
+    const onCancel = () => {
+        setLogo("");
+    };
+    const onSelect = (e) => {
+        console.log("hola");
+    };
+
     return (
         <div className="grid">
             <div className="col-12 md:col-6">
                 <div className="card p-fluid">
+                    <Toast ref={toast} />
                     <h5>Datos de la institución</h5>
                     <div className="field">
                         <label htmlFor="ruc">Ruc</label>
@@ -65,24 +122,35 @@ const FormularioDatosInstitucion = () => {
                     </div>
                     <div className="field">
                         <label htmlFor="correo">Email</label>
-                        <InputText id="nombre" value={institucion?.correo} type="text" onChange={(e) => onNameChange(e, "correo")} />
+                        <InputText id="nombre" value={institucion?.correo} type="text" onChange={(e) => onNameChange(e, "correo")} required autoFocus className={classNames({ "p-invalid": submitted && !institucion.correo })} />
+                        {submitted && !institucion && <small className="p-invalid">Email es requerido</small>}
                     </div>
 
                     <div className="field">
                         <label htmlFor="nombre">Nombre</label>
-                        <InputText id="nombre" value={institucion?.nombre} type="text" onChange={(e) => onNameChange(e, "nombre")} />
+                        <InputText id="nombre" value={institucion?.nombre} type="text" onChange={(e) => onNameChange(e, "nombre")} required autoFocus className={classNames({ "p-invalid": submitted && !institucion.nombre })} />
+                        {submitted && !institucion.nombre && <small className="p-invalid">Nombre es requerido</small>}
                     </div>
+                    <div className="field">
+                        <Image src={logo === "" ? institucion?.logo : logo} alt="Image Text" width="400px" />
+                    </div>
+                    <div className="field">
+                        <FileUpload name="image" accept="image/*" customUpload={true} chooseLabel={"Cargar"} uploadLabel={"Subir"} cancelLabel={"cancelar"} uploadHandler={onUpload} maxFileSize={1000000} onClear={onCancel} onRemove={onCancel} emptyTemplate={<p className="m-0"></p>} />
+                    </div>
+
                     <div className="field">
                         <label htmlFor="telefono">Telefono</label>
-                        <InputText id="telefono" value={institucion?.telefono} type="text" onChange={(e) => onNameChange(e, "telefono")} />
+                        <InputText id="telefono" value={institucion?.telefono} type="text" onChange={(e) => onNameChange(e, "telefono")} required autoFocus className={classNames({ "p-invalid": submitted && !institucion.telefono })} />
+                        {submitted && !institucion.telefono && <small className="p-invalid">Telefono es requerido</small>}
                     </div>
                     <div className="field">
-                        <label htmlFor="direccion">Direcion</label>
-                        <InputText id="direccion" value={institucion?.direccion} type="text" onChange={(e) => onNameChange(e, "direccion")} />
+                        <label htmlFor="direccion">Direccion</label>
+                        <InputText id="direccion" value={institucion?.direccion} type="text" onChange={(e) => onNameChange(e, "direccion")} required autoFocus className={classNames({ "p-invalid": submitted && !institucion.direccion })} />
+                        {submitted && !institucion.direccion && <small className="p-invalid">Direccion es requerido</small>}
                     </div>
                     <div className="field">
                         <label htmlFor="tipoInsitucion">Tipo de institucion</label>
-                        <Dropdown id="tipoInsitucion" value={tipoInstitucion} onChange={(e) => onTipoInstitucionChange(e)} options={tipoInstituciones} optionLabel="nombre" placeholder="seleccionar tipo de institucion"></Dropdown>
+                        <Dropdown id="tipoInsitucion" value={tipoInstitucion} onChange={onTipoInstitucionChange} name="tipoInstitucion" options={tipoInstituciones} optionLabel="nombre" placeholder="seleccionar tipo de institucion"></Dropdown>
                     </div>
                     <div>
                         <label htmlFor="provincia">Provincia</label>
@@ -92,29 +160,7 @@ const FormularioDatosInstitucion = () => {
                         <label htmlFor="ciudad">Ciudad</label>
                         <Dropdown id="ciudad" value={ciudad} onChange={(e) => onCiudadChange(e)} options={ciudades?.filter((resp) => resp.provincia.id === provincia.id)} optionLabel="nombre" placeholder="Seleccione ciudad"></Dropdown>
                     </div>
-                    <Button label="ACTUALIZAR"></Button>
-                </div>
-            </div>
-
-            <div className="col-12 md:col-6">
-                <div className="card p-fluid">
-                    <h5>Horizontal</h5>
-                    <div className="field grid">
-                        <label htmlFor="name3" className="col-12 mb-2 md:col-2 md:mb-0">
-                            Name
-                        </label>
-                        <div className="col-12 md:col-10">
-                            <InputText id="name3" type="text" />
-                        </div>
-                    </div>
-                    <div className="field grid">
-                        <label htmlFor="email3" className="col-12 mb-2 md:col-2 md:mb-0">
-                            Email
-                        </label>
-                        <div className="col-12 md:col-10">
-                            <InputText id="email3" type="text" />
-                        </div>
-                    </div>
+                    <Button label="ACTUALIZAR" onClick={savegrupo}></Button>
                 </div>
             </div>
         </div>

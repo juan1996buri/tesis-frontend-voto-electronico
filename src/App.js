@@ -12,7 +12,6 @@ import Dashboard from "./components/Dashboard";
 
 import Provincia from "./pages/Provincia";
 import EmptyPage from "./pages/EmptyPage";
-import TimelineDemo from "./pages/TimelineDemo";
 
 import PrimeReact from "primereact/api";
 import { Tooltip } from "primereact/tooltip";
@@ -26,15 +25,16 @@ import "./assets/demo/Demos.scss";
 import "./assets/layout/layout.scss";
 import "./App.scss";
 import Ciudad from "./pages/Ciudad";
-import { AppService } from "./service/AppService";
 import Recinto from "./pages/Recinto";
 import Junta from "./pages/Junta";
 import Grupo from "./pages/Grupo";
 import FormularioDatosInstitucion from "./pages/FormularioDatosInstitucion";
+import { InstitucionService } from "./service/InstitucionService";
+import { FileUploadDemo } from "./pages/FileUploadDemo";
+import PasswordModificacionDatosInstitucion from "./pages/PasswordModificacionDatosInstitucion";
 
 const App = () => {
     const [instituto, setInstituto] = useState({});
-
     const [layoutMode, setLayoutMode] = useState("static");
     const [layoutColorMode, setLayoutColorMode] = useState("light");
     const [inputStyle, setInputStyle] = useState("outlined");
@@ -51,8 +51,8 @@ const App = () => {
     let mobileTopbarMenuClick = false;
 
     useEffect(() => {
-        const appService = new AppService();
-        appService.getUser("ruc", setInstituto);
+        const institucion = new InstitucionService();
+        institucion.getInstitucion("ruc", setInstituto);
     }, []);
 
     useEffect(() => {
@@ -179,6 +179,10 @@ const App = () => {
             icon: "pi ",
             items: [{ label: "DatosInstitucion", icon: "pi pi-fw pi-user-edit", to: "/DatosInstitucion", state: instituto }],
         },
+        {
+            icon: "pi ",
+            items: [{ label: "Modificacion de Contraseña", icon: "pi pi-fw pi-user-edit", to: "/PasswordModificacionDatosInstitucion", state: instituto }],
+        },
     ];
 
     const addClass = (element, className) => {
@@ -223,6 +227,8 @@ const App = () => {
                     <Route path="/junta" component={Junta} />
                     <Route path="/grupo" component={Grupo} />
                     <Route path="/datosInstitucion" component={FormularioDatosInstitucion} />
+                    <Route path="/imagen" component={FileUploadDemo} />
+                    <Route path="/passwordModificacionDatosInstitucion" component={PasswordModificacionDatosInstitucion} />
                 </div>
                 <AppFooter layoutColorMode={layoutColorMode} />
             </div>

@@ -4,7 +4,7 @@ const url = "http://localhost:9090/api/v1.0/provincia/";
 
 export class ProvinciaService {
     getProvincias = async (state) => {
-        return axios.get(url).then((resp) => state(resp.data.result));
+        return await axios.get(url).then((resp) => state(resp.data.result));
     };
 
     createProvince = async (provincia) => {
