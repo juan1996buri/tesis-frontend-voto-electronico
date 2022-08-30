@@ -10,11 +10,9 @@ import { classNames } from "primereact/utils";
 import { InstitucionService } from "../service/InstitucionService";
 import { Toast } from "primereact/toast";
 import { FileUpload } from "primereact/fileupload";
-import { Tooltip } from "primereact/tooltip";
 import { Image } from "primereact/image";
 
 const FormularioDatosInstitucion = () => {
-    const ubication = useLocation().state;
     const [institucion, setInstitucion] = useState({});
     const [tipoInstitucion, setTipoInstitucion] = useState({});
     const [tipoInstituciones, setTipoInstituciones] = useState([]);
@@ -25,23 +23,24 @@ const FormularioDatosInstitucion = () => {
     const [submitted, setSubmitted] = useState(false);
     const [logo, setLogo] = useState("");
     const toast = useRef(null);
-    const fileUploadRef = useRef(null);
-    useEffect(() => {
-        if (ubication) {
-            setInstitucion(ubication);
-            const tipoInstitucionService = new TipoInstitucionService();
-            tipoInstitucionService.getTiposInstituciones(setTipoInstituciones);
 
-            setTipoInstitucion(ubication.tipoInstitucion);
-            const provincia = new ProvinciaService();
-            provincia.getProvincias(setProvincias);
-            const ciudad = new CiudadService();
-            ciudad.getCiudades(setCiudades);
-            setProvincia(ubication.ciudad.provincia);
-            setCiudad(ubication.ciudad);
-            setSubmitted(false);
-        }
+    const data = JSON.parse(window.localStorage.getItem("institucion"));
+
+    useEffect(() => {
+        const institucionService = new InstitucionService();
+        institucionService.getInstitucion(data.ruc, setInstitucion).then((resp) => {
+            setProvincia(resp.ciudad.provincia);
+            setCiudad(resp.ciudad);
+            setTipoInstitucion(resp.tipoInstitucion);
+        });
+        const tipoInstitucionService = new TipoInstitucionService();
+        tipoInstitucionService.getTiposInstituciones(setTipoInstituciones);
+        const provinciaService = new ProvinciaService();
+        provinciaService.getProvincias(setProvincias);
+        const ciudadService = new CiudadService();
+        ciudadService.getCiudades(setCiudades);
     }, []);
+
     const onNameChange = (e, name) => {
         const val = (e.target && e.target.value) || "";
         let _institucion = { ...institucion };
@@ -64,26 +63,13 @@ const FormularioDatosInstitucion = () => {
     };
     const savegrupo = () => {
         setSubmitted(true);
-
         if (institucion.id) {
             institucion.ciudad = ciudad;
             institucion.ciudad.provincia = provincia;
             institucion.logo = logo;
             const object = new InstitucionService();
             object.updateInstitucion(institucion);
-            ubication.nombre = institucion.nombre;
-            ubication.correo = institucion.correo;
-            ubication.tipoInstitucion = institucion.tipoInstitucion;
-            ubication.numero = institucion.numero;
-            ubication.ruc = institucion.ruc;
-            ubication.activo = institucion.activo;
-            ubication.logo = institucion.logo;
-            ubication.telefono = institucion.telefono;
-            ubication.ciudad = ciudad;
-            ubication.provincia = provincia;
-            ubication.direccion = institucion.direccion;
-            ubication.tipoInstitucion = tipoInstitucion;
-            ubication.logo = logo;
+
             toast.current.show({ severity: "success", summary: "Successful", detail: "Institucion actualizado", life: 3000 });
         }
     };
@@ -104,9 +90,6 @@ const FormularioDatosInstitucion = () => {
 
     const onCancel = () => {
         setLogo("");
-    };
-    const onSelect = (e) => {
-        console.log("hola");
     };
 
     return (
@@ -143,6 +126,7 @@ const FormularioDatosInstitucion = () => {
                         <InputText id="telefono" value={institucion?.telefono} type="text" onChange={(e) => onNameChange(e, "telefono")} required autoFocus className={classNames({ "p-invalid": submitted && !institucion.telefono })} />
                         {submitted && !institucion.telefono && <small className="p-invalid">Telefono es requerido</small>}
                     </div>
+
                     <div className="field">
                         <label htmlFor="direccion">Direccion</label>
                         <InputText id="direccion" value={institucion?.direccion} type="text" onChange={(e) => onNameChange(e, "direccion")} required autoFocus className={classNames({ "p-invalid": submitted && !institucion.direccion })} />

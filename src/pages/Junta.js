@@ -8,10 +8,10 @@ import { FileUpload } from "primereact/fileupload";
 import { Toolbar } from "primereact/toolbar";
 import { Dialog } from "primereact/dialog";
 import { InputText } from "primereact/inputtext";
-import { useLocation } from "react-router-dom";
 import { Dropdown } from "primereact/dropdown";
 import { JuntaService } from "../service/JuntaService";
 import { RecintoService } from "../service/RecintoService";
+import { InstitucionService } from "../service/InstitucionService";
 
 const Junta = () => {
     let emptyjunta = {
@@ -24,6 +24,7 @@ const Junta = () => {
     };
 
     const [juntas, setJuntas] = useState([]);
+    const [institucion, setInstitucion] = useState({});
     const [recintos, setRecintos] = useState([]);
     const [juntaDialog, setJuntaDialog] = useState(false);
     const [deletejuntaDialog, setDeletejuntaDialog] = useState(false);
@@ -36,20 +37,15 @@ const Junta = () => {
     const toast = useRef(null);
     const dt = useRef(null);
 
-    const ubication = useLocation().state;
-    useEffect(
-        () => {
-            if (ubication) {
-                const { ruc } = ubication;
-                const junta = new JuntaService();
-                junta.getJuntas(ruc, setJuntas);
-                const object = new RecintoService();
-                object.getRecintos(ruc, setRecintos);
-            }
-        },
-        [ubication],
-        []
-    );
+    const data = JSON.parse(window.localStorage.getItem("institucion"));
+    useEffect(() => {
+        const institucionService = new InstitucionService();
+        institucionService.getInstitucion(data.ruc, setInstitucion);
+        const juntaService = new JuntaService();
+        juntaService.getJuntas(data.ruc, setJuntas);
+        const recintoService = new RecintoService();
+        recintoService.getRecintos(data.ruc, setRecintos);
+    }, []);
 
     const openNew = () => {
         setRecinto({ ...recintos[0] });
@@ -73,21 +69,19 @@ const Junta = () => {
 
     const savejunta = () => {
         setSubmitted(true);
-
         junta.recinto = recinto;
-
+        junta.institucion = institucion;
+        const juntaService = new JuntaService();
         if (junta.numero.trim()) {
             let _juntas = [...juntas];
             let _junta = { ...junta };
             if (junta.id) {
-                const object = new JuntaService();
-                object.updateJunta(junta);
+                juntaService.updateJunta(junta);
                 const index = findIndexById(junta.id);
                 _juntas[index] = _junta;
                 toast.current.show({ severity: "success", summary: "Successful", detail: "junta Updated", life: 3000 });
             } else {
-                const object = new JuntaService();
-                object.postJunta(junta);
+                juntaService.postJunta(junta);
                 _juntas.push(_junta);
                 toast.current.show({ severity: "success", summary: "Successful", detail: "junta Created", life: 3000 });
             }

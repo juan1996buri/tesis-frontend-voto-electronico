@@ -8,10 +8,10 @@ import { FileUpload } from "primereact/fileupload";
 import { Toolbar } from "primereact/toolbar";
 import { Dialog } from "primereact/dialog";
 import { InputText } from "primereact/inputtext";
-import { useLocation } from "react-router-dom";
 import { Dropdown } from "primereact/dropdown";
 import { GrupoService } from "../service/GrupoService";
 import { JuntaService } from "../service/JuntaService";
+import { InstitucionService } from "../service/InstitucionService";
 
 const Grupo = () => {
     let emptygrupo = {
@@ -30,18 +30,18 @@ const Grupo = () => {
     const [selectedgrupos, setSelectedgrupos] = useState([]);
     const [submitted, setSubmitted] = useState(false);
     const [globalFilter, setGlobalFilter] = useState(null);
+    const [institucion, setInstitucion] = useState({});
     const toast = useRef(null);
     const dt = useRef(null);
 
-    const ubication = useLocation().state;
+    const data = JSON.parse(window.localStorage.getItem("institucion"));
     useEffect(() => {
-        if (ubication) {
-            const { ruc } = ubication;
-            const grupo = new GrupoService();
-            grupo.getGrupos(ruc, setGrupos);
-            const junta = new JuntaService();
-            junta.getJuntas(ruc, setJuntas);
-        }
+        const institucionService = new InstitucionService();
+        institucionService.getInstitucion(data.ruc, setInstitucion);
+        const grupoService = new GrupoService();
+        grupoService.getGrupos(data.ruc, setGrupos);
+        const juntaService = new JuntaService();
+        juntaService.getJuntas(data.ruc, setJuntas);
     }, []);
 
     const openNew = () => {
@@ -66,21 +66,20 @@ const Grupo = () => {
 
     const savegrupo = () => {
         setSubmitted(true);
-
+        const grupoService = new GrupoService();
         grupo.junta = junta;
+        grupo.institucion = institucion;
 
         if (grupo.nombre.trim()) {
             let _grupos = [...grupos];
             let _grupo = { ...grupo };
             if (grupo.id) {
-                const object = new GrupoService();
-                object.updateGrupo(grupo);
+                grupoService.updateGrupo(grupo);
                 const index = findIndexById(grupo.id);
                 _grupos[index] = _grupo;
                 toast.current.show({ severity: "success", summary: "Successful", detail: "grupo Updated", life: 3000 });
             } else {
-                const object = new GrupoService();
-                object.postGrupo(grupo);
+                grupoService.postGrupo(grupo);
                 _grupos.push(_grupo);
                 toast.current.show({ severity: "success", summary: "Successful", detail: "grupo Created", life: 3000 });
             }

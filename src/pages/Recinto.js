@@ -9,11 +9,10 @@ import { Toolbar } from "primereact/toolbar";
 import { Dialog } from "primereact/dialog";
 import { InputText } from "primereact/inputtext";
 import { RecintoService } from "../service/RecintoService";
-import { useLocation } from "react-router-dom";
 import { Dropdown } from "primereact/dropdown";
-import { useStateContext } from "../contexts/ContextProvider";
 import { ProvinciaService } from "../service/ProvinciaService";
 import { CiudadService } from "../service/CiudadService";
+import { InstitucionService } from "../service/InstitucionService";
 
 const Recinto = () => {
     let emptyRecinto = {
@@ -27,7 +26,6 @@ const Recinto = () => {
 
     const [recintos, setRecintos] = useState([]);
     const [ciudades, setCiudades] = useState([]);
-    const [activeDeleted, setActiveDeleted] = useState(false);
     const [provincias, setProvincias] = useState([]);
     const [recintoDialog, setRecintoDialog] = useState(false);
     const [deleterecintoDialog, setDeleterecintoDialog] = useState(false);
@@ -38,19 +36,20 @@ const Recinto = () => {
     const [selectedRecintos, setSelectedRecintos] = useState([]);
     const [submitted, setSubmitted] = useState(false);
     const [globalFilter, setGlobalFilter] = useState(null);
+    const [institucion, setInstitucion] = useState({});
     const toast = useRef(null);
     const dt = useRef(null);
-    const ubication = useLocation().state;
+
+    const data = JSON.parse(window.localStorage.getItem("institucion"));
     useEffect(() => {
-        if (ubication) {
-            const { ruc } = ubication;
-            const recinto = new RecintoService();
-            recinto.getRecintos(ruc, setRecintos);
-        }
-        const provincia = new ProvinciaService();
-        provincia.getProvincias(setProvincias);
-        const ciudad = new CiudadService();
-        ciudad.getCiudades(setCiudades);
+        const institucionService = new InstitucionService();
+        institucionService.getInstitucion(data.ruc, setInstitucion);
+        const recintoService = new RecintoService();
+        recintoService.getRecintos(data.ruc, setRecintos);
+        const provinciaService = new ProvinciaService();
+        provinciaService.getProvincias(setProvincias);
+        const ciudadService = new CiudadService();
+        ciudadService.getCiudades(setCiudades);
     }, []);
 
     const openNew = () => {
@@ -76,22 +75,19 @@ const Recinto = () => {
 
     const saveRecinto = () => {
         setSubmitted(true);
-
+        const recintoService = new RecintoService();
         recinto.ciudad = ciudad;
-        recinto.institucion = ubication;
-
+        recinto.institucion = institucion;
         if (recinto.nombre.trim()) {
             let _recintos = [...recintos];
             let _recinto = { ...recinto };
             if (recinto.id) {
-                const object = new RecintoService();
-                object.updateRecinto(recinto);
+                recintoService.updateRecinto(recinto);
                 const index = findIndexById(recinto.id);
                 _recintos[index] = _recinto;
                 toast.current.show({ severity: "success", summary: "Successful", detail: "recinto Updated", life: 3000 });
             } else {
-                const object = new RecintoService();
-                object.postRecinto(recinto);
+                recintoService.postRecinto(recinto);
                 _recintos.push(_recinto);
                 toast.current.show({ severity: "success", summary: "Successful", detail: "recinto Created", life: 3000 });
             }

@@ -4,7 +4,6 @@ import { CSSTransition } from "react-transition-group";
 import classNames from "classnames";
 import { Ripple } from "primereact/ripple";
 import { Badge } from "primereact/badge";
-import { useStateContext } from "./contexts/ContextProvider";
 
 const AppSubmenu = (props) => {
     const myData = {
