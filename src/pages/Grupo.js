@@ -144,7 +144,7 @@ const Grupo = () => {
             object
                 .deleteGrupo(res.id)
                 .then((res) =>
-                    res === 50
+                    res === 500
                         ? toast.current.show({ severity: "error", summary: "Error Message", detail: "grupos no eliminado" })
                         : ((_grupos = grupos.filter((val) => !selectedgrupos.includes(val))), setGrupos(_grupos), setDeletegruposDialog(false), setSelectedgrupos(null), toast.current.show({ severity: "success", summary: "Successful", detail: "grupos Deleted", life: 3000 }))
                 )

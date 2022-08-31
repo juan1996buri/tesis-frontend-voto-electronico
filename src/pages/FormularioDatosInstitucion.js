@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
-import { useLocation } from "react-router-dom";
 import { TipoInstitucionService } from "../service/TipoInstitucionService";
 import { Dropdown } from "primereact/dropdown";
 import { CiudadService } from "../service/CiudadService";
@@ -63,10 +62,14 @@ const FormularioDatosInstitucion = () => {
     };
     const savegrupo = () => {
         setSubmitted(true);
+
+        if (logo) {
+            institucion.logo = logo;
+        }
+
         if (institucion.id) {
             institucion.ciudad = ciudad;
             institucion.ciudad.provincia = provincia;
-            institucion.logo = logo;
             const object = new InstitucionService();
             object.updateInstitucion(institucion);
 
