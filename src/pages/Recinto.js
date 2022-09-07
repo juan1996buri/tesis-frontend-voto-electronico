@@ -13,8 +13,10 @@ import { Dropdown } from "primereact/dropdown";
 import { ProvinciaService } from "../service/ProvinciaService";
 import { CiudadService } from "../service/CiudadService";
 import { InstitucionService } from "../service/InstitucionService";
+import { useHistory } from "react-router-dom";
 
 const Recinto = () => {
+    const history = useHistory();
     let emptyRecinto = {
         id: "",
         nombre: "",
@@ -41,15 +43,25 @@ const Recinto = () => {
     const dt = useRef(null);
 
     const data = JSON.parse(window.localStorage.getItem("institucion"));
+
     useEffect(() => {
-        const institucionService = new InstitucionService();
-        institucionService.getInstitucion(data.ruc, setInstitucion);
-        const recintoService = new RecintoService();
-        recintoService.getRecintos(data.ruc, setRecintos);
-        const provinciaService = new ProvinciaService();
-        provinciaService.getProvincias(setProvincias);
-        const ciudadService = new CiudadService();
-        ciudadService.getCiudades(setCiudades);
+        if (data) {
+            const recintoService = new RecintoService();
+            recintoService.getRecintos(data?.ruc, setRecintos).then((res) => {
+                if (res === 401) {
+                    history.push("/");
+                    window.localStorage.removeItem("institucion");
+                }
+            });
+            const institucionService = new InstitucionService();
+            institucionService.getInstitucion(data?.ruc, setInstitucion);
+            const provinciaService = new ProvinciaService();
+            provinciaService.getProvincias(setProvincias);
+            const ciudadService = new CiudadService();
+            ciudadService.getCiudades(setCiudades);
+        } else {
+            history.push("/");
+        }
     }, []);
 
     const openNew = () => {
@@ -82,12 +94,22 @@ const Recinto = () => {
             let _recintos = [...recintos];
             let _recinto = { ...recinto };
             if (recinto.id) {
-                recintoService.updateRecinto(recinto);
+                recintoService.updateRecinto(recinto).then((res) => {
+                    if (res === 401) {
+                        history.push("/");
+                        window.localStorage.removeItem("institucion");
+                    }
+                });
                 const index = findIndexById(recinto.id);
                 _recintos[index] = _recinto;
                 toast.current.show({ severity: "success", summary: "Successful", detail: "recinto Updated", life: 3000 });
             } else {
-                recintoService.postRecinto(recinto);
+                recintoService.postRecinto(recinto).then((res) => {
+                    if (res === 401) {
+                        history.push("/");
+                        window.localStorage.removeItem("institucion");
+                    }
+                });
                 _recintos.push(_recinto);
                 toast.current.show({ severity: "success", summary: "Successful", detail: "recinto Created", life: 3000 });
             }
@@ -113,13 +135,19 @@ const Recinto = () => {
     const deleterecinto = () => {
         let _recintos;
         const object = new RecintoService();
-        object
-            .deleteRecinto(recinto.id)
-            .then((res) =>
-                res === 500
-                    ? toast.current.show({ severity: "error", summary: "Error Message", detail: "recinto no eliminado", life: 3000 })
-                    : ((_recintos = recintos.filter((val) => val.id !== recinto.id)), setRecintos(_recintos), setRecinto(emptyRecinto), toast.current.show({ severity: "success", summary: "Successful", detail: "recinto Deleted", life: 3000 }))
-            );
+        object.deleteRecinto(recinto.id).then((res) => {
+            if (res === 500) {
+                toast.current.show({ severity: "error", summary: "Error Message", detail: "recinto no eliminado", life: 3000 });
+            } else if (res === 401) {
+                history.push("/");
+                window.localStorage.removeItem("institucion");
+            } else {
+                _recintos = recintos.filter((val) => val.id !== recinto.id);
+                setRecintos(_recintos);
+                setRecinto(emptyRecinto);
+                toast.current.show({ severity: "success", summary: "Successful", detail: "recinto Deleted", life: 3000 });
+            }
+        });
         setDeleterecintoDialog(false);
     };
 
@@ -147,13 +175,20 @@ const Recinto = () => {
         const object = new RecintoService();
         let _recintos;
         selectedRecintos.map((res) =>
-            object
-                .deleteRecinto(res.id)
-                .then((res) =>
-                    res === 500
-                        ? toast.current.show({ severity: "error", summary: "Error Message", detail: "recintos no eliminadas", life: 3000 })
-                        : ((_recintos = recintos.filter((val) => !selectedRecintos.includes(val))), setRecintos(_recintos), setDeleterecintosDialog(false), setSelectedRecintos(null), toast.current.show({ severity: "success", summary: "Successful", detail: "recintos eliminados", life: 3000 }))
-                )
+            object.deleteRecinto(res.id).then((res) => {
+                if (res === 500) {
+                    toast.current.show({ severity: "error", summary: "Error Message", detail: "recintos no eliminadas", life: 3000 });
+                } else if (res === 401) {
+                    history.push("/");
+                    window.localStorage.removeItem("institucion");
+                } else {
+                    _recintos = recintos.filter((val) => !selectedRecintos.includes(val));
+                    setRecintos(_recintos);
+                    setDeleterecintosDialog(false);
+                    setSelectedRecintos(null);
+                    toast.current.show({ severity: "success", summary: "Successful", detail: "recintos eliminados", life: 3000 });
+                }
+            })
         );
 
         setDeleterecintosDialog(false);

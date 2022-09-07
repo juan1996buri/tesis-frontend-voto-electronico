@@ -12,8 +12,10 @@ import { Dropdown } from "primereact/dropdown";
 import { GrupoService } from "../service/GrupoService";
 import { JuntaService } from "../service/JuntaService";
 import { InstitucionService } from "../service/InstitucionService";
+import { useHistory } from "react-router-dom";
 
 const Grupo = () => {
+    const history = useHistory();
     let emptygrupo = {
         id: "",
         nombre: "",
@@ -36,12 +38,21 @@ const Grupo = () => {
 
     const data = JSON.parse(window.localStorage.getItem("institucion"));
     useEffect(() => {
-        const institucionService = new InstitucionService();
-        institucionService.getInstitucion(data.ruc, setInstitucion);
-        const grupoService = new GrupoService();
-        grupoService.getGrupos(data.ruc, setGrupos);
-        const juntaService = new JuntaService();
-        juntaService.getJuntas(data.ruc, setJuntas);
+        if (data) {
+            const institucionService = new InstitucionService();
+            institucionService.getInstitucion(data.ruc, setInstitucion).then((resp) => {
+                if (resp === 401) {
+                    history.push("/");
+                    window.localStorage.removeItem("institucion");
+                }
+            });
+            const grupoService = new GrupoService();
+            grupoService.getGrupos(data.ruc, setGrupos);
+            const juntaService = new JuntaService();
+            juntaService.getJuntas(data.ruc, setJuntas);
+        } else {
+            history.push("/");
+        }
     }, []);
 
     const openNew = () => {
@@ -74,12 +85,22 @@ const Grupo = () => {
             let _grupos = [...grupos];
             let _grupo = { ...grupo };
             if (grupo.id) {
-                grupoService.updateGrupo(grupo);
+                grupoService.updateGrupo(grupo).then((resp) => {
+                    if (resp === 401) {
+                        history.push("/");
+                        window.localStorage.removeItem("institucion");
+                    }
+                });
                 const index = findIndexById(grupo.id);
                 _grupos[index] = _grupo;
                 toast.current.show({ severity: "success", summary: "Successful", detail: "grupo Updated", life: 3000 });
             } else {
-                grupoService.postGrupo(grupo);
+                grupoService.postGrupo(grupo).then((resp) => {
+                    if (resp === 401) {
+                        history.push("/");
+                        window.localStorage.removeItem("institucion");
+                    }
+                });
                 _grupos.push(_grupo);
                 toast.current.show({ severity: "success", summary: "Successful", detail: "grupo Created", life: 3000 });
             }
@@ -104,17 +125,20 @@ const Grupo = () => {
     const deletegrupo = () => {
         let _grupos;
         const object = new GrupoService();
-        object
-            .deleteGrupo(grupo.id)
-            .then(
-                (res) => (
-                    res === 500 ? toast.current.show({ severity: "error", summary: "Error Message", detail: "grupo no eliminado" }) : (_grupos = grupos.filter((val) => val.id !== grupo.id)),
-                    setGrupos(_grupos),
-                    setDeletegrupoDialog(false),
-                    setGrupo(emptygrupo),
-                    toast.current.show({ severity: "success", summary: "Successful", detail: "grupo eliminado", life: 3000 })
-                )
-            );
+        object.deleteGrupo(grupo.id).then((res) => {
+            if (res === 500) {
+                toast.current.show({ severity: "error", summary: "Error Message", detail: "grupo no eliminado" });
+            } else if (res === 401) {
+                history.push("/");
+                window.localStorage.removeItem("institucion");
+            } else {
+                _grupos = grupos.filter((val) => val.id !== grupo.id);
+                setGrupos(_grupos);
+                setDeletegrupoDialog(false);
+                setGrupo(emptygrupo);
+                toast.current.show({ severity: "success", summary: "Successful", detail: "grupo eliminado", life: 3000 });
+            }
+        });
     };
 
     const findIndexById = (id) => {
@@ -141,13 +165,20 @@ const Grupo = () => {
         let _grupos;
         const object = new GrupoService();
         selectedgrupos.map((res) =>
-            object
-                .deleteGrupo(res.id)
-                .then((res) =>
-                    res === 500
-                        ? toast.current.show({ severity: "error", summary: "Error Message", detail: "grupos no eliminado" })
-                        : ((_grupos = grupos.filter((val) => !selectedgrupos.includes(val))), setGrupos(_grupos), setDeletegruposDialog(false), setSelectedgrupos(null), toast.current.show({ severity: "success", summary: "Successful", detail: "grupos Deleted", life: 3000 }))
-                )
+            object.deleteGrupo(res.id).then((res) => {
+                if (res === 500) {
+                    toast.current.show({ severity: "error", summary: "Error Message", detail: "grupos no eliminado" });
+                } else if (res === 401) {
+                    history.push("/");
+                    window.localStorage.removeItem("institucion");
+                } else {
+                    _grupos = grupos.filter((val) => !selectedgrupos.includes(val));
+                    setGrupos(_grupos);
+                    setDeletegruposDialog(false);
+                    setSelectedgrupos(null);
+                    toast.current.show({ severity: "success", summary: "Successful", detail: "grupos Deleted", life: 3000 });
+                }
+            })
         );
 
         setDeletegruposDialog(false);

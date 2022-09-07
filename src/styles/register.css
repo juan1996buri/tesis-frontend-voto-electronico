@@ -1,0 +1,29 @@
+.container {
+    background-color: rgb(212, 212, 211);
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    display: block;
+    width: 350px;
+    height: 200px;
+    overflow-y: scroll;
+    scroll-behavior: smooth;
+}
+
+.container .container_register {
+    background-color: rgb(253, 252, 252);
+    border-radius: 1rem;
+    display: flex;
+    padding: 4rem;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 40rem;
+    height: 50rem;
+}
+
+.item {
+    width: 100%;
+}

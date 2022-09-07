@@ -12,8 +12,10 @@ import { Dropdown } from "primereact/dropdown";
 import { JuntaService } from "../service/JuntaService";
 import { RecintoService } from "../service/RecintoService";
 import { InstitucionService } from "../service/InstitucionService";
+import { useHistory } from "react-router-dom";
 
 const Junta = () => {
+    const history = useHistory();
     let emptyjunta = {
         id: "",
         numero: "",
@@ -39,12 +41,21 @@ const Junta = () => {
 
     const data = JSON.parse(window.localStorage.getItem("institucion"));
     useEffect(() => {
-        const institucionService = new InstitucionService();
-        institucionService.getInstitucion(data.ruc, setInstitucion);
-        const juntaService = new JuntaService();
-        juntaService.getJuntas(data.ruc, setJuntas);
-        const recintoService = new RecintoService();
-        recintoService.getRecintos(data.ruc, setRecintos);
+        if (data) {
+            const juntaService = new JuntaService();
+            juntaService.getJuntas(data.ruc, setJuntas).then((res) => {
+                if (res === 401) {
+                    history.push("/");
+                    window.localStorage.removeItem("institucion");
+                }
+            });
+            const institucionService = new InstitucionService();
+            institucionService.getInstitucion(data.ruc, setInstitucion);
+            const recintoService = new RecintoService();
+            recintoService.getRecintos(data.ruc, setRecintos);
+        } else {
+            history.push("/");
+        }
     }, []);
 
     const openNew = () => {
@@ -76,12 +87,22 @@ const Junta = () => {
             let _juntas = [...juntas];
             let _junta = { ...junta };
             if (junta.id) {
-                juntaService.updateJunta(junta);
+                juntaService.updateJunta(junta).then((res) => {
+                    if (res === 401) {
+                        history.push("/");
+                        window.localStorage.removeItem("institucion");
+                    }
+                });
                 const index = findIndexById(junta.id);
                 _juntas[index] = _junta;
                 toast.current.show({ severity: "success", summary: "Successful", detail: "junta Updated", life: 3000 });
             } else {
-                juntaService.postJunta(junta);
+                juntaService.postJunta(junta).then((res) => {
+                    if (res === 401) {
+                        history.push("/");
+                        window.localStorage.removeItem("institucion");
+                    }
+                });
                 _juntas.push(_junta);
                 toast.current.show({ severity: "success", summary: "Successful", detail: "junta Created", life: 3000 });
             }
@@ -106,13 +127,19 @@ const Junta = () => {
     const deletejunta = () => {
         const object = new JuntaService();
         let _juntas;
-        object
-            .deleteJunta(junta.id)
-            .then((res) =>
-                res === 500
-                    ? toast.current.show({ severity: "error", summary: "Error Message", detail: "junta no eliminada", life: 3000 })
-                    : ((_juntas = juntas.filter((val) => val.id !== junta.id)), setJuntas(_juntas), setJunta(emptyjunta), toast.current.show({ severity: "success", summary: "Successful", detail: "junta eliminada", life: 3000 }))
-            );
+        object.deleteJunta(junta.id).then((res) => {
+            if (res === 500) {
+                toast.current.show({ severity: "error", summary: "Error Message", detail: "junta no eliminada", life: 3000 });
+            } else if (res === 401) {
+                history.push("/");
+                window.localStorage.removeItem("institucion");
+            } else {
+                _juntas = juntas.filter((val) => val.id !== junta.id);
+                setJuntas(_juntas);
+                setJunta(emptyjunta);
+                toast.current.show({ severity: "success", summary: "Successful", detail: "junta eliminada", life: 3000 });
+            }
+        });
         setDeletejuntaDialog(false);
     };
 
@@ -140,13 +167,19 @@ const Junta = () => {
         const object = new JuntaService();
         let _juntas;
         selectedjuntas.map((res) =>
-            object
-                .deleteJunta(res.id)
-                .then((res) =>
-                    res === 500
-                        ? toast.current.show({ severity: "error", summary: "Error Message", detail: "juntas no eliminadas", life: 3000 })
-                        : ((_juntas = juntas.filter((val) => !selectedjuntas.includes(val))), setJuntas(_juntas), setSelectedjuntas(null), toast.current.show({ severity: "success", summary: "Successful", detail: "juntas eliminadas", life: 3000 }))
-                )
+            object.deleteJunta(res.id).then((res) => {
+                if (res === 500) {
+                    toast.current.show({ severity: "error", summary: "Error Message", detail: "juntas no eliminadas", life: 3000 });
+                } else if (res === 401) {
+                    history.push("/");
+                    window.localStorage.removeItem("institucion");
+                } else {
+                    _juntas = juntas.filter((val) => !selectedjuntas.includes(val));
+                    setJuntas(_juntas);
+                    setSelectedjuntas(null);
+                    toast.current.show({ severity: "success", summary: "Successful", detail: "juntas eliminadas", life: 3000 });
+                }
+            })
         );
         setDeletejuntasDialog(false);
     };

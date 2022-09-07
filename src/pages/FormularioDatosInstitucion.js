@@ -10,9 +10,20 @@ import { InstitucionService } from "../service/InstitucionService";
 import { Toast } from "primereact/toast";
 import { FileUpload } from "primereact/fileupload";
 import { Image } from "primereact/image";
+import { useHistory } from "react-router-dom";
 
 const FormularioDatosInstitucion = () => {
-    const [institucion, setInstitucion] = useState({});
+    const history = useHistory();
+    const [institucion, setInstitucion] = useState({
+        ruc: "",
+        nombre: "",
+        correo: "",
+        logo: "",
+        ciudad: "",
+        telefono: "",
+        direccion: "",
+        tipoInstitucion: "",
+    });
     const [tipoInstitucion, setTipoInstitucion] = useState({});
     const [tipoInstituciones, setTipoInstituciones] = useState([]);
     const [ciudad, setCiudad] = useState({});
@@ -26,18 +37,27 @@ const FormularioDatosInstitucion = () => {
     const data = JSON.parse(window.localStorage.getItem("institucion"));
 
     useEffect(() => {
-        const institucionService = new InstitucionService();
-        institucionService.getInstitucion(data.ruc, setInstitucion).then((resp) => {
-            setProvincia(resp.ciudad.provincia);
-            setCiudad(resp.ciudad);
-            setTipoInstitucion(resp.tipoInstitucion);
-        });
-        const tipoInstitucionService = new TipoInstitucionService();
-        tipoInstitucionService.getTiposInstituciones(setTipoInstituciones);
-        const provinciaService = new ProvinciaService();
-        provinciaService.getProvincias(setProvincias);
-        const ciudadService = new CiudadService();
-        ciudadService.getCiudades(setCiudades);
+        if (data) {
+            const institucionService = new InstitucionService();
+            institucionService.getInstitucion(data.ruc, setInstitucion).then((resp) => {
+                if (resp === 401) {
+                    history.push("/");
+                    window.localStorage.removeItem("institucion");
+                } else {
+                    setProvincia(resp.ciudad.provincia);
+                    setCiudad(resp.ciudad);
+                    setTipoInstitucion(resp.tipoInstitucion);
+                }
+            });
+            const tipoInstitucionService = new TipoInstitucionService();
+            tipoInstitucionService.getTiposInstituciones(setTipoInstituciones);
+            const provinciaService = new ProvinciaService();
+            provinciaService.getProvincias(setProvincias);
+            const ciudadService = new CiudadService();
+            ciudadService.getCiudades(setCiudades);
+        } else {
+            history.push("/");
+        }
     }, []);
 
     const onNameChange = (e, name) => {
@@ -71,7 +91,12 @@ const FormularioDatosInstitucion = () => {
             institucion.ciudad = ciudad;
             institucion.ciudad.provincia = provincia;
             const object = new InstitucionService();
-            object.updateInstitucion(institucion);
+            object.updateInstitucion(institucion).then((res) => {
+                if (res === 401) {
+                    history.push("/");
+                    window.localStorage.removeItem("institucion");
+                }
+            });
 
             toast.current.show({ severity: "success", summary: "Successful", detail: "Institucion actualizado", life: 3000 });
         }

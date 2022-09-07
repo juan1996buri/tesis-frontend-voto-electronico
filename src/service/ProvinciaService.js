@@ -1,42 +1,32 @@
 import axios from "axios";
+import authHeader from "./auth-header";
 
 const url = "http://localhost:9090/api/v1.0/provincia/";
 
 export class ProvinciaService {
     getProvincias = async (state) => {
-        return await axios.get(url).then((resp) => state(resp.data.result));
+        return await axios.get(url).then((resp) => {
+            state(resp.data.result);
+            return resp.data.result;
+        });
     };
 
-    createProvince = async (provincia) => {
-        return axios.post(url, provincia);
+    postProvince = async (provincia) => {
+        return axios.post(url, provincia, { headers: authHeader() });
     };
 
     updateProvincia = async (provincia) => {
-        return axios.put(url, provincia);
+        return axios.put(url, provincia, { headers: authHeader() });
     };
 
     deleteProvincia = async (id, setActive) => {
         return axios
-            .delete(url + id)
+            .delete(url + id, { headers: authHeader() })
             .then((resp) => resp.data.success && setActive(true))
             .catch(function (error) {
                 if (error.response) {
-                    if (error.response.state === 500) {
-                        setActive(false);
-                    }
-                    console.log(error.response.data);
-                    console.log(error.response.status);
-                    console.log(error.response.headers);
-                } else if (error.request) {
-                    // La petición fue hecha pero no se recibió respuesta
-                    // `error.request` es una instancia de XMLHttpRequest en el navegador y una instancia de
-                    // http.ClientRequest en node.js
-                    console.log(error.request);
-                } else {
-                    // Algo paso al preparar la petición que lanzo un Error
-                    console.log("Error", error.message);
+                    return error.response.status;
                 }
-                console.log(error.config);
             });
     };
 }

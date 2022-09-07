@@ -1,0 +1,38 @@
+.container {
+    background-color: rgb(212, 212, 211);
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container .container_opcion {
+    background-color: rgb(253, 252, 252);
+    border-radius: 1rem;
+    display: flex;
+    padding: 4rem;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 40rem;
+    height: 25rem;
+    text-align: center;
+}
+
+.opcion {
+    width: 100%;
+    border-style: solid;
+    border-width: 1p;
+    border-color: rgb(212, 212, 211);
+    border-radius: 1rem;
+    padding: 1rem;
+}
+
+.opcion:hover {
+    box-shadow: 2px 2px 2px 1px rgb(212, 212, 211);
+}
+.container_item_opcion {
+    font-size: 1.5rem;
+    color: rgb(139, 139, 139);
+    font-weight: 500;
+}

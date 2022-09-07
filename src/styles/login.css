@@ -1,0 +1,46 @@
+.container {
+    background-color: rgb(212, 212, 211);
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container .container_login {
+    background-color: rgb(253, 252, 252);
+    border-radius: 1rem;
+    display: flex;
+    padding: 4rem;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 40rem;
+    height: 25rem;
+}
+
+.item {
+    width: 100%;
+}
+
+#ruc {
+    width: 100%;
+}
+
+#password {
+    width: 100%;
+}
+
+#registrarse {
+    margin: 80%;
+}
+
+.container_login_votante {
+    background-color: rgb(253, 252, 252);
+    border-radius: 1rem;
+    display: flex;
+    padding: 6rem;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 40rem;
+    height: 25rem;
+}
