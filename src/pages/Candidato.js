@@ -253,7 +253,7 @@ const Candidato = () => {
         return (
             <>
                 <span className="p-column-title">Nombre del Proceso</span>
-                {rowData.procesoEleccion.nombreproceso}
+                {rowData.procesoEleccion.nombre}
             </>
         );
     };
@@ -360,22 +360,22 @@ const Candidato = () => {
                             <label htmlFor="procesoElecction">Proceso Eleccion</label>
                             <Dropdown
                                 id="procesoElecction"
-                                name="nombreproceso"
+                                name="nombre"
                                 value={procesoEleccion}
                                 onChange={(e) => onProcesoEleccion(e)}
                                 options={procesoElecciones}
-                                optionLabel="nombreproceso"
+                                optionLabel="nombre"
                                 placeholder="Seleccione un candidato"
                                 required
                                 autoFocus
-                                className={classNames({ "p-invalid": submitted && !procesoEleccion.nombreproceso })}
+                                className={classNames({ "p-invalid": submitted && !procesoEleccion.nombre })}
                             />
                             {submitted && !tipoCandidato.nombre && <small className="p-invalid">Cargo es requerido</small>}
                         </div>
                         <div className="field">
                             <label htmlFor="provincia">Lista</label>
                             <Dropdown id="lista" name="lista" value={lista} onChange={(e) => onLista(e)} options={listas} optionLabel="nombre" placeholder="Seleccione un proceso eleccion" required autoFocus className={classNames({ "p-invalid": submitted && !lista.nombre })} />
-                            {submitted && !procesoEleccion.nombreproceso && <small className="p-invalid">Proceso eleccion es requerido</small>}
+                            {submitted && !procesoEleccion.nombre && <small className="p-invalid">Proceso eleccion es requerido</small>}
                         </div>
 
                         <div className="field">

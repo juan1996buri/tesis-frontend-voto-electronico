@@ -9,7 +9,7 @@ export class ListaService {
             .get(url, { headers: authHeader() })
             .then((res) => {
                 if (res.data.success) {
-                    state(res.data.result.filter((item) => item.procesoeleccion.institucion.ruc === ruc));
+                    state(res.data.result.filter((item) => item.procesoEleccion.institucion.ruc === ruc));
                 }
             })
             .catch(function (error) {

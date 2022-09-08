@@ -88,9 +88,9 @@ const Lista = () => {
         } else {
             lista.activo = false;
         }
-        lista.procesoeleccion = procesoEleccion;
+        lista.procesoEleccion = procesoEleccion;
         const listaService = new ListaService();
-        if (lista.nombre.trim() && procesoEleccion.nombreproceso.trim()) {
+        if (lista.nombre.trim() && procesoEleccion.nombre.trim()) {
             let _listas = [...listas];
             let _lista = { ...lista };
 
@@ -105,6 +105,7 @@ const Lista = () => {
                 _listas[index] = _lista;
                 toast.current.show({ severity: "success", summary: "Successful", detail: "lista Updated", life: 3000 });
             } else {
+                console.log(lista);
                 listaService.postLista(lista).then((res) => {
                     if (res === 401) {
                         window.localStorage.removeItem("institucion");
@@ -123,7 +124,7 @@ const Lista = () => {
 
     const editLista = (lista) => {
         setActive(lista.activo);
-        setProcesoEleccion(lista.procesoeleccion);
+        setProcesoEleccion(lista.procesoEleccion);
         setLista({ ...lista });
         setListaDialog(true);
     };
@@ -264,7 +265,7 @@ const Lista = () => {
         return (
             <>
                 <span className="p-column-title">Nombre</span>
-                {rowData.procesoeleccion.nombreproceso}
+                {rowData.procesoEleccion.nombre}
             </>
         );
     };
@@ -334,7 +335,7 @@ const Lista = () => {
                         <Column selectionMode="multiple" headerStyle={{ width: "3rem" }}></Column>
                         <Column field="id" header="id" sortable body={codeBodyTemplate} headerStyle={{ width: "14%", minWidth: "10rem" }}></Column>
                         <Column field="nombre" header="Nombre" sortable body={nombreBodyTemplate} headerStyle={{ width: "14%", minWidth: "10rem" }}></Column>
-                        <Column field="nombreproceso" header="nombreproceso" sortable body={procesoBodyTemplate} headerStyle={{ width: "14%", minWidth: "10rem" }}></Column>
+                        <Column field="proceso" header="Proceso" sortable body={procesoBodyTemplate} headerStyle={{ width: "14%", minWidth: "10rem" }}></Column>
 
                         <Column body={actionBodyTemplate}></Column>
                     </DataTable>
@@ -349,18 +350,18 @@ const Lista = () => {
                         <div className="field">
                             <label htmlFor="provincia">Proceso Elección</label>
                             <Dropdown
-                                id="nombreproceso"
-                                name="nombreproceso"
+                                id="nombre"
+                                name="nombre"
                                 value={procesoEleccion}
                                 onChange={(e) => onProcesoEleccion(e)}
                                 options={procesoElecciones}
-                                optionLabel="nombreproceso"
+                                optionLabel="nombre"
                                 placeholder="Seleccione un proceso eleccion"
                                 required
                                 autoFocus
-                                className={classNames({ "p-invalid": submitted && !procesoEleccion.nombreproceso })}
+                                className={classNames({ "p-invalid": submitted && !procesoEleccion.nombre })}
                             />
-                            {submitted && !procesoEleccion.nombreproceso && <small className="p-invalid">Proceso eleccion es requerido</small>}
+                            {submitted && !procesoEleccion.nombre && <small className="p-invalid">Proceso eleccion es requerido</small>}
                         </div>
                         <div className="field">
                             <Image src={logo === "" ? lista?.logo : logo} alt="Image Text" width="400px" />

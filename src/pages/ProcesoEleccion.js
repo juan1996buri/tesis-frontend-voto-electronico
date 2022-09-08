@@ -21,7 +21,7 @@ const ProcesoEleccion = () => {
     const history = useHistory();
     let emptyprocesoEleccion = {
         id: "",
-        nombreproceso: "",
+        nombre: "",
         activo: false,
     };
 
@@ -97,7 +97,7 @@ const ProcesoEleccion = () => {
         procesoEleccion.institucion = institucion;
         procesoEleccion.activo = activo;
 
-        if (procesoEleccion.nombreproceso.trim()) {
+        if (procesoEleccion.nombre.trim()) {
             let _procesoElecciones = [...procesoElecciones];
             let _procesoEleccion = { ...procesoEleccion };
             if (procesoEleccion.id) {
@@ -240,7 +240,7 @@ const ProcesoEleccion = () => {
         return (
             <>
                 <span className="p-column-title">Nombre</span>
-                {rowData.nombreproceso}
+                {rowData.nombre}
             </>
         );
     };
@@ -345,8 +345,8 @@ const ProcesoEleccion = () => {
                         {procesoEleccion.image && <img src={`assets/demo/images/procesoEleccion/${procesoEleccion.image}`} alt={procesoEleccion.image} width="150" className="mt-0 mx-auto mb-5 block shadow-2" />}
                         <div className="field">
                             <label htmlFor="nombre">Nombre</label>
-                            <InputText id="nombre" value={procesoEleccion.nombreproceso} onChange={(e) => onNameChange(e, "nombreproceso")} required autoFocus className={classNames({ "p-invalid": submitted && !procesoEleccion.nombre })} />
-                            {submitted && !procesoEleccion.nombreproceso && <small className="p-invalid">Numero es requerido</small>}
+                            <InputText id="nombre" value={procesoEleccion.nombre} onChange={(e) => onNameChange(e, "nombre")} required autoFocus className={classNames({ "p-invalid": submitted && !procesoEleccion.nombre })} />
+                            {submitted && !procesoEleccion.nombre && <small className="p-invalid">Numero es requerido</small>}
                         </div>
                         <div className="field" style={{ display: "flex", flexDirection: "column" }}>
                             <label htmlFor="fechaInicio">Fecha Inicio</label>
