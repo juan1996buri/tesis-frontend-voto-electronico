@@ -54,6 +54,7 @@ const App = () => {
                     <Route path="/login-votante" exact component={LoginVotante} />
                     <Route path="/administrador" component={LayoutAdministrador} />
                     <Route path="/votante" component={LayoutVotante} />
+                    <Route path="/" component={OpcionesInicioSesion} />
                 </Switch>
             </div>
         </LocalizationProvider>

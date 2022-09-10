@@ -259,7 +259,7 @@ const ProcesoEleccion = () => {
     const activoBodyTemplate = (rowData) => {
         return (
             <>
-                <span className="p-column-title">Activo</span>
+                <span className="p-column-title">Estado</span>
                 {rowData.activo ? <span style={{ backgroundColor: "red", borderRadius: "1rem", padding: "1rem", color: "white" }}>Activado</span> : <span style={{ backgroundColor: "green", borderRadius: "1rem", padding: "1rem", color: "white" }}>Desactivado</span>}
             </>
         );
@@ -332,7 +332,7 @@ const ProcesoEleccion = () => {
                         <Column field="nombre" header="Nombre" sortable body={nombreBodyTemplate} headerStyle={{ width: "14%", minWidth: "10rem" }}></Column>
                         <Column field="fechaInicio" header="Fecha Inicio" sortable body={fechaInicioBodyTemplate} headerStyle={{ width: "14%", minWidth: "10rem" }}></Column>
                         <Column field="fechaFin" header="Fecha Fin" sortable body={fechaFinBodyTemplate} headerStyle={{ width: "14%", minWidth: "10rem" }}></Column>
-                        <Column field="activo" header="Activo" sortable body={activoBodyTemplate} headerStyle={{ width: "14%", minWidth: "10rem" }}></Column>
+                        <Column field="estado" header="Estado" sortable body={activoBodyTemplate} headerStyle={{ width: "14%", minWidth: "10rem" }}></Column>
 
                         <Column body={actionBodyTemplate}></Column>
                     </DataTable>

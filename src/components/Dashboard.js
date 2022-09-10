@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useHistory } from "react-router-dom";
+const data = JSON.parse(window.localStorage.getItem("institucion"));
 
 const Dashboard = () => {
     return (

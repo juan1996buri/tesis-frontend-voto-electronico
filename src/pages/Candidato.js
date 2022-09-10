@@ -32,13 +32,13 @@ const Candidato = () => {
     const [deleteCandidatoDialog, setDeleteCandidatoDialog] = useState(false);
     const [deleteCandidatosDialog, setDeleteCandidatosDialog] = useState(false);
     const [candidato, setCandidato] = useState(emptycandidato);
-    const [procesoEleccion, setProcesoEleccion] = useState({});
+    const [procesoEleccion, setProcesoEleccion] = useState({ nombre: "" });
     const [procesoElecciones, setProcesoElecciones] = useState([]);
     const [tipoCandidatos, setTiposCandidatos] = useState([]);
-    const [lista, setLista] = useState({});
-    const [tipoCandidato, setTipoCandidato] = useState({});
+    const [lista, setLista] = useState({ nombre: "" });
+    const [tipoCandidato, setTipoCandidato] = useState({ nombre: "" });
     const [listas, setListas] = useState([]);
-    const [votante, setVotante] = useState({});
+    const [votante, setVotante] = useState({ nombre: "" });
     const [votantes, setVotantes] = useState([]);
     const [selectedCandidatos, setSelectedCandidatos] = useState([]);
     const [submitted, setSubmitted] = useState(false);
@@ -70,10 +70,10 @@ const Candidato = () => {
     }, []);
 
     const openNew = () => {
-        setTipoCandidato(tipoCandidatos[0]);
-        setVotante(votantes[0]);
-        setLista(listas[0]);
-        setProcesoEleccion(procesoElecciones[0]);
+        setTipoCandidato({ ...tipoCandidato, ...tipoCandidatos[0] });
+        setVotante({ ...votante, ...votantes[0] });
+        setLista({ ...lista, ...listas[0] });
+        setProcesoEleccion({ ...procesoEleccion, ...procesoElecciones[0] });
         setCandidato(emptycandidato);
         setSubmitted(false);
         setCandidatoDialog(true);
@@ -100,7 +100,7 @@ const Candidato = () => {
         candidato.votante = votante;
 
         const candidatoService = new CandidatoService();
-        if (candidato.votante.nombre.trim()) {
+        if (candidato.votante.nombre.trim() && lista.nombre.trim() && tipoCandidato.nombre.trim() && procesoEleccion.nombre.trim() && votante.nombre.trim()) {
             let _candidatos = [...candidatos];
             let _candidato = { ...candidato };
             if (candidato.id) {
@@ -295,7 +295,7 @@ const Candidato = () => {
 
     const header = (
         <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-            <h5 className="m-0">Manage candidatos</h5>
+            <h5 className="m-0">Administrador de candidatos</h5>
             <span className="block mt-2 md:mt-0 p-input-icon-left">
                 <i className="pi pi-search" />
                 <InputText type="search" onInput={(e) => setGlobalFilter(e.target.value)} placeholder="Search..." />
@@ -359,9 +359,9 @@ const Candidato = () => {
                     <Dialog visible={candidatoDialog} style={{ width: "450px" }} header="candidato" modal className="p-fluid" footer={candidatoDialogFooter} onHide={hideDialog}>
                         {candidato.image && <img src={`assets/demo/images/candidato/${candidato.image}`} alt={candidato.image} width="150" className="mt-0 mx-auto mb-5 block shadow-2" />}
                         <div className="field">
-                            <label htmlFor="procesoElecction">Proceso Eleccion</label>
+                            <label htmlFor="ProcesoEleccion">Proceso Eleccion</label>
                             <Dropdown
-                                id="procesoElecction"
+                                id="ProcesoEleccion"
                                 name="nombre"
                                 value={procesoEleccion}
                                 onChange={(e) => onProcesoEleccion(e)}
@@ -372,18 +372,18 @@ const Candidato = () => {
                                 autoFocus
                                 className={classNames({ "p-invalid": submitted && !procesoEleccion.nombre })}
                             />
-                            {submitted && !tipoCandidato.nombre && <small className="p-invalid">Cargo es requerido</small>}
+                            {submitted && !procesoEleccion.nombre && <small className="p-invalid">Proceso elección es requerido</small>}
                         </div>
                         <div className="field">
-                            <label htmlFor="provincia">Lista</label>
+                            <label htmlFor="lista">Lista</label>
                             <Dropdown id="lista" name="lista" value={lista} onChange={(e) => onLista(e)} options={listas} optionLabel="nombre" placeholder="Seleccione un proceso eleccion" required autoFocus className={classNames({ "p-invalid": submitted && !lista.nombre })} />
-                            {submitted && !procesoEleccion.nombre && <small className="p-invalid">Proceso eleccion es requerido</small>}
+                            {submitted && !lista.nombre && <small className="p-invalid">Lista es requerido</small>}
                         </div>
 
                         <div className="field">
-                            <label htmlFor="provincia">Candidato</label>
-                            <Dropdown id="votante" name="votante" value={votante} onChange={(e) => onVotante(e)} options={votantes} optionLabel="nombre" placeholder="Seleccione un candidato" required autoFocus className={classNames({ "p-invalid": submitted && !votante.nombre })} />
-                            {submitted && !votante.nombre && <small className="p-invalid">Candidato es requerido</small>}
+                            <label htmlFor="candidato">Candidato</label>
+                            <Dropdown id="candidato" name="votante" value={votante} onChange={(e) => onVotante(e)} options={votantes} optionLabel="cedula" placeholder="Seleccione un candidato" required autoFocus className={classNames({ "p-invalid": submitted && !votante.nombre })} />
+                            {submitted && !candidato.nombre && <small className="p-invalid">Candidato es requerido</small>}
                         </div>
                         <div className="field">
                             <label htmlFor="tipoCandidato">Cargo</label>

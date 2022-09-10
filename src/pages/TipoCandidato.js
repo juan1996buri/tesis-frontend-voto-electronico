@@ -85,18 +85,20 @@ const TipoCandidato = () => {
                 const index = findIndexById(tipoCandidato.id);
                 _tipoCandidatos[index] = _tipoCandidato;
                 toast.current.show({ severity: "success", summary: "Successful", detail: "tipoCandidato Updated", life: 3000 });
+                setTipoCandidatos(_tipoCandidatos);
             } else {
                 tipoCandidatoService.postTipoCandidato(tipoCandidato).then((res) => {
                     if (res === 401) {
                         window.localStorage.removeItem("institucion");
                         history.push("/");
+                    } else {
+                        _tipoCandidatos.push({ ...res });
+                        setTipoCandidatos(_tipoCandidatos);
                     }
                 });
-                _tipoCandidatos.push(_tipoCandidato);
                 toast.current.show({ severity: "success", summary: "Successful", detail: "tipoCandidato Created", life: 3000 });
             }
 
-            setTipoCandidatos(_tipoCandidatos);
             setTipoCandidatoDialog(false);
             setTipoCandidato(emptytipoCandidato);
         }
