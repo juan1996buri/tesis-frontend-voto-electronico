@@ -17,11 +17,18 @@ export class JuntaService {
             });
     }
     postJunta(data) {
-        return axios.post(url, data, { headers: authHeader() }).catch(function (error) {
-            if (error.response) {
-                return error.response.status;
-            }
-        });
+        return axios
+            .post(url, data, { headers: authHeader() })
+            .then((res) => {
+                if (res.data.success) {
+                    return res.data.result;
+                }
+            })
+            .catch(function (error) {
+                if (error.response) {
+                    return error.response.status;
+                }
+            });
     }
     updateJunta(data) {
         return axios.put(url, data, { headers: authHeader() }).catch(function (error) {

@@ -32,7 +32,7 @@ const Junta = () => {
     const [deletejuntaDialog, setDeletejuntaDialog] = useState(false);
     const [deletejuntasDialog, setDeletejuntasDialog] = useState(false);
     const [junta, setJunta] = useState(emptyjunta);
-    const [recinto, setRecinto] = useState({});
+    const [recinto, setRecinto] = useState({ nombre: "" });
     const [selectedjuntas, setSelectedjuntas] = useState([]);
     const [submitted, setSubmitted] = useState(false);
     const [globalFilter, setGlobalFilter] = useState(null);
@@ -59,7 +59,7 @@ const Junta = () => {
     }, []);
 
     const openNew = () => {
-        setRecinto({ ...recintos[0] });
+        setRecinto({ ...recinto, ...recintos[0] });
         setJunta(emptyjunta);
         setSubmitted(false);
         setJuntaDialog(true);
@@ -83,7 +83,7 @@ const Junta = () => {
         junta.recinto = recinto;
         junta.institucion = institucion;
         const juntaService = new JuntaService();
-        if (junta.numero.trim()) {
+        if (junta.numero.trim() && recinto.nombre.trim()) {
             let _juntas = [...juntas];
             let _junta = { ...junta };
             if (junta.id) {
@@ -96,18 +96,21 @@ const Junta = () => {
                 const index = findIndexById(junta.id);
                 _juntas[index] = _junta;
                 toast.current.show({ severity: "success", summary: "Successful", detail: "junta Updated", life: 3000 });
+                setJuntas(_juntas);
             } else {
                 juntaService.postJunta(junta).then((res) => {
                     if (res === 401) {
                         history.push("/");
                         window.localStorage.removeItem("institucion");
+                    } else {
+                        _juntas.push({ ...res });
+                        setJuntas(_juntas);
                     }
                 });
-                _juntas.push(_junta);
+
                 toast.current.show({ severity: "success", summary: "Successful", detail: "junta Created", life: 3000 });
             }
 
-            setJuntas(_juntas);
             setJuntaDialog(false);
             setJunta(emptyjunta);
         }
@@ -199,7 +202,7 @@ const Junta = () => {
         setJunta(_junta);
     };
 
-    const onCiudadChange = (e) => {
+    const onRecintoChange = (e) => {
         setRecinto(e.value);
     };
 
@@ -357,22 +360,23 @@ const Junta = () => {
                         <div className="field">
                             <label htmlFor="presidente">Presidente</label>
                             <InputText id="presidente" value={junta.presidente} onChange={(e) => onDirectionChange(e, "presidente")} required autoFocus className={classNames({ "p-invalid": submitted && !junta.presidente })} />
-                            {submitted && !junta.presidente && <small className="p-invalid">nombre es requerido</small>}
+                            {submitted && !junta.presidente && <small className="p-invalid">presidente es requerido</small>}
                         </div>
 
                         <div className="field">
                             <label htmlFor="vicepresidente">Vice-presidente</label>
                             <InputText id="vicepresidente" value={junta.vicePresidente} onChange={(e) => onDirectionChange(e, "vicePresidente")} required autoFocus className={classNames({ "p-invalid": submitted && !junta.vicePresidente })} />
-                            {submitted && !junta.vicePresidente && <small className="p-invalid">nombre es requerido</small>}
+                            {submitted && !junta.vicePresidente && <small className="p-invalid">Vice-presidente es requerido</small>}
                         </div>
                         <div className="field">
                             <label htmlFor="secretario">Secretario</label>
                             <InputText id="secretario" value={junta.secretario} onChange={(e) => onDirectionChange(e, "secretario")} required autoFocus className={classNames({ "p-invalid": submitted && !junta.secretario })} />
-                            {submitted && !junta.secretario && <small className="p-invalid">nombre es requerido</small>}
+                            {submitted && !junta.secretario && <small className="p-invalid">Secretario es requerido</small>}
                         </div>
                         <div>
                             <label htmlFor="recinto">Recinto</label>
-                            <Dropdown id="recinto" value={recinto} onChange={(e) => onCiudadChange(e)} options={recintos} optionLabel="nombre" placeholder="seleccionar junta"></Dropdown>
+                            <Dropdown id="recinto" value={recinto} onChange={(e) => onRecintoChange(e)} options={recintos} optionLabel="nombre" placeholder="seleccionar un recinto" className={classNames({ "p-invalid": submitted && !recinto.nombre })} />
+                            {submitted && !recinto.nombre && <small className="p-invalid">Recinto es requerido</small>}
                         </div>
                     </Dialog>
 

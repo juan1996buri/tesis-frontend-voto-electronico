@@ -33,6 +33,7 @@ const RegistrarInstitucion = () => {
         direccion: "",
         ruc: "",
         tipoInstitucion: "",
+        telefono: "",
     });
 
     useEffect(() => {
@@ -64,6 +65,9 @@ const RegistrarInstitucion = () => {
                 institucion.tipoInstitucion = tipoInstitucion;
                 user.password = password;
                 user.ruc = institucion.ruc;
+
+                console.log(institucion);
+                console.log(user);
 
                 const userService = new UserService();
                 const institucionService = new InstitucionService();

@@ -14,7 +14,6 @@ import { ListaService } from "../service/ListaService";
 import { ProcesoEleccionService } from "../service/ProcesoEleccionService";
 import { InputSwitch } from "primereact/inputswitch";
 import { Image } from "primereact/image";
-import Avatar from "../images/Avatar.jpeg";
 
 const Lista = () => {
     const history = useHistory();
@@ -23,10 +22,9 @@ const Lista = () => {
         nombre: "",
         activo: false,
     };
-
     const [listas, setListas] = useState([]);
     const [listaDialog, setListaDialog] = useState(false);
-    const [procesoEleccion, setProcesoEleccion] = useState({});
+    const [procesoEleccion, setProcesoEleccion] = useState({ nombre: "" });
     const [procesoElecciones, setProcesoElecciones] = useState([]);
     const [deleteListaDialog, setDeleteListaDialog] = useState(false);
     const [deleteListasDialog, setDeleteListasDialog] = useState(false);
@@ -58,7 +56,7 @@ const Lista = () => {
     }, []);
 
     const openNew = () => {
-        setProcesoEleccion(procesoElecciones[0]);
+        setProcesoEleccion({ ...procesoEleccion, ...procesoElecciones[0] });
 
         setLista(emptylista);
         setSubmitted(false);
@@ -76,6 +74,17 @@ const Lista = () => {
 
     const hideDeleteListasDialog = () => {
         setDeleteListasDialog(false);
+    };
+    const findIndexById = (id) => {
+        let index = -1;
+        for (let i = 0; i < listas.length; i++) {
+            if (listas[i].id === id) {
+                index = i;
+                break;
+            }
+        }
+
+        return index;
     };
 
     const savelista = () => {
@@ -104,19 +113,20 @@ const Lista = () => {
                 const index = findIndexById(lista.id);
                 _listas[index] = _lista;
                 toast.current.show({ severity: "success", summary: "Successful", detail: "lista Updated", life: 3000 });
+                setListas(_listas);
             } else {
-                console.log(lista);
                 listaService.postLista(lista).then((res) => {
                     if (res === 401) {
                         window.localStorage.removeItem("institucion");
                         history.push("/");
+                    } else {
+                        _listas.push({ ...res });
+                        setListas(_listas);
                     }
                 });
 
-                _listas.push(_lista);
                 toast.current.show({ severity: "success", summary: "Successful", detail: "lista Created", life: 3000 });
             }
-            setListas(_listas);
             setListaDialog(false);
             setLista(emptylista);
         }
@@ -132,6 +142,15 @@ const Lista = () => {
     const confirmDeleteLista = (lista) => {
         setLista(lista);
         setDeleteListaDialog(true);
+    };
+
+    const activoBodyTemplate = (rowData) => {
+        return (
+            <>
+                <span className="p-column-title">Estado</span>
+                {rowData.activo ? <span style={{ backgroundColor: "red", borderRadius: "1rem", padding: "1rem", color: "white" }}>Activado</span> : <span style={{ backgroundColor: "green", borderRadius: "1rem", padding: "1rem", color: "white" }}>Desactivado</span>}
+            </>
+        );
     };
 
     const deleteLista = () => {
@@ -153,18 +172,6 @@ const Lista = () => {
         setDeleteListaDialog(false);
     };
 
-    const findIndexById = (id) => {
-        let index = -1;
-        for (let i = 0; i < listas.length; i++) {
-            if (listas[i].id === id) {
-                index = i;
-                break;
-            }
-        }
-
-        return index;
-    };
-
     const exportCSV = () => {
         dt.current.exportCSV();
     };
@@ -173,8 +180,7 @@ const Lista = () => {
         setDeleteListasDialog(true);
     };
     const onProcesoEleccion = (e) => {
-        const { value, name } = e.target;
-        setProcesoEleccion({ ...procesoEleccion, [name]: value });
+        setProcesoEleccion(e.value);
     };
 
     const deleteSelectedlistas = () => {
@@ -328,7 +334,7 @@ const Lista = () => {
                         paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} listas"
                         globalFilter={globalFilter}
-                        emptyMessage="No listas found."
+                        emptyMessage="No se encuentra ninguna lista"
                         header={header}
                         responsiveLayout="scroll"
                     >
@@ -336,6 +342,7 @@ const Lista = () => {
                         <Column field="id" header="id" sortable body={codeBodyTemplate} headerStyle={{ width: "14%", minWidth: "10rem" }}></Column>
                         <Column field="nombre" header="Nombre" sortable body={nombreBodyTemplate} headerStyle={{ width: "14%", minWidth: "10rem" }}></Column>
                         <Column field="proceso" header="Proceso" sortable body={procesoBodyTemplate} headerStyle={{ width: "14%", minWidth: "10rem" }}></Column>
+                        <Column field="estado" header="Estado" sortable body={activoBodyTemplate} headerStyle={{ width: "14%", minWidth: "10rem" }}></Column>
 
                         <Column body={actionBodyTemplate}></Column>
                     </DataTable>
@@ -351,7 +358,7 @@ const Lista = () => {
                             <label htmlFor="provincia">Proceso Elección</label>
                             <Dropdown
                                 id="nombre"
-                                name="nombre"
+                                name="procesoEleccion"
                                 value={procesoEleccion}
                                 onChange={(e) => onProcesoEleccion(e)}
                                 options={procesoElecciones}

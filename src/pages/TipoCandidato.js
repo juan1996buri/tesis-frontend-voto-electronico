@@ -276,7 +276,7 @@ const TipoCandidato = () => {
                         paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} tipoCandidatos"
                         globalFilter={globalFilter}
-                        emptyMessage="No tipoCandidatos found."
+                        emptyMessage="No existe tipos de candidatos"
                         header={header}
                         responsiveLayout="scroll"
                     >
@@ -287,12 +287,12 @@ const TipoCandidato = () => {
                         <Column body={actionBodyTemplate}></Column>
                     </DataTable>
 
-                    <Dialog visible={tipoCandidatoDialog} style={{ width: "450px" }} header="tipoCandidato" modal className="p-fluid" footer={tipoCandidatoDialogFooter} onHide={hideDialog}>
+                    <Dialog visible={tipoCandidatoDialog} style={{ width: "450px" }} header="Tipo de candidato" modal className="p-fluid" footer={tipoCandidatoDialogFooter} onHide={hideDialog}>
                         {tipoCandidato.image && <img src={`assets/demo/images/tipoCandidato/${tipoCandidato.image}`} alt={tipoCandidato.image} width="150" className="mt-0 mx-auto mb-5 block shadow-2" />}
                         <div className="field">
                             <label htmlFor="nombre">Nombre</label>
                             <InputText id="nombre" value={tipoCandidato.nombre} onChange={(e) => onNameChange(e, "nombre")} required autoFocus className={classNames({ "p-invalid": submitted && !tipoCandidato.nombre })} />
-                            {submitted && !tipoCandidato.nombre && <small className="p-invalid">Numero es requerido</small>}
+                            {submitted && !tipoCandidato.nombre && <small className="p-invalid">Nombre es requerido</small>}
                         </div>
                     </Dialog>
 

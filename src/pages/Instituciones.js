@@ -32,10 +32,9 @@ const Institucion = () => {
     };
 
     const [instituciones, setInstituciones] = useState([]);
-    const [usuarios, setUsuarios] = useState([]);
+    //const [usuarios, setUsuarios] = useState([]);
     const [institucionDialog, setInstitucionDialog] = useState(false);
     const [institucion, setInstitucion] = useState(emptyinstitucion);
-    const [selectedinstituciones, setSelectedinstituciones] = useState([]);
     const [submitted, setSubmitted] = useState(false);
     const [active, setActive] = useState(false);
     const [globalFilter, setGlobalFilter] = useState(null);
@@ -48,7 +47,7 @@ const Institucion = () => {
         if (data) {
             const userService = new UserService();
             const institucionService = new InstitucionService();
-            userService.getUsers(setUsuarios).then((res) => {
+            userService.getUsers().then((res) => {
                 res.filter((f) => f.roles.nombre !== "ROLE_ADMIN").map((u) => {
                     institucionService.getInstitucion(u.ruc, setInstitucion).then((i) => {
                         setInstituciones((inst) => inst.concat(i));
@@ -101,6 +100,14 @@ const Institucion = () => {
         setActive(institucion.activo);
         setInstitucion({ ...institucion });
         setInstitucionDialog(true);
+    };
+    const activoBodyTemplate = (rowData) => {
+        return (
+            <>
+                <span className="p-column-title">Estado</span>
+                {rowData.activo ? <span style={{ backgroundColor: "red", borderRadius: "1rem", padding: "1rem", color: "white" }}>Activado</span> : <span style={{ backgroundColor: "green", borderRadius: "1rem", padding: "1rem", color: "white" }}>Desactivado</span>}
+            </>
+        );
     };
 
     const findIndexById = (id) => {
@@ -215,7 +222,6 @@ const Institucion = () => {
                     <DataTable
                         ref={dt}
                         value={instituciones}
-                        onSelectionChange={(e) => setSelectedinstituciones(e.value)}
                         dataKey="id"
                         paginator
                         rows={10}
@@ -234,6 +240,7 @@ const Institucion = () => {
                         <Column field="direccion" header="Direccion" sortable body={direccionBodyTemplate} headerStyle={{ width: "14%", minWidth: "10rem" }}></Column>
                         <Column field="provincia/ciudad" header="Provincia/Ciudad" sortable body={ciudadProvinciaBodyTemplate} headerStyle={{ width: "14%", minWidth: "10rem" }}></Column>
                         <Column field="tipoInstitucion" header="Tipo Institucion" sortable body={tipoInstitucionBodyTemplate} headerStyle={{ width: "14%", minWidth: "10rem" }}></Column>
+                        <Column field="estado" header="Estado" sortable body={activoBodyTemplate} headerStyle={{ width: "14%", minWidth: "10rem" }}></Column>
 
                         <Column body={actionBodyTemplate}></Column>
                     </DataTable>

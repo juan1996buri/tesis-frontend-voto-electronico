@@ -20,6 +20,7 @@ import LoginVotante from "./pages/LoginVotante";
 import NotFound from "./pages/NotFound";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import LayoutVotante from "./pages/layout/LayoutVotante";
 
 // <Route component={NotFound} />
 const App = () => {
@@ -39,6 +40,8 @@ const App = () => {
                                     return <Redirect to={"/institucion"} />;
                                 } else if (data.rol === "ROLE_ADMIN" && data.token) {
                                     return <Redirect to={"/administrador"} />;
+                                } else if (data.cedula) {
+                                    return <Redirect to={"/votante"} />;
                                 }
                             } else {
                                 return <OpcionesInicioSesion />;
@@ -50,6 +53,7 @@ const App = () => {
                     <Route path="/institucion" component={LayoutInstituto} />
                     <Route path="/login-votante" exact component={LoginVotante} />
                     <Route path="/administrador" component={LayoutAdministrador} />
+                    <Route path="/votante" component={LayoutVotante} />
                 </Switch>
             </div>
         </LocalizationProvider>

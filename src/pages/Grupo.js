@@ -28,7 +28,7 @@ const Grupo = () => {
     const [deletegrupoDialog, setDeletegrupoDialog] = useState(false);
     const [deletegruposDialog, setDeletegruposDialog] = useState(false);
     const [grupo, setGrupo] = useState(emptygrupo);
-    const [junta, setJunta] = useState({});
+    const [junta, setJunta] = useState({ numero: "" });
     const [selectedgrupos, setSelectedgrupos] = useState([]);
     const [submitted, setSubmitted] = useState(false);
     const [globalFilter, setGlobalFilter] = useState(null);
@@ -56,7 +56,7 @@ const Grupo = () => {
     }, []);
 
     const openNew = () => {
-        setJunta({ ...juntas[0] });
+        setJunta({ ...junta, ...juntas[0] });
         setGrupo(emptygrupo);
         setSubmitted(false);
         setGrupoDialog(true);
@@ -81,31 +81,34 @@ const Grupo = () => {
         grupo.junta = junta;
         grupo.institucion = institucion;
 
-        if (grupo.nombre.trim()) {
+        if (grupo.nombre.trim() && junta.numero.trim()) {
             let _grupos = [...grupos];
             let _grupo = { ...grupo };
             if (grupo.id) {
                 grupoService.updateGrupo(grupo).then((resp) => {
                     if (resp === 401) {
-                        history.push("/");
                         window.localStorage.removeItem("institucion");
+                        history.push("/");
                     }
                 });
                 const index = findIndexById(grupo.id);
                 _grupos[index] = _grupo;
                 toast.current.show({ severity: "success", summary: "Successful", detail: "grupo Updated", life: 3000 });
+                setGrupos(_grupos);
             } else {
-                grupoService.postGrupo(grupo).then((resp) => {
-                    if (resp === 401) {
-                        history.push("/");
+                grupoService.postGrupo(grupo).then((res) => {
+                    if (res === 401) {
                         window.localStorage.removeItem("institucion");
+                        history.push("/");
+                    } else {
+                        _grupos.push({ ...res });
+                        setGrupos(_grupos);
                     }
                 });
-                _grupos.push(_grupo);
+
                 toast.current.show({ severity: "success", summary: "Successful", detail: "grupo Created", life: 3000 });
             }
 
-            setGrupos(_grupos);
             setGrupoDialog(false);
             setGrupo(emptygrupo);
         }
@@ -318,13 +321,13 @@ const Grupo = () => {
                         <div className="field">
                             <label htmlFor="nombre">Nombre</label>
                             <InputText id="nombre" value={grupo.nombre} onChange={(e) => onNameChange(e, "nombre")} required autoFocus className={classNames({ "p-invalid": submitted && !grupo.nombre })} />
-                            {submitted && !grupo.nombre && <small className="p-invalid">Name is required.</small>}
+                            {submitted && !grupo.nombre && <small className="p-invalid">Nombre es requiredo</small>}
                         </div>
 
                         <div>
                             <label htmlFor="junta">Junta</label>
-                            <Dropdown id="junta" value={junta} onChange={(e) => onJuntaChange(e)} options={juntas} optionLabel="numero" placeholder="Select Junta" required autoFocus className={classNames({ "p-invalid": submitted && !junta })} />
-                            {submitted && !junta && <small className="p-invalid">Name is required.</small>}
+                            <Dropdown id="junta" value={junta} onChange={(e) => onJuntaChange(e)} options={juntas} optionLabel="numero" placeholder="Select Junta" required autoFocus className={classNames({ "p-invalid": submitted && !junta.numero })} />
+                            {submitted && !junta.numero && <small className="p-invalid">Junta es requiredo</small>}
                         </div>
                     </Dialog>
 

@@ -10,7 +10,6 @@ import { InputText } from "primereact/inputtext";
 import { ProvinciaService } from "../service/ProvinciaService";
 import { useHistory } from "react-router-dom";
 import { FileUpload } from "primereact/fileupload";
-import { Dropdown } from "primereact/dropdown";
 
 const Provincia = () => {
     const history = useHistory();
@@ -81,18 +80,21 @@ const Provincia = () => {
                 const index = findIndexById(provincia.id);
                 _provincias[index] = _provincia;
                 toast.current.show({ severity: "success", summary: "Successful", detail: "provincia Updated", life: 3000 });
+                setProvincias(_provincias);
             } else {
                 provinciaService.postProvince(provincia).then((res) => {
                     if (res === 401) {
                         window.localStorage.removeItem("institucion");
                         history.push("/");
+                    } else {
+                        _provincias.push({ ...res });
+                        setProvincias(_provincias);
                     }
                 });
-                _provincias.push(_provincia);
+
                 toast.current.show({ severity: "success", summary: "Successful", detail: "provincia Created", life: 3000 });
             }
 
-            setProvincias(_provincias);
             setProvinciaDialog(false);
             setProvincia(emptyprovincia);
         }

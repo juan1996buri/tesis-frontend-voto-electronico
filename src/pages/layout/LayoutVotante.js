@@ -10,9 +10,6 @@ import { AppConfig } from "../../AppConfig";
 
 import Dashboard from "../../components/Dashboard";
 
-import Provincia from "../../pages/Provincia";
-import EmptyPage from "../../pages/EmptyPage";
-
 import PrimeReact from "primereact/api";
 import { Tooltip } from "primereact/tooltip";
 
@@ -24,15 +21,9 @@ import "../../assets/demo/flags/flags.css";
 import "../../assets/demo/Demos.scss";
 import "../../assets/layout/layout.scss";
 import "../../App.scss";
-import Ciudad from "../../pages/Ciudad";
-import Recinto from "../../pages/Recinto";
-import Junta from "../../pages/Junta";
-import Grupo from "../../pages/Grupo";
-import FormularioDatosInstitucion from "../../pages/FormularioDatosInstitucion";
-import { FileUploadDemo } from "../../pages/FileUploadDemo";
-import PasswordModificacionDatosInstitucion from "../../pages/PasswordModificacionDatosInstitucion";
+import Sufragar from "../Sufragar";
 
-const Layoutvotante = () => {
+const LayoutVotante = () => {
     const [layoutMode, setLayoutMode] = useState("static");
     const [layoutColorMode, setLayoutColorMode] = useState("light");
     const [inputStyle, setInputStyle] = useState("outlined");
@@ -152,31 +143,7 @@ const Layoutvotante = () => {
         {
             label: "Pages",
             icon: "pi ",
-            items: [{ label: "Provincia", icon: "pi pi-fw pi-user-edit", to: `${url}/provincia` }],
-        },
-        {
-            icon: "pi ",
-            items: [{ label: "Ciudad", icon: "pi pi-fw pi-user-edit", to: `${url}/ciudad` }],
-        },
-        {
-            icon: "pi ",
-            items: [{ label: "Recinto", icon: "pi pi-fw pi-user-edit", to: `${url}/recinto` }],
-        },
-        {
-            icon: "pi ",
-            items: [{ label: "Junta", icon: "pi pi-fw pi-user-edit", to: `${url}/junta` }],
-        },
-        {
-            icon: "pi ",
-            items: [{ label: "Grupo", icon: "pi pi-fw pi-user-edit", to: `${url}/grupo` }],
-        },
-        {
-            icon: "pi ",
-            items: [{ label: "DatosInstitucion", icon: "pi pi-fw pi-user-edit", to: `${url}/datosInstitucion` }],
-        },
-        {
-            icon: "pi ",
-            items: [{ label: "Modificacion de Contraseña", icon: "pi pi-fw pi-user-edit", to: `${url}/passwordModificacionDatosInstitucion` }],
+            items: [{ label: "Sufragar", icon: "pi pi-fw pi-user-edit", to: `${url}/sufragar` }],
         },
     ];
 
@@ -214,13 +181,7 @@ const Layoutvotante = () => {
                 <div className="layout-main">
                     <Route path={`${path}`} exact render={() => <Dashboard colorMode={layoutColorMode} location={location} />} />
 
-                    <Route path={`${path}/provincia`} component={Provincia} />
-                    <Route path={`${path}/ciudad`} component={Ciudad} />
-                    <Route path={`${path}/recinto`} exact component={Recinto} />
-                    <Route path={`${path}/junta`} component={Junta} />
-                    <Route path={`${path}/grupo`} component={Grupo} />
-                    <Route path={`${path}/datosInstitucion`} component={FormularioDatosInstitucion} />
-                    <Route path={`${path}/passwordModificacionDatosInstitucion`} component={PasswordModificacionDatosInstitucion} />
+                    <Route path={`${path}/sufragar`} component={Sufragar} />
                 </div>
                 <AppFooter layoutColorMode={layoutColorMode} />
             </div>
@@ -233,4 +194,4 @@ const Layoutvotante = () => {
     );
 };
 
-export default Layoutvotante;
+export default LayoutVotante;

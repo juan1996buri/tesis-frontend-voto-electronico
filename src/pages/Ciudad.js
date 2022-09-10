@@ -91,18 +91,21 @@ const Ciudad = () => {
                 const index = findIndexById(ciudad.id);
                 _ciudades[index] = _ciudad;
                 toast.current.show({ severity: "success", summary: "Successful", detail: "ciudad Updated", life: 3000 });
+                setCiudades(_ciudades);
             } else {
                 ciudadeservice.postCiudad(ciudad).then((res) => {
                     if (res === 401) {
                         window.localStorage.removeItem("institucion");
                         history.push("/");
+                    } else {
+                        _ciudades.push({ ...res });
+                        setCiudades(_ciudades);
                     }
                 });
-                _ciudades.push(_ciudad);
+
                 toast.current.show({ severity: "success", summary: "Successful", detail: "ciudad Created", life: 3000 });
             }
 
-            setCiudades(_ciudades);
             setCiudadDialog(false);
             setCiudad(emptyciudad);
         }
@@ -216,8 +219,7 @@ const Ciudad = () => {
     };
 
     const onProvinciaChange = (e) => {
-        const { name, value } = e.target;
-        setProvincia(value);
+        setProvincia(e.value);
     };
 
     const nombreBodyTemplate = (rowData) => {
@@ -249,7 +251,7 @@ const Ciudad = () => {
 
     const header = (
         <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-            <h5 className="m-0">Manage ciudades</h5>
+            <h5 className="m-0">Administrador de ciudades</h5>
             <span className="block mt-2 md:mt-0 p-input-icon-left">
                 <i className="pi pi-search" />
                 <InputText type="search" onInput={(e) => setGlobalFilter(e.target.value)} placeholder="Search..." />
@@ -296,7 +298,7 @@ const Ciudad = () => {
                         paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} ciudades"
                         globalFilter={globalFilter}
-                        emptyMessage="No ciudades found."
+                        emptyMessage="No se encuentran ciudades"
                         header={header}
                         responsiveLayout="scroll"
                     >

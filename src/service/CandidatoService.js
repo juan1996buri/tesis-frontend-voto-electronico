@@ -18,12 +18,38 @@ export class CandidatoService {
                 }
             });
     }
+
+    getCandidatosAVotar(votante) {
+        return axios
+            .get(url)
+            .then((res) => {
+                if (res.data.success) {
+                    const data = res.data.result;
+                    const candidatos = data.filter((item) => item.votante.institucion.id === votante.institucion.id);
+                    const candidatosProcesoEleccionActivos = candidatos.filter((item) => item.procesoEleccion.activo === true);
+                    const candidatosListasActivos = candidatosProcesoEleccionActivos.filter((item) => item.lista.activo === true);
+                    return candidatosListasActivos;
+                }
+            })
+            .catch(function (error) {
+                if (error.response) {
+                    return error.response.status;
+                }
+            });
+    }
     postCandidato(data) {
-        return axios.post(url, data, { headers: authHeader() }).catch(function (error) {
-            if (error.response) {
-                return error.response.status;
-            }
-        });
+        return axios
+            .post(url, data, { headers: authHeader() })
+            .then((res) => {
+                if (res.data.success) {
+                    return res.data.result;
+                }
+            })
+            .catch(function (error) {
+                if (error.response) {
+                    return error.response.status;
+                }
+            });
     }
     updateCandidato(data) {
         return axios.put(url, data, { headers: authHeader() }).catch(function (error) {

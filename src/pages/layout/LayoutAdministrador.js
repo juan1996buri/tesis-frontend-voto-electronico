@@ -11,7 +11,6 @@ import { AppConfig } from "../../AppConfig";
 import Dashboard from "../../components/Dashboard";
 
 import Provincia from "../../pages/Provincia";
-import EmptyPage from "../../pages/EmptyPage";
 
 import PrimeReact from "primereact/api";
 import { Tooltip } from "primereact/tooltip";
@@ -25,9 +24,6 @@ import "../../assets/demo/Demos.scss";
 import "../../assets/layout/layout.scss";
 import "../../App.scss";
 import Ciudad from "../../pages/Ciudad";
-import Recinto from "../../pages/Recinto";
-import Junta from "../../pages/Junta";
-import Grupo from "../../pages/Grupo";
 import FormularioDatosInstitucion from "../../pages/FormularioDatosInstitucion";
 import PasswordModificacionDatosInstitucion from "../../pages/PasswordModificacionDatosInstitucion";
 import Instituciones from "../Instituciones";

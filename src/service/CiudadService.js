@@ -11,12 +11,19 @@ export class CiudadService {
         });
     };
 
-    /* getCiudadesAndProvincia = async (setCiudades, provincia, setCiudad) => {
-        return axios.get(url).then((resp) => setCiudades(resp.data.result));
-    };*/
-
     postCiudad = async (provincia) => {
-        return await axios.post(url, provincia, { headers: authHeader() });
+        return await axios
+            .post(url, provincia, { headers: authHeader() })
+            .then((res) => {
+                if (res.data.success) {
+                    return res.data.result;
+                }
+            })
+            .catch(function (error) {
+                if (error.response) {
+                    return error.response.status;
+                }
+            });
     };
 
     updateCiudad = async (provincia) => {

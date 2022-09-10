@@ -18,12 +18,36 @@ export class ListaService {
                 }
             });
     }
+
+    getListasAVotar(votante) {
+        return axios
+            .get(url)
+            .then((res) => {
+                if (res.data.success) {
+                    const data = res.data.result;
+                    const listas = data.filter((item) => item.procesoEleccion.institucion.id === votante.institucion.id).filter((item) => item.activo === true);
+                    return listas;
+                }
+            })
+            .catch(function (error) {
+                if (error.response) {
+                    return error.response.status;
+                }
+            });
+    }
     postLista(data) {
-        return axios.post(url, data, { headers: authHeader() }).catch(function (error) {
-            if (error.response) {
-                return error.response.status;
-            }
-        });
+        return axios
+            .post(url, data, { headers: authHeader() })
+            .then((res) => {
+                if (res.data.success) {
+                    return res.data.result;
+                }
+            })
+            .catch(function (error) {
+                if (error.response) {
+                    return error.response.status;
+                }
+            });
     }
     updateLista(data) {
         return axios.put(url, data, { headers: authHeader() }).catch(function (error) {

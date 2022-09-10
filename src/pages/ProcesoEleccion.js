@@ -41,12 +41,6 @@ const ProcesoEleccion = () => {
     const toast = useRef(null);
     const dt = useRef(null);
 
-    const [value, setValue] = useState();
-
-    const handleChange = (newValue) => {
-        setValue(newValue);
-    };
-
     const data = JSON.parse(window.localStorage.getItem("institucion"));
     useEffect(() => {
         if (data) {
@@ -87,8 +81,6 @@ const ProcesoEleccion = () => {
         setSubmitted(true);
 
         const procesoEleccioneservice = new ProcesoEleccionService();
-        console.log(fechaInicio);
-
         const FI = moment(fechaInicio).format("YYYY-MM-DDTHH:mm:ss").toString();
         const FF = moment(fechaFinal).format("YYYY-MM-DDTHH:mm:ss").toString();
 
@@ -110,18 +102,21 @@ const ProcesoEleccion = () => {
                 const index = findIndexById(procesoEleccion.id);
                 _procesoElecciones[index] = _procesoEleccion;
                 toast.current.show({ severity: "success", summary: "Successful", detail: "procesoEleccion Updated", life: 3000 });
+                setProcesoElecciones(_procesoElecciones);
             } else {
                 procesoEleccioneservice.postProcesoEleccion(procesoEleccion).then((res) => {
                     if (res === 401) {
                         window.localStorage.removeItem("institucion");
                         history.push("/");
+                    } else {
+                        _procesoElecciones.push({ ...res });
+                        setProcesoElecciones(_procesoElecciones);
                     }
                 });
-                _procesoElecciones.push(_procesoEleccion);
+
                 toast.current.show({ severity: "success", summary: "Successful", detail: "procesoEleccion Created", life: 3000 });
             }
 
-            setProcesoElecciones(_procesoElecciones);
             setProcesoEleccionDialog(false);
             setProcesoEleccion(emptyprocesoEleccion);
         }
@@ -144,7 +139,7 @@ const ProcesoEleccion = () => {
         let _procesoElecciones;
         procesoEleccioneservice.deleteProcesoEleccion(procesoEleccion.id).then((res) => {
             if (res === 500) {
-                toast.current.show({ severity: "error", summary: "Error Message", detail: "procesoEleccion no eliminada", life: 3000 });
+                toast.current.show({ severity: "error", summary: "Error Message", detail: "proceso de elección no eliminada", life: 3000 });
             } else if (res === 401) {
                 history.push("/");
                 window.localStorage.removeItem("institucion");
@@ -152,7 +147,7 @@ const ProcesoEleccion = () => {
                 _procesoElecciones = procesoElecciones.filter((val) => val.id !== procesoEleccion.id);
                 setProcesoElecciones(_procesoElecciones);
                 setProcesoEleccion(emptyprocesoEleccion);
-                toast.current.show({ severity: "success", summary: "Successful", detail: "procesoEleccion eliminada", life: 3000 });
+                toast.current.show({ severity: "success", summary: "Successful", detail: "proceso de eleccion no eliminada", life: 3000 });
             }
         });
         setDeleteProcesoEleccionDialog(false);
@@ -261,11 +256,11 @@ const ProcesoEleccion = () => {
         );
     };
 
-    const activoTemplate = (rowData) => {
+    const activoBodyTemplate = (rowData) => {
         return (
             <>
                 <span className="p-column-title">Activo</span>
-                {rowData.activo ? "activado" : "desactivado"}
+                {rowData.activo ? <span style={{ backgroundColor: "red", borderRadius: "1rem", padding: "1rem", color: "white" }}>Activado</span> : <span style={{ backgroundColor: "green", borderRadius: "1rem", padding: "1rem", color: "white" }}>Desactivado</span>}
             </>
         );
     };
@@ -336,37 +331,36 @@ const ProcesoEleccion = () => {
                         <Column field="id" header="id" sortable body={codeBodyTemplate} headerStyle={{ width: "14%", minWidth: "10rem" }}></Column>
                         <Column field="nombre" header="Nombre" sortable body={nombreBodyTemplate} headerStyle={{ width: "14%", minWidth: "10rem" }}></Column>
                         <Column field="fechaInicio" header="Fecha Inicio" sortable body={fechaInicioBodyTemplate} headerStyle={{ width: "14%", minWidth: "10rem" }}></Column>
-                        <Column field="nombre" header="Nombre" sortable body={fechaFinBodyTemplate} headerStyle={{ width: "14%", minWidth: "10rem" }}></Column>
+                        <Column field="fechaFin" header="Fecha Fin" sortable body={fechaFinBodyTemplate} headerStyle={{ width: "14%", minWidth: "10rem" }}></Column>
+                        <Column field="activo" header="Activo" sortable body={activoBodyTemplate} headerStyle={{ width: "14%", minWidth: "10rem" }}></Column>
 
                         <Column body={actionBodyTemplate}></Column>
                     </DataTable>
 
-                    <Dialog visible={procesoEleccionDialog} style={{ width: "450px" }} header="procesoEleccion" modal className="p-fluid" footer={procesoEleccionDialogFooter} onHide={hideDialog}>
+                    <Dialog visible={procesoEleccionDialog} style={{ width: "450px" }} header="Proceso Elección" modal className="p-fluid" footer={procesoEleccionDialogFooter} onHide={hideDialog}>
                         {procesoEleccion.image && <img src={`assets/demo/images/procesoEleccion/${procesoEleccion.image}`} alt={procesoEleccion.image} width="150" className="mt-0 mx-auto mb-5 block shadow-2" />}
                         <div className="field">
                             <label htmlFor="nombre">Nombre</label>
                             <InputText id="nombre" value={procesoEleccion.nombre} onChange={(e) => onNameChange(e, "nombre")} required autoFocus className={classNames({ "p-invalid": submitted && !procesoEleccion.nombre })} />
-                            {submitted && !procesoEleccion.nombre && <small className="p-invalid">Numero es requerido</small>}
+                            {submitted && !procesoEleccion.nombre && <small className="p-invalid">Nombre es requerido</small>}
                         </div>
                         <div className="field" style={{ display: "flex", flexDirection: "column" }}>
-                            <label htmlFor="fechaInicio">Fecha Inicio</label>
+                            <label htmlFor="fechaInicio">Fecha inicio</label>
                             <DateTimePicker
                                 label="fecha hora"
                                 value={fechaInicio}
                                 onChange={(newValue) => {
-                                    setValue(newValue);
                                     setFechaInicio(newValue);
                                 }}
                                 renderInput={(params) => <TextField {...params} />}
                             />
                         </div>
                         <div className="field" style={{ display: "flex", flexDirection: "column" }}>
-                            <label htmlFor="fechaInicio">Fecha Inicio</label>
+                            <label htmlFor="fechaInicio">Fecha fin</label>
                             <DateTimePicker
                                 label="fecha-hora"
                                 value={fechaFinal}
                                 onChange={(newValue) => {
-                                    setValue(newValue);
                                     setFechaFinal(newValue);
                                 }}
                                 renderInput={(params) => <TextField {...params} />}
@@ -380,7 +374,7 @@ const ProcesoEleccion = () => {
                             <i className="pi pi-exclamation-triangle mr-3" style={{ fontSize: "2rem" }} />
                             {procesoEleccion && (
                                 <span>
-                                    ¿Está seguro que desea eliminar esta procesoEleccion? <b>{procesoEleccion.name}</b>
+                                    ¿Está seguro que desea eliminar este proceso de elección? <b>{procesoEleccion.name}</b>
                                 </span>
                             )}
                         </div>
@@ -389,7 +383,7 @@ const ProcesoEleccion = () => {
                     <Dialog visible={deleteProcesoEleccionesDialog} style={{ width: "450px" }} header="Confirm" modal footer={deleteProcesoEleccionesDialogFooter} onHide={hideDeleteProcesoEleccionesDialog}>
                         <div className="flex align-items-center justify-content-center">
                             <i className="pi pi-exclamation-triangle mr-3" style={{ fontSize: "2rem" }} />
-                            {procesoEleccion && <span>¿Está seguro que desea eliminar las procesoElecciones seleccionadas?</span>}
+                            {procesoEleccion && <span>¿Está seguro que desea eliminar los procesos de elecciones seleccionadas?</span>}
                         </div>
                     </Dialog>
                 </div>

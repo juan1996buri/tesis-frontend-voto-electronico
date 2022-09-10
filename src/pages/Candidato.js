@@ -98,7 +98,6 @@ const Candidato = () => {
         candidato.procesoEleccion = procesoEleccion;
         candidato.tipoCandidato = tipoCandidato;
         candidato.votante = votante;
-        console.log(candidato);
 
         const candidatoService = new CandidatoService();
         if (candidato.votante.nombre.trim()) {
@@ -113,19 +112,22 @@ const Candidato = () => {
                 });
                 const index = findIndexById(candidato.id);
                 _candidatos[index] = _candidato;
-                toast.current.show({ severity: "success", summary: "Successful", detail: "candidato Updated", life: 3000 });
+                toast.current.show({ severity: "success", summary: "Successful", detail: "candidato actualizado", life: 3000 });
+                setCandidatos(_candidatos);
             } else {
                 candidatoService.postCandidato(candidato).then((res) => {
                     if (res === 401) {
                         window.localStorage.removeItem("institucion");
                         history.push("/");
+                    } else {
+                        _candidatos.push({ ...res });
+                        setCandidatos(_candidatos);
                     }
                 });
-                _candidatos.push(_candidato);
-                toast.current.show({ severity: "success", summary: "Successful", detail: "candidato Created", life: 3000 });
+
+                toast.current.show({ severity: "success", summary: "Successful", detail: "candidato creado", life: 3000 });
             }
 
-            setCandidatos(_candidatos);
             setCandidatoDialog(false);
             setCandidato(emptycandidato);
         }

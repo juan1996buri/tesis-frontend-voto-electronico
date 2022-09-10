@@ -1,32 +1,43 @@
 import classNames from "classnames";
 import { Button } from "primereact/button";
 import { Password } from "primereact/password";
-import React, { useState } from "react";
-import { UserService } from "../service/UserService";
+import React, { useRef, useState } from "react";
+import { useHistory } from "react-router-dom";
+import { VotanteService } from "../service/VotanteService";
+import { Toast } from "primereact/toast";
 import "../styles/login.css";
 
 const LoginVotante = () => {
-    const [user, setUser] = useState({ password: "", ruc: "" });
+    const history = useHistory();
+    const [password, setPassword] = useState("");
     const [submitted, setSubmitted] = useState(false);
+    const toast = useRef(null);
 
     const onInputChange = (e) => {
-        const { value, name } = e.target;
-        setUser({ ...user, [name]: value });
+        const { value } = e.target;
+        setPassword(value);
     };
     const saveUser = () => {
         setSubmitted(true);
-        if (user.password.trim() && user.ruc.trim()) {
-            const userService = new UserService();
-            userService.postUserLogin(user);
+        if (password.trim()) {
+            const votanteService = new VotanteService();
+            votanteService.getLogin(password).then((res) => {
+                if (res === 500) {
+                    toast.current.show({ severity: "error", summary: "Error Message", detail: "El Ruc o la contraseña son incorrectas", life: 3000 });
+                } else {
+                    history.push("/votante");
+                }
+            });
         }
     };
     return (
         <div className="container">
+            <Toast ref={toast} />
             <div className="container_login_votante p-fluid">
                 <div className="item">
                     <label htmlFor="password">Password</label>
-                    <Password id="password" name="password" value={user?.password} onChange={(e) => onInputChange(e)} toggleMask feedback={false} required autoFocus className={classNames({ "p-invalid ": submitted && !user.password })} />
-                    {submitted && !user.password && <small className="p-invalid">Se requiere una contraseña</small>}
+                    <Password type={"number"} id="password" name="password" value={password} onChange={(e) => onInputChange(e)} toggleMask feedback={false} required autoFocus className={classNames({ "p-invalid ": submitted && !password })} />
+                    {submitted && !password && <small className="p-invalid">Se requiere una contraseña</small>}
                 </div>
 
                 <div>

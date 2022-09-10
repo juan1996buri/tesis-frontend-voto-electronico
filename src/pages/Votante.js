@@ -33,10 +33,10 @@ const Votante = () => {
     };
 
     const [votantes, setVotantes] = useState([]);
-    const [grupo, setGrupo] = useState({});
+    const [grupo, setGrupo] = useState({ nombre: "" });
     const [institucion, setInstitucion] = useState({});
     const [grupos, setGrupos] = useState([]);
-    const [sexo, setSexo] = useState({});
+    const [sexo, setSexo] = useState({ nombre: "" });
     const [sexos, setSexos] = useState([]);
     const [codigo, setCodigo] = useState("");
     const [votanteDialog, setVotanteDialog] = useState(false);
@@ -73,8 +73,9 @@ const Votante = () => {
     }, []);
 
     const openNew = () => {
-        setGrupo({ ...grupos[0] });
-        setSexo({ ...sexos[0] });
+        setActiveCedula(true);
+        setGrupo({ ...grupo, ...grupos[0] });
+        setSexo({ ...sexo, ...sexos[0] });
         setVotante(emptyvotante);
         setSubmitted(false);
         setVotanteDialog(true);
@@ -103,7 +104,7 @@ const Votante = () => {
         votante.sexo = sexo;
         votante.codigo = codigo;
 
-        if (votante.nombre.trim()) {
+        if (votante.nombre.trim() && votante.apellido.trim() && grupo.nombre.trim() && sexo.nombre.trim()) {
             let _votantes = [...votantes];
             let _votante = { ...votante };
             if (votante.id) {
@@ -117,25 +118,34 @@ const Votante = () => {
                 const index = findIndexById(votante.id);
                 _votantes[index] = _votante;
                 toast.current.show({ severity: "success", summary: "Successful", detail: "votante Updated", life: 3000 });
+                setVotantes(_votantes);
             } else {
                 votanteService.postVotante(votante).then((res) => {
                     if (res === 401) {
                         window.localStorage.removeItem("institucion");
                         history.push("/");
+                    } else {
+                        _votantes.push({ ...res });
+                        setVotantes(_votantes);
                     }
                 });
-                _votantes.push(_votante);
+
                 toast.current.show({ severity: "success", summary: "Successful", detail: "votante Created", life: 3000 });
             }
 
             setCodigo("");
-            setVotantes(_votantes);
+
             setVotanteDialog(false);
             setVotante(emptyvotante);
         }
     };
 
     const editVotante = (votante) => {
+        if (votante.id) {
+            setActiveCedula(false);
+        } else {
+            setActiveCedula(true);
+        }
         setCodigo(votante.codigo);
         setActiveCedula(false);
         setGrupo(votante.grupo);
@@ -295,19 +305,19 @@ const Votante = () => {
             </>
         );
     };
-    const correoBodyTemplate = (rowData) => {
-        return (
-            <>
-                <span className="p-column-title">Nombre</span>
-                {rowData.correo}
-            </>
-        );
-    };
     const codigoBodyTemplate = (rowData) => {
         return (
             <>
                 <span className="p-column-title">Nombre</span>
                 {rowData.codigo}
+            </>
+        );
+    };
+    const activoBodyTemplate = (rowData) => {
+        return (
+            <>
+                <span className="p-column-title">Estado</span>
+                {rowData.activo ? <span style={{ backgroundColor: "red", borderRadius: "1rem", padding: "1rem", color: "white" }}>Activado</span> : <span style={{ backgroundColor: "green", borderRadius: "1rem", padding: "1rem", color: "white" }}>Desactivado</span>}
             </>
         );
     };
@@ -320,7 +330,7 @@ const Votante = () => {
     const actionBodyTemplate = (rowData) => {
         return (
             <div className="actions">
-                <Button disabled={votante.id ? setActiveCedula(false) : setActiveCedula(true)} icon="pi pi-pencil" className="p-button-rounded p-button-success mr-2" onClick={() => editVotante(rowData)} />
+                <Button icon="pi pi-pencil" className="p-button-rounded p-button-success mr-2" onClick={() => editVotante(rowData)} />
                 <Button icon="pi pi-trash" className="p-button-rounded p-button-warning mt-2" onClick={() => confirmDeleteVotante(rowData)} />
             </div>
         );
@@ -328,7 +338,7 @@ const Votante = () => {
 
     const header = (
         <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-            <h5 className="m-0">Manage votantes</h5>
+            <h5 className="m-0">Administrador de votantes</h5>
             <span className="block mt-2 md:mt-0 p-input-icon-left">
                 <i className="pi pi-search" />
                 <InputText type="search" onInput={(e) => setGlobalFilter(e.target.value)} placeholder="Search..." />
@@ -375,7 +385,7 @@ const Votante = () => {
                         paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} votantes"
                         globalFilter={globalFilter}
-                        emptyMessage="No votantes found."
+                        emptyMessage="No existe votantes"
                         header={header}
                         responsiveLayout="scroll"
                     >
@@ -387,42 +397,43 @@ const Votante = () => {
                         <Column field="celular" header="Celular" sortable body={celularBodyTemplate} headerStyle={{ width: "14%", minWidth: "10rem" }}></Column>
                         <Column field="sexo" header="Sexo" sortable body={sexoBodyTemplate} headerStyle={{ width: "14%", minWidth: "10rem" }}></Column>
                         <Column field="codigo" header="Codigo" sortable body={codigoBodyTemplate} headerStyle={{ width: "14%", minWidth: "10rem" }}></Column>
+                        <Column field="estado" header="Estado" sortable body={activoBodyTemplate} headerStyle={{ width: "14%", minWidth: "10rem" }}></Column>
 
                         <Column body={actionBodyTemplate}></Column>
                     </DataTable>
 
-                    <Dialog visible={votanteDialog} style={{ width: "450px" }} header="votante" modal className="p-fluid" footer={votanteDialogFooter} onHide={hideDialog}>
+                    <Dialog visible={votanteDialog} style={{ width: "450px" }} header="Votante" modal className="p-fluid" footer={votanteDialogFooter} onHide={hideDialog}>
                         {votante.image && <img src={`assets/demo/images/votante/${votante.image}`} alt={votante.image} width="150" className="mt-0 mx-auto mb-5 block shadow-2" />}
                         <div className="field">
                             <label htmlFor="cedula">Cedula</label>
                             {activeCedula === true ? <InputText id="cedula" value={votante.cedula} onChange={(e) => onNameChange(e, "cedula")} required autoFocus className={classNames({ "p-invalid": submitted && !votante.cedula })} /> : <h5>{votante.cedula}</h5>}
-                            {submitted && !votante.cedula && <small className="p-invalid">Numero es requerido</small>}
+                            {submitted && !votante.cedula && <small className="p-invalid">Cedula es requerido</small>}
                         </div>
                         <div className="field">
                             <label htmlFor="nombre">Nombre</label>
                             <InputText id="nombre" value={votante.nombre} onChange={(e) => onNameChange(e, "nombre")} required autoFocus className={classNames({ "p-invalid": submitted && !votante.nombre })} />
-                            {submitted && !votante.nombre && <small className="p-invalid">Numero es requerido</small>}
+                            {submitted && !votante.nombre && <small className="p-invalid">Nombre es requerido</small>}
                         </div>
                         <div className="field">
                             <label htmlFor="apellido">Apellido</label>
                             <InputText id="apellido" value={votante.apellido} onChange={(e) => onNameChange(e, "apellido")} required autoFocus className={classNames({ "p-invalid": submitted && !votante.apellido })} />
-                            {submitted && !votante.apellido && <small className="p-invalid">Numero es requerido</small>}
+                            {submitted && !votante.apellido && <small className="p-invalid">Apellido es requerido</small>}
                         </div>
                         <div className="field">
                             <label htmlFor="celular">Celular</label>
                             <InputText id="celular" value={votante.celular} onChange={(e) => onNameChange(e, "celular")} required autoFocus className={classNames({ "p-invalid": submitted && !votante.celular })} />
-                            {submitted && !votante.celular && <small className="p-invalid">Numero es requerido</small>}
+                            {submitted && !votante.celular && <small className="p-invalid">Celular es requerido</small>}
                         </div>
 
                         <div className="field">
-                            <label htmlFor="junta">Grupo</label>
-                            <Dropdown id="junta" value={grupo} onChange={(e) => onGrupoChange(e)} options={grupos} optionLabel="nombre" placeholder="Select Junta" required autoFocus className={classNames({ "p-invalid": submitted && !grupo })} />
-                            {submitted && !grupo && <small className="p-invalid">Name is required.</small>}
+                            <label htmlFor="grupo">Grupo</label>
+                            <Dropdown id="grupo" value={grupo} onChange={(e) => onGrupoChange(e)} options={grupos} optionLabel="nombre" placeholder="Seleccione un grupo" required autoFocus className={classNames({ "p-invalid": submitted && !grupo.nombre })} />
+                            {submitted && !grupo.nombre && <small className="p-invalid">Grupo es requerido</small>}
                         </div>
                         <div className="field">
-                            <label htmlFor="junta">Sexo</label>
-                            <Dropdown id="junta" value={sexo} onChange={(e) => onSexoChange(e)} options={sexos} optionLabel="nombre" placeholder="Select Junta" required autoFocus className={classNames({ "p-invalid": submitted && !sexo })} />
-                            {submitted && !grupo && <small className="p-invalid">Name is required.</small>}
+                            <label htmlFor="sexo">Sexo</label>
+                            <Dropdown id="sexo" value={sexo} onChange={(e) => onSexoChange(e)} options={sexos} optionLabel="nombre" placeholder="Seleccione un sexo" required autoFocus className={classNames({ "p-invalid": submitted && !sexo.nombre })} />
+                            {submitted && !sexo.nombre && <small className="p-invalid">Sexo no requerido</small>}
                         </div>
                         <div className="field ">
                             <label htmlFor="codigo">Codigo--</label>

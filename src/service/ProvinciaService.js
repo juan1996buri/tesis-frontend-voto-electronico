@@ -12,7 +12,18 @@ export class ProvinciaService {
     };
 
     postProvince = async (provincia) => {
-        return axios.post(url, provincia, { headers: authHeader() });
+        return axios
+            .post(url, provincia, { headers: authHeader() })
+            .then((res) => {
+                if (res.data.success) {
+                    return res.data.result;
+                }
+            })
+            .catch(function (error) {
+                if (error.response) {
+                    return error.response.status;
+                }
+            });
     };
 
     updateProvincia = async (provincia) => {

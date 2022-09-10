@@ -21,8 +21,22 @@ export class VotanteService {
             });
     }
 
+    getVotante(cedula) {
+        return axios
+            .get(url + cedula)
+            .then((res) => {
+                if (res.data.success) {
+                    return res.data.result;
+                }
+            })
+            .catch(function (error) {
+                if (error.response) {
+                    return error.response.status;
+                }
+            });
+    }
+
     getCodigo(id) {
-        console.log(id);
         return axios
             .get(url + "codigo/" + id, { headers: authHeader() })
             .then((res) => {
@@ -36,12 +50,40 @@ export class VotanteService {
                 }
             });
     }
+
+    getLogin(code) {
+        return axios
+            .get(url + "login/" + code)
+            .then((res) => {
+                if (res.data.success) {
+                    const data = res.data.result;
+                    window.localStorage.setItem(
+                        "institucion",
+                        JSON.stringify({
+                            cedula: data.cedula,
+                        })
+                    );
+                }
+            })
+            .catch(function (error) {
+                if (error.response) {
+                    return error.response.status;
+                }
+            });
+    }
     postVotante(data) {
-        return axios.post(url, data, { headers: authHeader() }).catch(function (error) {
-            if (error.response) {
-                return error.response.status;
-            }
-        });
+        return axios
+            .post(url, data, { headers: authHeader() })
+            .then((res) => {
+                if (res.data.success) {
+                    return res.data.result;
+                }
+            })
+            .catch(function (error) {
+                if (error.response) {
+                    return error.response.status;
+                }
+            });
     }
     updateVotante(data) {
         return axios.put(url, data, { headers: authHeader() }).catch(function (error) {

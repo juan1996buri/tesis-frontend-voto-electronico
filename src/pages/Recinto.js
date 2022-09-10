@@ -33,8 +33,8 @@ const Recinto = () => {
     const [deleterecintoDialog, setDeleterecintoDialog] = useState(false);
     const [deleterecintosDialog, setDeleterecintosDialog] = useState(false);
     const [recinto, setRecinto] = useState(emptyRecinto);
-    const [ciudad, setCiudad] = useState({});
-    const [provincia, setProvincia] = useState({});
+    const [ciudad, setCiudad] = useState({ nombre: "" });
+    const [provincia, setProvincia] = useState({ nombre: "" });
     const [selectedRecintos, setSelectedRecintos] = useState([]);
     const [submitted, setSubmitted] = useState(false);
     const [globalFilter, setGlobalFilter] = useState(null);
@@ -65,8 +65,8 @@ const Recinto = () => {
     }, []);
 
     const openNew = () => {
-        setProvincia(provincias[0]);
-        setCiudad(ciudades.find((item) => item.provincia.id === provincias[0].id));
+        setProvincia({ ...provincia, ...provincias[0] });
+        setCiudad({ ...ciudad, ...ciudades.find((item) => item.provincia.id === provincias[0].id) });
         setRecinto(emptyRecinto);
         setSubmitted(false);
         setRecintoDialog(true);
@@ -90,7 +90,7 @@ const Recinto = () => {
         const recintoService = new RecintoService();
         recinto.ciudad = ciudad;
         recinto.institucion = institucion;
-        if (recinto.nombre.trim()) {
+        if (recinto.nombre.trim() && recinto.direccion.trim() && recinto.celular.trim()) {
             let _recintos = [...recintos];
             let _recinto = { ...recinto };
             if (recinto.id) {
@@ -103,18 +103,21 @@ const Recinto = () => {
                 const index = findIndexById(recinto.id);
                 _recintos[index] = _recinto;
                 toast.current.show({ severity: "success", summary: "Successful", detail: "recinto Updated", life: 3000 });
+                setRecintos(_recintos);
             } else {
                 recintoService.postRecinto(recinto).then((res) => {
                     if (res === 401) {
                         history.push("/");
                         window.localStorage.removeItem("institucion");
+                    } else {
+                        _recintos.push({ ...res });
+                        setRecintos(_recintos);
                     }
                 });
-                _recintos.push(_recinto);
+
                 toast.current.show({ severity: "success", summary: "Successful", detail: "recinto Created", life: 3000 });
             }
 
-            setRecintos(_recintos);
             setRecintoDialog(false);
             setRecinto(emptyRecinto);
         }
@@ -213,7 +216,6 @@ const Recinto = () => {
         setCiudad(e.value);
     };
     const onProvinciaChange = (e) => {
-        const id = e.value.id;
         setProvincia(e.value);
         setCiudad(ciudades.find((item) => item.provincia.id === e.value.id));
         const object = new CiudadService();
@@ -344,7 +346,7 @@ const Recinto = () => {
                         paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} recintos"
                         globalFilter={globalFilter}
-                        emptyMessage="No recintos found."
+                        emptyMessage="No se encuentra ningun recinto"
                         header={header}
                         responsiveLayout="scroll"
                     >
@@ -363,25 +365,38 @@ const Recinto = () => {
                         <div className="field">
                             <label htmlFor="nombre">Nombre</label>
                             <InputText id="nombre" value={recinto.nombre} onChange={(e) => onNameChange(e, "nombre")} required autoFocus className={classNames({ "p-invalid": submitted && !recinto.nombre })} />
-                            {submitted && !recinto.nombre && <small className="p-invalid">Name is required.</small>}
+                            {submitted && !recinto.nombre && <small className="p-invalid">Nombre es requerido</small>}
                         </div>
                         <div className="field">
                             <label htmlFor="direccion">Direccion</label>
                             <InputText id="direccion" value={recinto.direccion} onChange={(e) => onDirectionChange(e, "direccion")} required autoFocus className={classNames({ "p-invalid": submitted && !recinto.direccion })} />
-                            {submitted && !recinto.direccion && <small className="p-invalid">Name is required.</small>}
+                            {submitted && !recinto.direccion && <small className="p-invalid">Direccion es requerido</small>}
                         </div>
                         <div className="field">
                             <label htmlFor="celular">Celular</label>
                             <InputText id="celular" value={recinto.celular} onChange={(e) => onDirectionChange(e, "celular")} required autoFocus className={classNames({ "p-invalid": submitted && !recinto.celular })} />
-                            {submitted && !recinto.celular && <small className="p-invalid">Name is required.</small>}
+                            {submitted && !recinto.celular && <small className="p-invalid">Celular es requiredo</small>}
                         </div>
                         <div>
                             <label htmlFor="provincia">Provincia</label>
-                            <Dropdown id="provincia" value={provincia} onChange={(e) => onProvinciaChange(e)} options={provincias} optionLabel="nombre" placeholder="Selecione provincia"></Dropdown>
+                            <Dropdown id="provincia" value={provincia} onChange={(e) => onProvinciaChange(e)} options={provincias} optionLabel="nombre" placeholder="Selecione una provincia" required autoFocus className={classNames({ "p-invalid": submitted && !provincia.nombre })} />
+                            {submitted && !provincia.nombre && <small className="p-invalid">Provincia es requiredo</small>}
                         </div>
                         <div>
                             <label htmlFor="ciudad">Ciudad</label>
-                            <Dropdown id="ciudad" value={ciudad} onChange={(e) => onCiudadChange(e)} options={ciudades?.filter((resp) => resp.provincia.id === provincia.id)} optionLabel="nombre" placeholder="Seleccione ciudad"></Dropdown>
+                            <Dropdown
+                                id="ciudad"
+                                value={ciudad}
+                                name={"ciudad"}
+                                onChange={(e) => onCiudadChange(e)}
+                                options={ciudades?.filter((resp) => resp.provincia.id === provincia.id)}
+                                optionLabel="nombre"
+                                placeholder="Seleccione una ciudad"
+                                required
+                                autoFocus
+                                className={classNames({ "p-invalid": submitted && !ciudad.nombre })}
+                            />
+                            {submitted && !ciudad.nombre && <small className="p-invalid">Ciudad es requerido</small>}
                         </div>
                     </Dialog>
 
