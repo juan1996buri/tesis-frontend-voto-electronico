@@ -8,7 +8,6 @@ import { ListaService } from "../service/ListaService";
 import { CandidatoService } from "../service/CandidatoService";
 import { VotoService } from "../service/VotoService";
 import { ProcesoEleccionService } from "../service/ProcesoEleccionService";
-import { Alert, AlertTitle } from "@mui/material";
 import Swal from "sweetalert2";
 
 const Sufragar = () => {
@@ -19,6 +18,7 @@ const Sufragar = () => {
     const [listas, setListas] = useState([]);
     const [votante, setVotante] = useState({});
     const [candidatos, setCandidatos] = useState([]);
+    const [procesoEleccion, setProcesoEleccion] = useState([]);
     const voto = { id: "", lista: "", votante: "", procesoEleccion: "" };
     const validarVoto = {
         idVotante: "",
@@ -33,11 +33,17 @@ const Sufragar = () => {
             const procesoEleccion = new ProcesoEleccionService();
             votanteService.getVotante(data.cedula).then((votante) => {
                 setVotante(votante);
-                listaService.getListasAVotar(votante).then((lista) => {
-                    setListas(lista);
-                });
-                candidatosService.getCandidatosAVotar(votante).then((candidato) => {
-                    setCandidatos(candidato);
+                procesoEleccion.getProcesoEleccionAVotar(votante).then((proceso) => {
+                    setProcesoEleccion(proceso[0]);
+                    if (proceso[0]?.activo === true) {
+                        listaService.getListasAVotar(votante).then((lista) => {
+                            const listaAVotar = lista.filter((item) => item.procesoEleccion.nombre === proceso[0].nombre);
+                            setListas(listaAVotar);
+                        });
+                        candidatosService.getCandidatosAVotar(votante).then((candidato) => {
+                            setCandidatos(candidato);
+                        });
+                    }
                 });
             });
         } else {
@@ -88,14 +94,16 @@ const Sufragar = () => {
     return (
         <div className="container_sufragar">
             <div className="title-sufragar">
-                <h1>Proceso eleccion</h1>
+                <h1 style={{ fontWeight: "bold" }}>{procesoEleccion?.nombre}</h1>
             </div>
             <div className="container_listas  p-fluid">
                 {listas.map((lista) => (
                     <div className="container-lista" key={lista.id}>
-                        <h2 className="lista-nombre" style={{ fontWeight: "bolder" }}>
-                            {lista.nombre}
-                        </h2>
+                        <div className="lista-cabecera">
+                            <img alt="logo" src={lista?.logo} style={{ width: "3rem", height: "3rem", borderRadius: "50%" }} />
+                            <h2 style={{ fontWeight: "bolder" }}>{lista.nombre}</h2>
+                        </div>
+
                         {candidatos
                             .filter((candidato) => candidato.lista.nombre === lista.nombre)
                             .map((candidato) => (
@@ -104,7 +112,7 @@ const Sufragar = () => {
                                         {candidato.tipoCandidato.nombre}
                                     </h3>
                                     <div className="lista-usuario">
-                                        <img src={Nulo} className="lista-imagen" alt="imagen" />
+                                        <img src={candidato.imagen} className="lista-imagen" alt="imagen" />
                                         <div>
                                             <h4>{candidato.votante.nombre}</h4>
                                             <h4>{candidato.votante.apellido}</h4>
@@ -112,6 +120,7 @@ const Sufragar = () => {
                                     </div>
                                 </div>
                             ))}
+                        <br />
                         <Button label="VOTAR" className="p-button-success mr-2" onClick={() => handleVoto(lista)} />
                     </div>
                 ))}

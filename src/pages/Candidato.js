@@ -15,6 +15,7 @@ import { ListaService } from "../service/ListaService";
 import { VotanteService } from "../service/VotanteService";
 import { ProcesoEleccionService } from "../service/ProcesoEleccionService";
 import { TipoCandidatoService } from "../service/TipoCandidatoService";
+import { Image } from "primereact/image";
 
 const Candidato = () => {
     const history = useHistory();
@@ -43,6 +44,7 @@ const Candidato = () => {
     const [selectedCandidatos, setSelectedCandidatos] = useState([]);
     const [submitted, setSubmitted] = useState(false);
     const [globalFilter, setGlobalFilter] = useState(null);
+    const [imagen, setImagen] = useState("");
     const toast = useRef(null);
     const dt = useRef(null);
 
@@ -94,6 +96,9 @@ const Candidato = () => {
 
     const savecandidato = () => {
         setSubmitted(true);
+        if (imagen) {
+            candidato.imagen = imagen;
+        }
         candidato.lista = lista;
         candidato.procesoEleccion = procesoEleccion;
         candidato.tipoCandidato = tipoCandidato;
@@ -136,6 +141,7 @@ const Candidato = () => {
     const editcandidato = (candidato) => {
         setLista(candidato.lista);
         setVotante(candidato.votante);
+        setImagen(candidato.imagen);
         setTipoCandidato(candidato.tipoCandidato);
         setProcesoEleccion(candidato.procesoEleccion);
         setCandidato({ ...candidato });
@@ -176,6 +182,24 @@ const Candidato = () => {
         }
 
         return index;
+    };
+
+    const onUpload = async (e) => {
+        //e.options.props.customUpload = false;
+        const file = e.files[0];
+        const reader = new FileReader();
+
+        let blob = await fetch(file.objectURL).then((r) => r.blob()); //blob:url
+        reader.readAsDataURL(blob);
+        reader.onloadend = function () {
+            const base64data = reader.result;
+            setImagen(base64data);
+        };
+        toast.current.show({ severity: "info", summary: "Success", detail: "Imagen cargada" });
+    };
+
+    const onCancel = () => {
+        setImagen("");
     };
 
     const exportCSV = () => {
@@ -275,6 +299,14 @@ const Candidato = () => {
             </>
         );
     };
+    const imagenCandidatoBodyTemplate = (rowData) => {
+        return (
+            <>
+                <span className="p-column-title">Imagen</span>
+                <img style={{ width: "12rem", height: "10rem" }} src={rowData.imagen} alt="imagen" />
+            </>
+        );
+    };
     const candidatoBodyTemplate = (rowData) => {
         return (
             <>
@@ -351,7 +383,8 @@ const Candidato = () => {
                         <Column field="procesoEleccion" header="Proceso Eleccion" sortable body={procesoEleccionBodyTemplate} headerStyle={{ width: "14%", minWidth: "10rem" }}></Column>
                         <Column field="lista" header="Lista" sortable body={listaBodyTemplate} headerStyle={{ width: "14%", minWidth: "10rem" }}></Column>
                         <Column field="candidato" header="Candidato" sortable body={candidatoBodyTemplate} headerStyle={{ width: "14%", minWidth: "10rem" }}></Column>
-                        <Column field="Cargo" header="Cargo" sortable body={tipoCandidatoBodyTemplate} headerStyle={{ width: "14%", minWidth: "10rem" }}></Column>
+                        <Column field="cargo" header="Cargo" sortable body={tipoCandidatoBodyTemplate} headerStyle={{ width: "14%", minWidth: "10rem" }}></Column>
+                        <Column field="imagen" header="Imagen" sortable body={imagenCandidatoBodyTemplate} headerStyle={{ width: "14%", minWidth: "10rem" }}></Column>
 
                         <Column body={actionBodyTemplate}></Column>
                     </DataTable>
@@ -383,7 +416,7 @@ const Candidato = () => {
                         <div className="field">
                             <label htmlFor="candidato">Candidato</label>
                             <Dropdown id="candidato" name="votante" value={votante} onChange={(e) => onVotante(e)} options={votantes} optionLabel="cedula" placeholder="Seleccione un candidato" required autoFocus className={classNames({ "p-invalid": submitted && !votante.nombre })} />
-                            {submitted && !candidato.nombre && <small className="p-invalid">Candidato es requerido</small>}
+                            {submitted && !votante.nombre && <small className="p-invalid">Candidato es requerido</small>}
                         </div>
                         <div className="field">
                             <label htmlFor="tipoCandidato">Cargo</label>
@@ -400,6 +433,12 @@ const Candidato = () => {
                                 className={classNames({ "p-invalid": submitted && !tipoCandidato.nombre })}
                             />
                             {submitted && !tipoCandidato.nombre && <small className="p-invalid">Cargo es requerido</small>}
+                        </div>
+                        <div className="field">
+                            <Image src={imagen === "" ? candidato?.imagen : imagen} alt="Image Text" width="400px" />
+                        </div>
+                        <div className="field">
+                            <FileUpload name="image" accept="image/*" customUpload={true} chooseLabel={"Cargar"} uploadLabel={"Subir"} cancelLabel={"cancelar"} uploadHandler={onUpload} maxFileSize={1000000} onClear={onCancel} onRemove={onCancel} emptyTemplate={<p className="m-0"></p>} />
                         </div>
                     </Dialog>
 

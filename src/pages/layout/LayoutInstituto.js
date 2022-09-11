@@ -31,6 +31,7 @@ import Lista from "../Lista";
 import TipoCandidato from "../TipoCandidato";
 import Votante from "../Votante";
 import Candidato from "../Candidato";
+import Resultados from "../Resultados";
 
 const LayoutInstituto = () => {
     const [layoutMode, setLayoutMode] = useState("static");
@@ -187,6 +188,10 @@ const LayoutInstituto = () => {
         },
         {
             icon: "pi ",
+            items: [{ label: "Resultados", icon: "pi pi-fw pi-user-edit", to: `${url}/resultados` }],
+        },
+        {
+            icon: "pi ",
             items: [{ label: "Modificacion de Contraseña", icon: "pi pi-fw pi-user-edit", to: `${url}/passwordModificacionDatosInstitucion` }],
         },
     ];
@@ -236,6 +241,7 @@ const LayoutInstituto = () => {
                         <Route path={`${path}/votantes`} component={Votante} />
                         <Route path={`${path}/passwordModificacionDatosInstitucion`} component={PasswordModificacionDatosInstitucion} />
                         <Route path={`${path}/candidatos`} component={Candidato} />
+                        <Route path={`${path}/resultados`} component={Resultados} />
                     </Switch>
                 </div>
                 <AppFooter layoutColorMode={layoutColorMode} />

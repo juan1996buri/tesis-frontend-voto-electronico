@@ -1,0 +1,63 @@
+.resultado_lista_nombre {
+    display: flex;
+    width: 99%;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}
+
+.resultado_listas {
+    display: flex;
+    width: 99%;
+}
+
+.resultado_lista {
+    flex: 1;
+}
+
+.resultado_porcentaje {
+    height: 90%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.resultado_barra {
+    flex: 1;
+    text-align: center;
+}
+.resultado_cantidad {
+    flex: 1;
+    text-align: center;
+}
+
+.resultado_integrante_datos {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.restultado_integrante_cargo {
+    text-align: center;
+}
+.resultados_division {
+    height: 1px;
+    background-color: rgb(197, 202, 202);
+}
+
+.resultado_integrante_imagen {
+    width: 60px;
+    height: 60px;
+    background-color: white;
+}
+.resultado_votos {
+    height: 90%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@media screen and (max-width: 600px) {
+    .resultado_barra {
+        display: none;
+    }
+}

@@ -20,8 +20,11 @@
     background-color: rgb(231, 231, 245);
 }
 
-.lista-nombre {
-    text-align: center;
+.lista-cabecera {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    align-items: center;
 }
 .lista-usuario {
     margin-top: -1rem;
@@ -33,5 +36,9 @@
 .lista-imagen {
     width: 100px;
     height: 100px;
-    background-color: blueviolet;
+    background-color: white;
+}
+
+.lista-nombre {
+    text-align: center;
 }

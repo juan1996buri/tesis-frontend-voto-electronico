@@ -134,6 +134,7 @@ const Lista = () => {
 
     const editLista = (lista) => {
         setActive(lista.activo);
+        setLogo(lista.logo);
         setProcesoEleccion(lista.procesoEleccion);
         setLista({ ...lista });
         setListaDialog(true);
@@ -267,6 +268,14 @@ const Lista = () => {
             </>
         );
     };
+    const logoCandidatoBodyTemplate = (rowData) => {
+        return (
+            <>
+                <span className="p-column-title">Logo</span>
+                <img style={{ width: "12rem", height: "10rem" }} src={rowData.logo} alt="imagen" />
+            </>
+        );
+    };
     const procesoBodyTemplate = (rowData) => {
         return (
             <>
@@ -342,6 +351,7 @@ const Lista = () => {
                         <Column field="id" header="id" sortable body={codeBodyTemplate} headerStyle={{ width: "14%", minWidth: "10rem" }}></Column>
                         <Column field="nombre" header="Nombre" sortable body={nombreBodyTemplate} headerStyle={{ width: "14%", minWidth: "10rem" }}></Column>
                         <Column field="proceso" header="Proceso" sortable body={procesoBodyTemplate} headerStyle={{ width: "14%", minWidth: "10rem" }}></Column>
+                        <Column field="logo" header="Logo" sortable body={logoCandidatoBodyTemplate} headerStyle={{ width: "14%", minWidth: "10rem" }}></Column>
                         <Column field="estado" header="Estado" sortable body={activoBodyTemplate} headerStyle={{ width: "14%", minWidth: "10rem" }}></Column>
 
                         <Column body={actionBodyTemplate}></Column>

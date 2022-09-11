@@ -36,6 +36,23 @@ export class ProcesoEleccionService {
             });
     }
 
+    getProcesoEleccionAVotar(votante) {
+        return axios
+            .get(url, { headers: authHeader() })
+            .then((res) => {
+                if (res.data.success) {
+                    const data = res.data.result;
+                    const procesoEleccionAVotar = data.filter((item) => item.institucion.id === votante.institucion.id).filter((estado) => estado.activo === true);
+                    return procesoEleccionAVotar;
+                }
+            })
+            .catch(function (error) {
+                if (error.response) {
+                    return error.response.status;
+                }
+            });
+    }
+
     postProcesoEleccion(data) {
         return axios
             .post(url, data, { headers: authHeader() })
