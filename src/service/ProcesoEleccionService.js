@@ -21,7 +21,7 @@ export class ProcesoEleccionService {
             });
     }
 
-    getProcesoEleccione(ruc, state) {
+    /*   getProcesoEleccione(ruc, state) {
         return axios
             .get(url, { headers: authHeader() })
             .then((res) => {
@@ -34,7 +34,7 @@ export class ProcesoEleccionService {
                     return error.response.status;
                 }
             });
-    }
+    }*/
 
     getProcesoEleccionAVotar(votante) {
         return axios

@@ -6,12 +6,12 @@ const url = "http://localhost:9090/api/v1.0/voto/";
 //const institucion = JSON.parse(localStorage.getItem("institucion"));
 
 export class VotoService {
-    getVotos(ruc, state) {
+    getVotos(ruc) {
         return axios
             .get(url, { headers: authHeader() })
             .then((res) => {
                 if (res.data.success) {
-                    state(res.data.result.filter((item) => item.institucion.ruc === ruc));
+                    return res.data.result.filter((item) => item.procesoEleccion.institucion.ruc === ruc);
                 }
             })
             .catch(function (error) {
@@ -42,6 +42,23 @@ export class VotoService {
                 return error.response.status;
             }
         });
+    }
+
+    postConteo(lista, proceso) {
+        const conteo = {
+            idProcesoEleccion: proceso,
+            idLista: lista,
+        };
+        return axios
+            .post(url + "conteo", conteo, { headers: authHeader() })
+            .then((res) => {
+                return res.data.result;
+            })
+            .catch(function (error) {
+                if (error.response) {
+                    return error.response.status;
+                }
+            });
     }
 
     postVerificarVoto(data) {

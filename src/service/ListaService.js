@@ -10,6 +10,7 @@ export class ListaService {
             .then((res) => {
                 if (res.data.success) {
                     state(res.data.result.filter((item) => item.procesoEleccion.institucion.ruc === ruc));
+                    return res.data.result.filter((item) => item.procesoEleccion.institucion.ruc === ruc);
                 }
             })
             .catch(function (error) {
