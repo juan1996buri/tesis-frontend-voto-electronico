@@ -3,7 +3,7 @@ import Nulo from "../images/Nulo.png";
 import "../styles/Resultados.css";
 import { Dropdown } from "primereact/dropdown";
 
-import LinearProgress, { LinearProgressProps } from "@mui/material/LinearProgress";
+import LinearProgress from "@mui/material/LinearProgress";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import { useHistory } from "react-router-dom";
@@ -33,14 +33,12 @@ const Resultados = () => {
     const [candidatos, setCandidatos] = useState([]);
 
     const [progress, setProgress] = React.useState(100);
-    const [cantidadVotos, setCantidadVotos] = useState([]);
 
     const onProcesoEleccion = (e) => {
         setProcesoEleccion(e.value);
         const listaService = new ListaService();
         const candidatoService = new CandidatoService();
         listaService.getListas(data.ruc, setListas).then((_lista) => {
-            const listaValida = _lista.filter((item) => item.procesoEleccion.nombre === e.value.nombre);
             setListas(_lista.filter((item) => item.procesoEleccion.nombre === e.value.nombre));
             candidatoService.getCandidatos(data.ruc, setCandidatos).then((candidato) => {
                 setCandidatos(candidato.filter((item) => item.procesoEleccion.nombre === e.value.nombre));
@@ -48,36 +46,7 @@ const Resultados = () => {
             const votoService = new VotoService();
             votoService.getVotos(data.ruc, setVotos).then((voto) => {
                 const votosValidos = voto.filter((item) => item.procesoEleccion.nombre === e.value.nombre);
-
-                console.log(votosValidos);
-                const uniqueIds = [];
-
-                const unique = votosValidos.filter((element) => {
-                    const isDuplicate = uniqueIds.includes(element.lista.id);
-
-                    if (!isDuplicate) {
-                        uniqueIds.push(element.id);
-
-                        return true;
-                    }
-
-                    return false;
-                });
-
-                console.log(unique);
-
-                setVotos(voto.filter((item) => item.procesoEleccion.nombre === e.value.nombre));
-
-                listaValida.map((lista) =>
-                    unique.map((v) => {
-                        if (v.lista.nombre === lista.nombre) {
-                            const votoService = new VotoService();
-                            votoService.postConteo(lista.id, v.procesoEleccion.id).then((item) => {
-                                setCantidadVotos((cantidadVotos) => cantidadVotos.concat({ nombre: lista.nombre, cantidad: item }));
-                            });
-                        }
-                    })
-                );
+                setVotos(votosValidos);
             });
         });
     };
@@ -89,14 +58,8 @@ const Resultados = () => {
             history.push("/");
         }
     }, []);
-    const [numero, setNumero] = useState(0);
-    const conteoVotos = (idLista, idProceso) => {
-        const votoService = new VotoService();
 
-        votoService.postConteo(idLista, idProceso).then((resp) => {
-            setNumero(resp);
-        });
-    };
+    let resp = 0;
     return (
         <div className="container_resultado ">
             <div>
@@ -144,13 +107,20 @@ const Resultados = () => {
                             </div>
                             <div className="resultado_cantidad">
                                 <h3 style={{ fontWeight: "bold", height: "10%" }}>Votos</h3>
-                                {cantidadVotos
-                                    .filter((item) => lista.nombre === item.nombre)
-                                    .map((item) => (
-                                        <div key={lista.id} className="resultado_votos">
-                                            {item.cantidad}
+                                {
+                                    (votos
+                                        .filter((item) => lista.nombre === item.lista.nombre)
+                                        .map((voto) => {
+                                            if (voto.lista.nombre === lista.nombre) {
+                                                resp++;
+                                            }
+                                        }, (resp = 0)),
+                                    (
+                                        <div className="resultado_votos">
+                                            <h3>{resp}</h3>
                                         </div>
-                                    ))}
+                                    ))
+                                }
                             </div>
                         </div>
                     </div>
