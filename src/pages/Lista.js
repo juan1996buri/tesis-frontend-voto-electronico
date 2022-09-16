@@ -20,7 +20,6 @@ const Lista = () => {
     let emptylista = {
         id: "",
         nombre: "",
-        activo: false,
     };
     const [listas, setListas] = useState([]);
     const [listaDialog, setListaDialog] = useState(false);
@@ -32,7 +31,6 @@ const Lista = () => {
     const [selectedlistas, setSelectedlistas] = useState([]);
     const [submitted, setSubmitted] = useState(false);
     const [globalFilter, setGlobalFilter] = useState(null);
-    const [active, setActive] = useState(false);
     const [logo, setLogo] = useState("");
 
     const toast = useRef(null);
@@ -92,11 +90,7 @@ const Lista = () => {
         if (logo) {
             lista.logo = logo;
         }
-        if (active) {
-            lista.activo = true;
-        } else {
-            lista.activo = false;
-        }
+
         lista.procesoEleccion = procesoEleccion;
         const listaService = new ListaService();
         if (lista.nombre.trim() && procesoEleccion.nombre.trim()) {
@@ -133,7 +127,6 @@ const Lista = () => {
     };
 
     const editLista = (lista) => {
-        setActive(lista.activo);
         setLogo(lista.logo);
         setProcesoEleccion(lista.procesoEleccion);
         setLista({ ...lista });
@@ -143,15 +136,6 @@ const Lista = () => {
     const confirmDeleteLista = (lista) => {
         setLista(lista);
         setDeleteListaDialog(true);
-    };
-
-    const activoBodyTemplate = (rowData) => {
-        return (
-            <>
-                <span className="p-column-title">Estado</span>
-                {rowData.activo ? <span style={{ backgroundColor: "red", borderRadius: "1rem", padding: "1rem", color: "white" }}>Activado</span> : <span style={{ backgroundColor: "green", borderRadius: "1rem", padding: "1rem", color: "white" }}>Desactivado</span>}
-            </>
-        );
     };
 
     const deleteLista = () => {
@@ -352,7 +336,6 @@ const Lista = () => {
                         <Column field="nombre" header="Nombre" sortable body={nombreBodyTemplate} headerStyle={{ width: "14%", minWidth: "10rem" }}></Column>
                         <Column field="proceso" header="Proceso" sortable body={procesoBodyTemplate} headerStyle={{ width: "14%", minWidth: "10rem" }}></Column>
                         <Column field="logo" header="Logo" sortable body={logoCandidatoBodyTemplate} headerStyle={{ width: "14%", minWidth: "10rem" }}></Column>
-                        <Column field="estado" header="Estado" sortable body={activoBodyTemplate} headerStyle={{ width: "14%", minWidth: "10rem" }}></Column>
 
                         <Column body={actionBodyTemplate}></Column>
                     </DataTable>
@@ -386,7 +369,6 @@ const Lista = () => {
                         <div className="field">
                             <FileUpload name="image" accept="image/*" customUpload={true} chooseLabel={"Cargar"} uploadLabel={"Subir"} cancelLabel={"cancelar"} uploadHandler={onUpload} maxFileSize={1000000} onClear={onCancel} onRemove={onCancel} emptyTemplate={<p className="m-0"></p>} />
                         </div>
-                        <InputSwitch checked={active} onChange={(e) => setActive(e.value)} color="primary" name="status" />
                     </Dialog>
 
                     <Dialog visible={deleteListaDialog} style={{ width: "450px" }} header="Confirm" modal footer={deleteListaDialogFooter} onHide={hideDeleteListaDialog}>

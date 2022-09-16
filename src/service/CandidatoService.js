@@ -9,8 +9,8 @@ export class CandidatoService {
             .get(url, { headers: authHeader() })
             .then((res) => {
                 if (res.data.success) {
-                    state(res.data.result.filter((item) => item.procesoEleccion.institucion.ruc === ruc));
-                    return res.data.result.filter((item) => item.procesoEleccion.institucion.ruc === ruc);
+                    state(res.data.result.filter((item) => item.lista.procesoEleccion.institucion.ruc === ruc));
+                    return res.data.result.filter((item) => item.lista.procesoEleccion.institucion.ruc === ruc);
                 }
             })
             .catch(function (error) {
@@ -27,9 +27,9 @@ export class CandidatoService {
                 if (res.data.success) {
                     const data = res.data.result;
                     const candidatos = data.filter((item) => item.votante.institucion.id === votante.institucion.id);
-                    const candidatosProcesoEleccionActivos = candidatos.filter((item) => item.procesoEleccion.activo === true);
-                    const candidatosListasActivos = candidatosProcesoEleccionActivos.filter((item) => item.lista.activo === true);
-                    return candidatosListasActivos;
+                    const candidatosProcesoEleccionActivos = candidatos.filter((item) => item.lista.procesoEleccion.activo === true);
+                    //const candidatosListasActivos = candidatosProcesoEleccionActivos.filter((item) => item.lista.activo === true);
+                    return candidatosProcesoEleccionActivos;
                 }
             })
             .catch(function (error) {

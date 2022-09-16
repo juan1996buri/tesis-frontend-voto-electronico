@@ -28,10 +28,10 @@ const LayoutVotante = () => {
     const [layoutColorMode, setLayoutColorMode] = useState("light");
     const [inputStyle, setInputStyle] = useState("outlined");
     const [ripple, setRipple] = useState(true);
-    const [staticMenuInactive, setStaticMenuInactive] = useState(false);
-    const [overlayMenuActive, setOverlayMenuActive] = useState(false);
-    const [mobileMenuActive, setMobileMenuActive] = useState(false);
-    const [mobileTopbarMenuActive, setMobileTopbarMenuActive] = useState(false);
+    const [staticMenuInactive, setStaticMenuInactive] = useState(true);
+    const [overlayMenuActive, setOverlayMenuActive] = useState(true);
+    const [mobileMenuActive, setMobileMenuActive] = useState(true);
+    const [mobileTopbarMenuActive, setMobileTopbarMenuActive] = useState(true);
     const copyTooltipRef = useRef();
     const location = useLocation();
     PrimeReact.ripple = true;
@@ -172,16 +172,14 @@ const LayoutVotante = () => {
         <div className={wrapperClass} onClick={onWrapperClick}>
             <Tooltip ref={copyTooltipRef} target=".block-action-copy" position="bottom" content="Copied to clipboard" event="focus" />
 
-            <AppTopbar onToggleMenuClick={onToggleMenuClick} layoutColorMode={layoutColorMode} mobileTopbarMenuActive={mobileTopbarMenuActive} onMobileTopbarMenuClick={onMobileTopbarMenuClick} onMobileSubTopbarMenuClick={onMobileSubTopbarMenuClick} />
+            <AppTopbar />
 
             <div className="layout-sidebar" onClick={onSidebarClick}>
-                <AppMenu model={menu} onMenuItemClick={onMenuItemClick} layoutColorMode={layoutColorMode} />
+                <AppMenu />
             </div>
             <div className="layout-main-container">
                 <div className="layout-main">
-                    <Route path={`${path}`} exact render={() => <Dashboard colorMode={layoutColorMode} location={location} />} />
-
-                    <Route path={`${path}/sufragar`} component={Sufragar} />
+                    <Route path={`${path}`} component={Sufragar} />
                 </div>
                 <AppFooter layoutColorMode={layoutColorMode} />
             </div>

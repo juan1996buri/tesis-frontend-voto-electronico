@@ -41,7 +41,7 @@ const Resultados = () => {
         listaService.getListas(data.ruc, setListas).then((_lista) => {
             setListas(_lista.filter((item) => item.procesoEleccion.nombre === e.value.nombre));
             candidatoService.getCandidatos(data.ruc, setCandidatos).then((candidato) => {
-                setCandidatos(candidato.filter((item) => item.procesoEleccion.nombre === e.value.nombre));
+                setCandidatos(candidato.filter((item) => item.lista.procesoEleccion.nombre === e.value.nombre));
             });
             const votoService = new VotoService();
             votoService.getVotos(data.ruc, setVotos).then((voto) => {

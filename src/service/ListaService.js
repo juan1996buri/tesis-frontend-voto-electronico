@@ -26,7 +26,7 @@ export class ListaService {
             .then((res) => {
                 if (res.data.success) {
                     const data = res.data.result;
-                    const listas = data.filter((item) => item.procesoEleccion.institucion.id === votante.institucion.id).filter((item) => item.activo === true);
+                    const listas = data.filter((item) => item.procesoEleccion.institucion.id === votante.institucion.id);
                     return listas;
                 }
             })

@@ -24,7 +24,6 @@ const Candidato = () => {
         votante: "",
         tipoCandidato: "",
         lista: "",
-        procesoEleccion: "",
         imagen: "",
     };
 
@@ -33,7 +32,6 @@ const Candidato = () => {
     const [deleteCandidatoDialog, setDeleteCandidatoDialog] = useState(false);
     const [deleteCandidatosDialog, setDeleteCandidatosDialog] = useState(false);
     const [candidato, setCandidato] = useState(emptycandidato);
-    const [procesoEleccion, setProcesoEleccion] = useState({ nombre: "" });
     const [procesoElecciones, setProcesoElecciones] = useState([]);
     const [tipoCandidatos, setTiposCandidatos] = useState([]);
     const [lista, setLista] = useState({ nombre: "" });
@@ -75,7 +73,6 @@ const Candidato = () => {
         setTipoCandidato({ ...tipoCandidato, ...tipoCandidatos[0] });
         setVotante({ ...votante, ...votantes[0] });
         setLista({ ...lista, ...listas[0] });
-        setProcesoEleccion({ ...procesoEleccion, ...procesoElecciones[0] });
         setCandidato(emptycandidato);
         setSubmitted(false);
         setCandidatoDialog(true);
@@ -100,12 +97,11 @@ const Candidato = () => {
             candidato.imagen = imagen;
         }
         candidato.lista = lista;
-        candidato.procesoEleccion = procesoEleccion;
         candidato.tipoCandidato = tipoCandidato;
         candidato.votante = votante;
 
         const candidatoService = new CandidatoService();
-        if (candidato.votante.nombre.trim() && lista.nombre.trim() && tipoCandidato.nombre.trim() && procesoEleccion.nombre.trim() && votante.nombre.trim()) {
+        if (candidato.votante.nombre.trim() && lista.nombre.trim() && tipoCandidato.nombre.trim() && votante.nombre.trim()) {
             let _candidatos = [...candidatos];
             let _candidato = { ...candidato };
             if (candidato.id) {
@@ -143,7 +139,6 @@ const Candidato = () => {
         setVotante(candidato.votante);
         setImagen(candidato.imagen);
         setTipoCandidato(candidato.tipoCandidato);
-        setProcesoEleccion(candidato.procesoEleccion);
         setCandidato({ ...candidato });
         setCandidatoDialog(true);
     };
@@ -210,10 +205,6 @@ const Candidato = () => {
         setDeleteCandidatosDialog(true);
     };
 
-    const onProcesoEleccion = (e) => {
-        setProcesoEleccion(e.value);
-    };
-
     const onLista = (e) => {
         setLista(e.value);
     };
@@ -275,14 +266,6 @@ const Candidato = () => {
         );
     };
 
-    const procesoEleccionBodyTemplate = (rowData) => {
-        return (
-            <>
-                <span className="p-column-title">Nombre del Proceso</span>
-                {rowData.procesoEleccion.nombre}
-            </>
-        );
-    };
     const listaBodyTemplate = (rowData) => {
         return (
             <>
@@ -380,7 +363,6 @@ const Candidato = () => {
                     >
                         <Column selectionMode="multiple" headerStyle={{ width: "3rem" }}></Column>
                         <Column field="id" header="id" sortable body={codeBodyTemplate} headerStyle={{ width: "14%", minWidth: "10rem" }}></Column>
-                        <Column field="procesoEleccion" header="Proceso Eleccion" sortable body={procesoEleccionBodyTemplate} headerStyle={{ width: "14%", minWidth: "10rem" }}></Column>
                         <Column field="lista" header="Lista" sortable body={listaBodyTemplate} headerStyle={{ width: "14%", minWidth: "10rem" }}></Column>
                         <Column field="candidato" header="Candidato" sortable body={candidatoBodyTemplate} headerStyle={{ width: "14%", minWidth: "10rem" }}></Column>
                         <Column field="cargo" header="Cargo" sortable body={tipoCandidatoBodyTemplate} headerStyle={{ width: "14%", minWidth: "10rem" }}></Column>
@@ -391,22 +373,7 @@ const Candidato = () => {
 
                     <Dialog visible={candidatoDialog} style={{ width: "450px" }} header="candidato" modal className="p-fluid" footer={candidatoDialogFooter} onHide={hideDialog}>
                         {candidato.image && <img src={`assets/demo/images/candidato/${candidato.image}`} alt={candidato.image} width="150" className="mt-0 mx-auto mb-5 block shadow-2" />}
-                        <div className="field">
-                            <label htmlFor="ProcesoEleccion">Proceso Eleccion</label>
-                            <Dropdown
-                                id="ProcesoEleccion"
-                                name="nombre"
-                                value={procesoEleccion}
-                                onChange={(e) => onProcesoEleccion(e)}
-                                options={procesoElecciones}
-                                optionLabel="nombre"
-                                placeholder="Seleccione un candidato"
-                                required
-                                autoFocus
-                                className={classNames({ "p-invalid": submitted && !procesoEleccion.nombre })}
-                            />
-                            {submitted && !procesoEleccion.nombre && <small className="p-invalid">Proceso elección es requerido</small>}
-                        </div>
+
                         <div className="field">
                             <label htmlFor="lista">Lista</label>
                             <Dropdown id="lista" name="lista" value={lista} onChange={(e) => onLista(e)} options={listas} optionLabel="nombre" placeholder="Seleccione un proceso eleccion" required autoFocus className={classNames({ "p-invalid": submitted && !lista.nombre })} />
