@@ -26,9 +26,10 @@ export class CandidatoService {
             .then((res) => {
                 if (res.data.success) {
                     const data = res.data.result;
-                    const candidatos = data.filter((item) => item.votante.institucion.id === votante.institucion.id);
+                    const candidatos = data.filter((item) => item.lista.procesoEleccion.institucion.id === votante.institucion.id);
+
                     const candidatosProcesoEleccionActivos = candidatos.filter((item) => item.lista.procesoEleccion.activo === true);
-                    //const candidatosListasActivos = candidatosProcesoEleccionActivos.filter((item) => item.lista.activo === true);
+
                     return candidatosProcesoEleccionActivos;
                 }
             })

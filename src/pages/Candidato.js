@@ -21,10 +21,10 @@ const Candidato = () => {
     const history = useHistory();
     let emptycandidato = {
         id: "",
-        votante: "",
         tipoCandidato: "",
         lista: "",
         imagen: "",
+        nombre: "",
     };
 
     const [candidatos, setCandidatos] = useState([]);
@@ -37,8 +37,6 @@ const Candidato = () => {
     const [lista, setLista] = useState({ nombre: "" });
     const [tipoCandidato, setTipoCandidato] = useState({ nombre: "" });
     const [listas, setListas] = useState([]);
-    const [votante, setVotante] = useState({ nombre: "" });
-    const [votantes, setVotantes] = useState([]);
     const [selectedCandidatos, setSelectedCandidatos] = useState([]);
     const [submitted, setSubmitted] = useState(false);
     const [globalFilter, setGlobalFilter] = useState(null);
@@ -58,8 +56,7 @@ const Candidato = () => {
             });
             const listaService = new ListaService();
             listaService.getListas(data.ruc, setListas);
-            const votanteService = new VotanteService();
-            votanteService.getVotantes(data.ruc, setVotantes);
+
             const procesoEleccionService = new ProcesoEleccionService();
             procesoEleccionService.getProcesosElecciones(data.ruc, setProcesoElecciones);
             const tipoCandidatoService = new TipoCandidatoService();
@@ -71,7 +68,7 @@ const Candidato = () => {
 
     const openNew = () => {
         setTipoCandidato({ ...tipoCandidato, ...tipoCandidatos[0] });
-        setVotante({ ...votante, ...votantes[0] });
+
         setLista({ ...lista, ...listas[0] });
         setCandidato(emptycandidato);
         setSubmitted(false);
@@ -98,10 +95,9 @@ const Candidato = () => {
         }
         candidato.lista = lista;
         candidato.tipoCandidato = tipoCandidato;
-        candidato.votante = votante;
 
         const candidatoService = new CandidatoService();
-        if (candidato.votante.nombre.trim() && lista.nombre.trim() && tipoCandidato.nombre.trim() && votante.nombre.trim()) {
+        if (lista.nombre.trim() && tipoCandidato.nombre.trim() && candidato.nombre.trim()) {
             let _candidatos = [...candidatos];
             let _candidato = { ...candidato };
             if (candidato.id) {
@@ -136,7 +132,7 @@ const Candidato = () => {
 
     const editcandidato = (candidato) => {
         setLista(candidato.lista);
-        setVotante(candidato.votante);
+
         setImagen(candidato.imagen);
         setTipoCandidato(candidato.tipoCandidato);
         setCandidato({ ...candidato });
@@ -211,9 +207,12 @@ const Candidato = () => {
     const onTipoCandidato = (e) => {
         setTipoCandidato(e.value);
     };
+    const onNameChange = (e, name) => {
+        const val = (e.target && e.target.value) || "";
+        let _candidato = { ...candidato };
+        _candidato[`${name}`] = val;
 
-    const onVotante = (e) => {
-        setVotante(e.value);
+        setCandidato(_candidato);
     };
 
     const deleteSelectedCandidatos = () => {
@@ -293,8 +292,8 @@ const Candidato = () => {
     const candidatoBodyTemplate = (rowData) => {
         return (
             <>
-                <span className="p-column-title">Cedula</span>
-                {rowData.votante.cedula}
+                <span className="p-column-title">Nombre</span>
+                {rowData.nombre}
             </>
         );
     };
@@ -364,7 +363,7 @@ const Candidato = () => {
                         <Column selectionMode="multiple" headerStyle={{ width: "3rem" }}></Column>
                         <Column field="id" header="id" sortable body={codeBodyTemplate} headerStyle={{ width: "14%", minWidth: "10rem" }}></Column>
                         <Column field="lista" header="Lista" sortable body={listaBodyTemplate} headerStyle={{ width: "14%", minWidth: "10rem" }}></Column>
-                        <Column field="candidato" header="Candidato" sortable body={candidatoBodyTemplate} headerStyle={{ width: "14%", minWidth: "10rem" }}></Column>
+                        <Column field="nombre" header="Nombre" sortable body={candidatoBodyTemplate} headerStyle={{ width: "14%", minWidth: "10rem" }}></Column>
                         <Column field="cargo" header="Cargo" sortable body={tipoCandidatoBodyTemplate} headerStyle={{ width: "14%", minWidth: "10rem" }}></Column>
                         <Column field="imagen" header="Imagen" sortable body={imagenCandidatoBodyTemplate} headerStyle={{ width: "14%", minWidth: "10rem" }}></Column>
 
@@ -382,8 +381,8 @@ const Candidato = () => {
 
                         <div className="field">
                             <label htmlFor="candidato">Candidato</label>
-                            <Dropdown id="candidato" name="votante" value={votante} onChange={(e) => onVotante(e)} options={votantes} optionLabel="cedula" placeholder="Seleccione un candidato" required autoFocus className={classNames({ "p-invalid": submitted && !votante.nombre })} />
-                            {submitted && !votante.nombre && <small className="p-invalid">Candidato es requerido</small>}
+                            <InputText id="candidato" value={candidato.nombre} onChange={(e) => onNameChange(e, "nombre")} required autoFocus className={classNames({ "p-invalid": submitted && !candidato.nombre })} />
+                            {submitted && !candidato.nombre && <small className="p-invalid">Nombre es requiredo</small>}
                         </div>
                         <div className="field">
                             <label htmlFor="tipoCandidato">Cargo</label>

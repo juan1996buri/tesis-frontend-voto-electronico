@@ -94,8 +94,12 @@ const Sufragar = () => {
     };
     return (
         <div className="container_sufragar">
+            <div className="title-sufragar " style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "2rem" }}>
+                <img src={procesoEleccion.institucion?.logo} alt="logo" style={{ width: "3rem", height: "3rem", borderRadius: "50%" }} />
+                <h1 style={{ fontWeight: "bold" }}>{procesoEleccion.institucion?.nombre}</h1>
+            </div>
             <div className="title-sufragar">
-                <h1 style={{ fontWeight: "bold" }}>{procesoEleccion?.nombre}</h1>
+                <h2 style={{ fontWeight: "bold", fontFamily: "cursive", marginBottom: "2rem" }}>{procesoEleccion?.nombre}</h2>
             </div>
             <div className="container_listas  p-fluid">
                 {listas.map((lista) => (
@@ -115,8 +119,7 @@ const Sufragar = () => {
                                     <div className="lista-usuario">
                                         <img src={candidato.imagen} className="lista-imagen" alt="imagen" />
                                         <div>
-                                            <h4>{candidato.votante.nombre}</h4>
-                                            <h4>{candidato.votante.apellido}</h4>
+                                            <h4>{candidato.nombre}</h4>
                                         </div>
                                     </div>
                                 </div>

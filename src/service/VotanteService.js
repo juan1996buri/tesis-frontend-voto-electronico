@@ -12,6 +12,7 @@ export class VotanteService {
             .then((res) => {
                 if (res.data.success) {
                     state(res.data.result.filter((item) => item.institucion.ruc === ruc));
+                    return res.data.result.filter((item) => item.institucion.ruc === ruc);
                 }
             })
             .catch(function (error) {

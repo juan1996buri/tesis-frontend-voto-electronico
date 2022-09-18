@@ -56,6 +56,16 @@
     justify-content: center;
 }
 
+.resultado_lista_container {
+    background-color: white;
+    padding: 1rem;
+    border-radius: 0.4rem;
+}
+.resultado_lista_container:hover {
+    background-color: rgb(116, 245, 245);
+    cursor: pointer;
+}
+
 @media screen and (max-width: 600px) {
     .resultado_barra {
         display: none;

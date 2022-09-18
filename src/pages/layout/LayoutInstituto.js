@@ -32,10 +32,10 @@ import TipoCandidato from "../TipoCandidato";
 import Votante from "../Votante";
 import Candidato from "../Candidato";
 import Resultados from "../Resultados";
-import { useHistory } from "react-router-dom";
+import Ausentes from "../Ausentes";
+import Padron from "../Padron";
 
 const LayoutInstituto = () => {
-    const history = useHistory();
     const [layoutMode, setLayoutMode] = useState("static");
     const [layoutColorMode, setLayoutColorMode] = useState("light");
     const [inputStyle, setInputStyle] = useState("outlined");
@@ -116,27 +116,6 @@ const LayoutInstituto = () => {
         event.preventDefault();
     };
 
-    const actionProp = () => {
-        window.localStorage.removeItem("institucion");
-        history.push("/");
-    };
-
-    const onOptionUser = () => {
-        return (
-            <div style={{ textDecoration: "none" }}>
-                <Link to={`${url}/datosInstitucion`} style={{ color: "blue" }}>
-                    <h4>Perfil</h4>
-                </Link>
-                <Link to={`${url}/passwordModificacionDatosInstitucion`} style={{ color: "blue" }}>
-                    <h4>Cambiar contraseña</h4>
-                </Link>
-                <h4 onClick={actionProp} style={{ color: "blue", cursor: "pointer" }}>
-                    Cerrar sesión
-                </h4>
-            </div>
-        );
-    };
-
     const onSidebarClick = () => {
         menuClick = true;
     };
@@ -195,6 +174,10 @@ const LayoutInstituto = () => {
         },
         {
             label: "Reportes ",
+            items: [
+                { label: "Padrones", icon: "pi pi-fw pi-user-edit", to: `${url}/padrones` },
+                { label: "Ausentes", icon: "pi pi-fw pi-user-edit", to: `${url}/ausentes` },
+            ],
         },
         {
             label: "Resultados ",
@@ -256,6 +239,8 @@ const LayoutInstituto = () => {
                         <Route path={`${path}/passwordModificacionDatosInstitucion`} component={PasswordModificacionDatosInstitucion} />
                         <Route path={`${path}/candidatos`} component={Candidato} />
                         <Route path={`${path}/resultados`} component={Resultados} />
+                        <Route path={`${path}/ausentes`} component={Ausentes} />
+                        <Route path={`${path}/padrones`} component={Padron} />
                     </Switch>
                 </div>
                 <AppFooter layoutColorMode={layoutColorMode} />
