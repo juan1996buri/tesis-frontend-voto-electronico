@@ -438,7 +438,7 @@ const Votante = () => {
                         <div className="field ">
                             <label htmlFor="codigo">Codigo--</label>
                             <label htmlFor="codigo">{codigo}</label>
-                            <Button label="Gemerar codigo" icon="pi pi-plus" className="p-button-success mr-2" onClick={handleCodigo} />
+                            <Button label="Generar codigo" icon="pi pi-plus" className="p-button-success mr-2" onClick={handleCodigo} />
                         </div>
                         <div className="field">
                             <InputSwitch checked={activo} onChange={(e) => setActivo(e.value)} color="primary" name="status" />

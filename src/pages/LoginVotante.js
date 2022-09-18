@@ -23,7 +23,7 @@ const LoginVotante = () => {
             const votanteService = new VotanteService();
             votanteService.getLogin(password).then((res) => {
                 if (res === 500) {
-                    toast.current.show({ severity: "error", summary: "Error Message", detail: "El Ruc o la contraseña son incorrectas", life: 3000 });
+                    toast.current.show({ severity: "error", summary: "Error Message", detail: "El codigo es incorrecto", life: 3000 });
                 } else {
                     history.push("/votante");
                 }
@@ -35,7 +35,7 @@ const LoginVotante = () => {
             <Toast ref={toast} />
             <div className="container_login_votante p-fluid">
                 <div className="item">
-                    <label htmlFor="password">Password</label>
+                    <label htmlFor="password">Contraseña</label>
                     <Password type={"number"} id="password" name="password" value={password} onChange={(e) => onInputChange(e)} toggleMask feedback={false} required autoFocus className={classNames({ "p-invalid ": submitted && !password })} />
                     {submitted && !password && <small className="p-invalid">Se requiere una contraseña</small>}
                 </div>

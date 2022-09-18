@@ -39,14 +39,20 @@ const Resultados = () => {
         const listaService = new ListaService();
         const candidatoService = new CandidatoService();
         listaService.getListas(data.ruc, setListas).then((_lista) => {
-            setListas(_lista.filter((item) => item.procesoEleccion.nombre === e.value.nombre));
+            if (_lista !== 404) {
+                setListas(_lista.filter((item) => item.procesoEleccion.nombre === e.value.nombre));
+            }
             candidatoService.getCandidatos(data.ruc, setCandidatos).then((candidato) => {
-                setCandidatos(candidato.filter((item) => item.lista.procesoEleccion.nombre === e.value.nombre));
+                if (candidato !== 404) {
+                    setCandidatos(candidato.filter((item) => item.lista.procesoEleccion.nombre === e.value.nombre));
+                }
             });
             const votoService = new VotoService();
             votoService.getVotos(data.ruc, setVotos).then((voto) => {
-                const votosValidos = voto.filter((item) => item.procesoEleccion.nombre === e.value.nombre);
-                setVotos(votosValidos);
+                if (voto !== 404) {
+                    const votosValidos = voto.filter((item) => item.procesoEleccion.nombre === e.value.nombre);
+                    setVotos(votosValidos);
+                }
             });
         });
     };

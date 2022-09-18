@@ -20,6 +20,11 @@
     background-color: rgb(231, 231, 245);
 }
 
+.container-lista:hover {
+    background-color: rgb(116, 245, 245);
+    cursor: pointer;
+}
+
 .lista-cabecera {
     display: flex;
     gap: 2rem;

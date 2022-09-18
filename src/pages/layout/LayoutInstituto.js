@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import classNames from "classnames";
-import { Route, Switch, useLocation, useRouteMatch } from "react-router-dom";
+import { Link, Route, Switch, useLocation, useRouteMatch } from "react-router-dom";
 import { CSSTransition } from "react-transition-group";
 
 import { AppTopbar } from "../../AppTopbar";
@@ -32,8 +32,10 @@ import TipoCandidato from "../TipoCandidato";
 import Votante from "../Votante";
 import Candidato from "../Candidato";
 import Resultados from "../Resultados";
+import { useHistory } from "react-router-dom";
 
 const LayoutInstituto = () => {
+    const history = useHistory();
     const [layoutMode, setLayoutMode] = useState("static");
     const [layoutColorMode, setLayoutColorMode] = useState("light");
     const [inputStyle, setInputStyle] = useState("outlined");
@@ -114,6 +116,27 @@ const LayoutInstituto = () => {
         event.preventDefault();
     };
 
+    const actionProp = () => {
+        window.localStorage.removeItem("institucion");
+        history.push("/");
+    };
+
+    const onOptionUser = () => {
+        return (
+            <div style={{ textDecoration: "none" }}>
+                <Link to={`${url}/datosInstitucion`} style={{ color: "blue" }}>
+                    <h4>Perfil</h4>
+                </Link>
+                <Link to={`${url}/passwordModificacionDatosInstitucion`} style={{ color: "blue" }}>
+                    <h4>Cambiar contraseña</h4>
+                </Link>
+                <h4 onClick={actionProp} style={{ color: "blue", cursor: "pointer" }}>
+                    Cerrar sesión
+                </h4>
+            </div>
+        );
+    };
+
     const onSidebarClick = () => {
         menuClick = true;
     };
@@ -144,55 +167,46 @@ const LayoutInstituto = () => {
             label: "Home",
             items: [
                 {
-                    label: "Dashboard",
+                    label: "Escritorio",
                     icon: "pi pi-fw pi-home",
                     to: `${url}`,
                 },
             ],
         },
         {
-            icon: "pi ",
-            items: [{ label: "Recinto", icon: "pi pi-fw pi-user-edit", to: `${url}/recinto` }],
-        },
-        {
-            icon: "pi ",
-            items: [{ label: "Junta", icon: "pi pi-fw pi-user-edit", to: `${url}/junta` }],
-        },
-        {
-            icon: "pi ",
-            items: [{ label: "Grupo", icon: "pi pi-fw pi-user-edit", to: `${url}/grupo` }],
-        },
-        {
-            icon: "pi ",
-            items: [{ label: "DatosInstitucion", icon: "pi pi-fw pi-user-edit", to: `${url}/datosInstitucion` }],
-        },
-        {
-            icon: "pi ",
+            label: "Proceso Electoral ",
             items: [{ label: "Proceso Eleccion", icon: "pi pi-fw pi-user-edit", to: `${url}/procesoEleccion` }],
         },
         {
-            icon: "pi ",
-            items: [{ label: "Lista", icon: "pi pi-fw pi-user-edit", to: `${url}/listas` }],
-        },
-        {
-            icon: "pi ",
-            items: [{ label: "Tipo Candidato", icon: "pi pi-fw pi-user-edit", to: `${url}/tipoCandidato` }],
-        },
-        {
-            icon: "pi ",
+            label: "Votantes ",
             items: [{ label: "Votantes", icon: "pi pi-fw pi-user-edit", to: `${url}/votantes` }],
         },
         {
-            icon: "pi ",
-            items: [{ label: "Candidatos", icon: "pi pi-fw pi-user-edit", to: `${url}/candidatos` }],
+            label: "Candidatos ",
+            items: [
+                { label: "Lista", icon: "pi pi-fw pi-user-edit", to: `${url}/listas` },
+                { label: "Tipo Candidato", icon: "pi pi-fw pi-user-edit", to: `${url}/tipoCandidato` },
+                {
+                    label: "Candidatos",
+                    icon: "pi pi-fw pi-user-edit",
+                    to: `${url}/candidatos`,
+                },
+            ],
         },
         {
-            icon: "pi ",
+            label: "Reportes ",
+        },
+        {
+            label: "Resultados ",
             items: [{ label: "Resultados", icon: "pi pi-fw pi-user-edit", to: `${url}/resultados` }],
         },
         {
-            icon: "pi ",
-            items: [{ label: "Modificacion de Contraseña", icon: "pi pi-fw pi-user-edit", to: `${url}/passwordModificacionDatosInstitucion` }],
+            label: "Configuraciones ",
+            items: [
+                { label: "Recinto", icon: "pi pi-fw pi-user-edit", to: `${url}/recinto` },
+                { label: "Junta", icon: "pi pi-fw pi-user-edit", to: `${url}/junta` },
+                { label: "Grupo", icon: "pi pi-fw pi-user-edit", to: `${url}/grupo` },
+            ],
         },
     ];
 
@@ -221,7 +235,7 @@ const LayoutInstituto = () => {
         <div className={wrapperClass} onClick={onWrapperClick}>
             <Tooltip ref={copyTooltipRef} target=".block-action-copy" position="bottom" content="Copied to clipboard" event="focus" />
 
-            <AppTopbar onToggleMenuClick={onToggleMenuClick} layoutColorMode={layoutColorMode} mobileTopbarMenuActive={mobileTopbarMenuActive} onMobileTopbarMenuClick={onMobileTopbarMenuClick} onMobileSubTopbarMenuClick={onMobileSubTopbarMenuClick} />
+            <AppTopbar url={url} onToggleMenuClick={onToggleMenuClick} layoutColorMode={layoutColorMode} mobileTopbarMenuActive={mobileTopbarMenuActive} onMobileTopbarMenuClick={onMobileTopbarMenuClick} onMobileSubTopbarMenuClick={onMobileSubTopbarMenuClick} />
 
             <div className="layout-sidebar" onClick={onSidebarClick}>
                 <AppMenu model={menu} onMenuItemClick={onMenuItemClick} layoutColorMode={layoutColorMode} />

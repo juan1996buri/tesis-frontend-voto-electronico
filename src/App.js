@@ -25,7 +25,7 @@ import LayoutVotante from "./pages/layout/LayoutVotante";
 // <Route component={NotFound} />
 const App = () => {
     // PrimeReact.ripple = true;
-    const data = JSON.parse(window.localStorage.getItem("institucion"));
+    // const data = JSON.parse(window.localStorage.getItem("institucion"));
 
     return (
         <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -35,6 +35,7 @@ const App = () => {
                         path="/"
                         exact
                         render={() => {
+                            const data = JSON.parse(window.localStorage.getItem("institucion"));
                             if (data) {
                                 if (data.rol === "ROLE_INSTITUTE" && data.token) {
                                     return <Redirect to={"/institucion"} />;

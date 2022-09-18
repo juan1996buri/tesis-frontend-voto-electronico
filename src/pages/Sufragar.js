@@ -52,7 +52,6 @@ const Sufragar = () => {
     }, []);
 
     const handleVoto = (lista) => {
-        console.log(lista);
         voto.lista = lista;
         voto.votante = votante;
         voto.procesoEleccion = { ...lista.procesoEleccion };
@@ -72,6 +71,7 @@ const Sufragar = () => {
                 }).then((res) => {
                     if (res.isConfirmed) {
                         window.localStorage.removeItem("institucion");
+
                         history.push("/");
                     }
                 });
@@ -85,6 +85,7 @@ const Sufragar = () => {
                 }).then((res) => {
                     if (res.isConfirmed) {
                         window.localStorage.removeItem("institucion");
+
                         history.push("/");
                     }
                 });
@@ -98,7 +99,7 @@ const Sufragar = () => {
             </div>
             <div className="container_listas  p-fluid">
                 {listas.map((lista) => (
-                    <div className="container-lista" key={lista.id}>
+                    <div className="container-lista" key={lista.id} onClick={() => handleVoto(lista)}>
                         <div className="lista-cabecera">
                             <img alt="logo" src={lista?.logo} style={{ width: "3rem", height: "3rem", borderRadius: "50%" }} />
                             <h2 style={{ fontWeight: "bolder" }}>{lista.nombre}</h2>
@@ -121,7 +122,7 @@ const Sufragar = () => {
                                 </div>
                             ))}
                         <br />
-                        <Button label="VOTAR" className="p-button-success mr-2" onClick={() => handleVoto(lista)} />
+                        <Button label="VOTAR" className="p-button-success mr-2" />
                     </div>
                 ))}
             </div>
