@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
-import Nulo from "../images/Nulo.png";
 import "../styles/Resultados.css";
 import { Dropdown } from "primereact/dropdown";
-
 import LinearProgress from "@mui/material/LinearProgress";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
@@ -12,6 +10,8 @@ import { VotoService } from "../service/VotoService";
 import { ListaService } from "../service/ListaService";
 import { CandidatoService } from "../service/CandidatoService";
 import { VotanteService } from "../service/VotanteService";
+import Avatar from "../images/Avatar.jpeg";
+
 function LinearProgressWithLabel(props) {
     return (
         <Box sx={{ display: "flex", alignItems: "center" }}>
@@ -33,7 +33,7 @@ const Resultados = () => {
     const [listas, setListas] = useState([]);
     const [candidatos, setCandidatos] = useState([]);
     const [cantidad, setCantidad] = useState(0);
-
+    const [cantidadVotantes, setCantidadVotantes] = useState(0);
     const [votantes, setVotantes] = useState([]);
 
     const [activo, setActivo] = useState(false);
@@ -57,13 +57,22 @@ const Resultados = () => {
                 if (voto !== 404) {
                     const votosValidos = voto.filter((item) => item.procesoEleccion.nombre === e.value.nombre);
                     setVotos(votosValidos);
+                    setCantidad(0);
                     votosValidos.forEach((element) => {
                         setCantidad((cantidad) => cantidad + 1);
                     });
                 }
             });
             const votanteService = new VotanteService();
-            votanteService.getVotantes(data.ruc, setVotantes);
+
+            votanteService.getVotantes(data.ruc, setVotantes).then((res) => {
+                if (res !== 404) {
+                    setCantidadVotantes(0);
+                    res.forEach((element) => {
+                        setCantidadVotantes((cantidad) => cantidad + 1);
+                    });
+                }
+            });
         });
 
         setActivo(true);
@@ -97,7 +106,7 @@ const Resultados = () => {
                                 <br />
                                 <div className="resultado_lista_container">
                                     <div className="resultado_lista_nombre">
-                                        <img src={lista.logo} style={{ width: "3rem", height: "3rem", borderRadius: "50%" }} alt={"logo"} />
+                                        <img src={lista.logo === null ? Avatar : lista.logo} style={{ width: "3rem", height: "3rem", borderRadius: "50%" }} alt={"logo"} />
                                         <h2 style={{ fontWeight: "bold" }}>{lista.nombre}</h2>
                                     </div>
                                     <div className="resultado_listas">
@@ -110,7 +119,7 @@ const Resultados = () => {
                                                             {candidato.tipoCandidato.nombre}
                                                         </h3>
                                                         <div className="resultado_integrante_datos">
-                                                            <img src={candidato.imagen} className={"resultado_integrante_imagen"} alt={"integrante"} />
+                                                            <img src={candidato.imagen === null ? Avatar : candidato.imagen} className={"resultado_integrante_imagen"} alt={"integrante"} />
                                                             <div>
                                                                 <h4> {candidato.nombre}</h4>
                                                             </div>
@@ -134,7 +143,6 @@ const Resultados = () => {
                                                     }
                                                 </Box>
                                             </div>
-                                            {console.log(cantidad)}
                                         </div>
 
                                         <div className="resultado_cantidad">
@@ -161,7 +169,7 @@ const Resultados = () => {
                         <div style={{ fontSize: "1.5rem", display: "flex", flexDirection: "column", marginTop: "1.5rem", gap: "1rem", fontWeight: "unset", fontFamily: "cursive" }}>
                             <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
                                 <span>Empadronados</span>
-                                <span>{cantidad}</span>
+                                <span>{cantidadVotantes}</span>
                             </div>
                             <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
                                 <span>Votantes</span>
@@ -169,7 +177,7 @@ const Resultados = () => {
                             </div>
                             <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
                                 <span>Ausentes</span>
-                                <span>{cantidad}</span>
+                                <span>{cantidadVotantes - cantidad}</span>
                             </div>
                         </div>
                     </div>

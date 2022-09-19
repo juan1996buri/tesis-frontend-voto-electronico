@@ -12,10 +12,9 @@ import { FileUpload } from "primereact/fileupload";
 import { Dropdown } from "primereact/dropdown";
 import { CandidatoService } from "../service/CandidatoService";
 import { ListaService } from "../service/ListaService";
-import { VotanteService } from "../service/VotanteService";
-import { ProcesoEleccionService } from "../service/ProcesoEleccionService";
 import { TipoCandidatoService } from "../service/TipoCandidatoService";
 import { Image } from "primereact/image";
+import Avatar from "../images/Avatar.jpeg";
 
 const Candidato = () => {
     const history = useHistory();
@@ -23,7 +22,6 @@ const Candidato = () => {
         id: "",
         tipoCandidato: "",
         lista: "",
-        imagen: "",
         nombre: "",
     };
 
@@ -32,7 +30,6 @@ const Candidato = () => {
     const [deleteCandidatoDialog, setDeleteCandidatoDialog] = useState(false);
     const [deleteCandidatosDialog, setDeleteCandidatosDialog] = useState(false);
     const [candidato, setCandidato] = useState(emptycandidato);
-    const [procesoElecciones, setProcesoElecciones] = useState([]);
     const [tipoCandidatos, setTiposCandidatos] = useState([]);
     const [lista, setLista] = useState({ nombre: "" });
     const [tipoCandidato, setTipoCandidato] = useState({ nombre: "" });
@@ -56,9 +53,6 @@ const Candidato = () => {
             });
             const listaService = new ListaService();
             listaService.getListas(data.ruc, setListas);
-
-            const procesoEleccionService = new ProcesoEleccionService();
-            procesoEleccionService.getProcesosElecciones(data.ruc, setProcesoElecciones);
             const tipoCandidatoService = new TipoCandidatoService();
             tipoCandidatoService.getTipoCandidatos(data.ruc, setTiposCandidatos);
         } else {
@@ -68,7 +62,7 @@ const Candidato = () => {
 
     const openNew = () => {
         setTipoCandidato({ ...tipoCandidato, ...tipoCandidatos[0] });
-
+        setImagen(null);
         setLista({ ...lista, ...listas[0] });
         setCandidato(emptycandidato);
         setSubmitted(false);
@@ -285,7 +279,7 @@ const Candidato = () => {
         return (
             <>
                 <span className="p-column-title">Imagen</span>
-                <img style={{ width: "12rem", height: "10rem" }} src={rowData.imagen} alt="imagen" />
+                {rowData.imagen === null ? <img style={{ width: "12rem", height: "10rem" }} src={Avatar} alt="imagen" /> : <img style={{ width: "12rem", height: "10rem" }} src={rowData.imagen} alt="imagen" />}
             </>
         );
     };

@@ -6,10 +6,6 @@ import { Ripple } from "primereact/ripple";
 import { Badge } from "primereact/badge";
 
 const AppSubmenu = (props) => {
-    const myData = {
-        name: "Some thing",
-        price: 123,
-    };
     const [activeIndex, setActiveIndex] = useState(null);
 
     const onMenuItemClick = (event, item, index) => {

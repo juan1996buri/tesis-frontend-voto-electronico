@@ -1,19 +1,14 @@
 import React, { useState, useEffect, useRef } from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
-import { Toast } from "primereact/toast";
 import { useHistory } from "react-router-dom";
 import { VotanteService } from "../service/VotanteService";
-import { Dropdown } from "primereact/dropdown";
-import { ProcesoEleccionService } from "../service/ProcesoEleccionService";
-import { VotoService } from "../service/VotoService";
 import { GrupoService } from "../service/GrupoService";
 
 const Padron = () => {
     const history = useHistory();
     const [grupos, setGrupos] = useState([]);
     const [votantes, setVotantes] = useState([]);
-    const toast = useRef(null);
     const dt = useRef(null);
 
     const data = JSON.parse(window.localStorage.getItem("institucion"));
@@ -102,7 +97,6 @@ const Padron = () => {
             <div className="col-12">
                 {grupos.map((grupo) => (
                     <div className="card" key={grupo.id}>
-                        <Toast ref={toast} />
                         <div>
                             <br />
                             <DataTable

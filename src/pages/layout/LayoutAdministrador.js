@@ -141,40 +141,24 @@ const LayoutAdministrador = () => {
             label: "Home",
             items: [
                 {
-                    label: "Dashboard",
+                    label: "Escritorio",
                     icon: "pi pi-fw pi-home",
                     to: `${url}`,
                 },
             ],
         },
         {
-            label: "Pages",
-            icon: "pi ",
-            items: [{ label: "Provincia", icon: "pi pi-fw pi-user-edit", to: `${url}/provincia` }],
+            label: "Configuraciones",
+            items: [
+                { label: "Provincia", icon: "pi pi-fw pi-user-edit", to: `${url}/provincia` },
+                { label: "Ciudad", icon: "pi pi-fw pi-user-edit", to: `${url}/ciudad` },
+                { label: "Sexo", icon: "pi pi-fw pi-user-edit", to: `${url}/sexos` },
+                { label: "Tipo Institucion", icon: "pi pi-fw pi-user-edit", to: `${url}/tipoInstitucion` },
+            ],
         },
         {
-            icon: "pi ",
-            items: [{ label: "Ciudad", icon: "pi pi-fw pi-user-edit", to: `${url}/ciudad` }],
-        },
-        {
-            icon: "pi ",
-            items: [{ label: "DatosInstitucion", icon: "pi pi-fw pi-user-edit", to: `${url}/datosInstitucion` }],
-        },
-        {
-            icon: "pi ",
+            label: "Reportes",
             items: [{ label: "Instituciones", icon: "pi pi-fw pi-user-edit", to: `${url}/instituciones-registradas` }],
-        },
-        {
-            icon: "pi ",
-            items: [{ label: "Sexo", icon: "pi pi-fw pi-user-edit", to: `${url}/sexos` }],
-        },
-        {
-            icon: "pi ",
-            items: [{ label: "Tipo Institucion", icon: "pi pi-fw pi-user-edit", to: `${url}/tipoInstitucion` }],
-        },
-        {
-            icon: "pi ",
-            items: [{ label: "Modificacion de Contraseña", icon: "pi pi-fw pi-user-edit", to: `${url}/passwordModificacionDatosInstitucion` }],
         },
     ];
 
@@ -203,7 +187,7 @@ const LayoutAdministrador = () => {
         <div className={wrapperClass} onClick={onWrapperClick}>
             <Tooltip ref={copyTooltipRef} target=".block-action-copy" position="bottom" content="Copied to clipboard" event="focus" />
 
-            <AppTopbar onToggleMenuClick={onToggleMenuClick} layoutColorMode={layoutColorMode} mobileTopbarMenuActive={mobileTopbarMenuActive} onMobileTopbarMenuClick={onMobileTopbarMenuClick} onMobileSubTopbarMenuClick={onMobileSubTopbarMenuClick} />
+            <AppTopbar url={url} onToggleMenuClick={onToggleMenuClick} layoutColorMode={layoutColorMode} mobileTopbarMenuActive={mobileTopbarMenuActive} onMobileTopbarMenuClick={onMobileTopbarMenuClick} onMobileSubTopbarMenuClick={onMobileSubTopbarMenuClick} />
 
             <div className="layout-sidebar" onClick={onSidebarClick}>
                 <AppMenu model={menu} onMenuItemClick={onMenuItemClick} layoutColorMode={layoutColorMode} />

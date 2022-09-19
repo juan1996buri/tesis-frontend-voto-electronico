@@ -3,12 +3,9 @@ import classNames from "classnames";
 import { Route, useLocation, useRouteMatch } from "react-router-dom";
 import { CSSTransition } from "react-transition-group";
 
-import { AppTopbar } from "../../AppTopbar";
 import { AppFooter } from "../../AppFooter";
 import { AppMenu } from "../../AppMenu";
 import { AppConfig } from "../../AppConfig";
-
-import Dashboard from "../../components/Dashboard";
 
 import PrimeReact from "primereact/api";
 import { Tooltip } from "primereact/tooltip";
@@ -22,24 +19,25 @@ import "../../assets/demo/Demos.scss";
 import "../../assets/layout/layout.scss";
 import "../../App.scss";
 import Sufragar from "../Sufragar";
+import { AppTopbarVotante } from "../../AppTopbarVotante";
 
 const LayoutVotante = () => {
     const [layoutMode, setLayoutMode] = useState("static");
     const [layoutColorMode, setLayoutColorMode] = useState("light");
     const [inputStyle, setInputStyle] = useState("outlined");
-    const [ripple, setRipple] = useState(true);
+    const [ripple, setRipple] = useState(false);
     const [staticMenuInactive, setStaticMenuInactive] = useState(true);
-    const [overlayMenuActive, setOverlayMenuActive] = useState(true);
-    const [mobileMenuActive, setMobileMenuActive] = useState(true);
-    const [mobileTopbarMenuActive, setMobileTopbarMenuActive] = useState(true);
+    const [overlayMenuActive, setOverlayMenuActive] = useState(false);
+    const [mobileMenuActive, setMobileMenuActive] = useState(false);
+    const [mobileTopbarMenuActive, setMobileTopbarMenuActive] = useState(false);
     const copyTooltipRef = useRef();
     const location = useLocation();
-    PrimeReact.ripple = true;
+    PrimeReact.ripple = false;
 
     let menuClick = false;
     let mobileTopbarMenuClick = false;
 
-    const { path, url } = useRouteMatch();
+    const { path } = useRouteMatch();
 
     useEffect(() => {
         if (mobileMenuActive) {
@@ -84,69 +82,6 @@ const LayoutVotante = () => {
         menuClick = false;
     };
 
-    const onToggleMenuClick = (event) => {
-        menuClick = true;
-
-        if (isDesktop()) {
-            if (layoutMode === "overlay") {
-                if (mobileMenuActive === true) {
-                    setOverlayMenuActive(true);
-                }
-
-                setOverlayMenuActive((prevState) => !prevState);
-                setMobileMenuActive(false);
-            } else if (layoutMode === "static") {
-                setStaticMenuInactive((prevState) => !prevState);
-            }
-        } else {
-            setMobileMenuActive((prevState) => !prevState);
-        }
-        event.preventDefault();
-    };
-
-    const onSidebarClick = () => {
-        menuClick = true;
-    };
-
-    const onMobileTopbarMenuClick = (event) => {
-        mobileTopbarMenuClick = true;
-        setMobileTopbarMenuActive((prevState) => !prevState);
-        event.preventDefault();
-    };
-
-    const onMobileSubTopbarMenuClick = (event) => {
-        mobileTopbarMenuClick = true;
-        event.preventDefault();
-    };
-
-    const onMenuItemClick = (event) => {
-        if (!event.item.items) {
-            setOverlayMenuActive(false);
-            setMobileMenuActive(false);
-        }
-    };
-    const isDesktop = () => {
-        return window.innerWidth >= 992;
-    };
-
-    const menu = [
-        {
-            label: "Home",
-            items: [
-                {
-                    label: "Dashboard",
-                    icon: "pi pi-fw pi-home",
-                    to: `${url}`,
-                },
-            ],
-        },
-        {
-            label: "Pages",
-            icon: "pi ",
-            items: [{ label: "Sufragar", icon: "pi pi-fw pi-user-edit", to: `${url}/sufragar` }],
-        },
-    ];
-
     const addClass = (element, className) => {
         if (element.classList) element.classList.add(className);
         else element.className += " " + className;
@@ -172,9 +107,9 @@ const LayoutVotante = () => {
         <div className={wrapperClass} onClick={onWrapperClick}>
             <Tooltip ref={copyTooltipRef} target=".block-action-copy" position="bottom" content="Copied to clipboard" event="focus" />
 
-            <AppTopbar />
+            <AppTopbarVotante />
 
-            <div className="layout-sidebar" onClick={onSidebarClick}>
+            <div className="layout-sidebar">
                 <AppMenu />
             </div>
             <div className="layout-main-container">

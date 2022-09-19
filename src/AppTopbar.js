@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import logo from "./images/logo.png";
 import { useHistory } from "react-router-dom";
+import Tuerca from "../src/images/Tuerca.png";
 
 export const AppTopbar = (props) => {
     const history = useHistory();
@@ -26,7 +27,7 @@ export const AppTopbar = (props) => {
                 </div>
 
                 <div style={{ marginLeft: "auto" }}>
-                    <img src={logo} alt="logo" style={{ width: "3rem", marginRight: "2.5rem", cursor: "pointer" }} onClick={() => setActive(!active)} />
+                    <img src={Tuerca} alt="logo" style={{ width: "3rem", marginRight: "2.5rem", cursor: "pointer" }} onClick={() => setActive(!active)} />
                     {active && (
                         <div style={{ position: "fixed", right: "0.5rem", textAlign: "center", background: "white", width: "12rem", borderRadius: "0.5rem", paddingTop: "0.5rem" }}>
                             <div style={{ textDecoration: "none" }}>

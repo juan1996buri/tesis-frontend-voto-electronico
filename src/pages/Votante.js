@@ -73,6 +73,7 @@ const Votante = () => {
     }, []);
 
     const openNew = () => {
+        handleCodigo();
         setActiveCedula(true);
         setGrupo({ ...grupo, ...grupos[0] });
         setSexo({ ...sexo, ...sexos[0] });
@@ -317,12 +318,12 @@ const Votante = () => {
         return (
             <>
                 <span className="p-column-title">Estado</span>
-                {rowData.activo ? <span style={{ backgroundColor: "red", borderRadius: "1rem", padding: "1rem", color: "white" }}>Activado</span> : <span style={{ backgroundColor: "green", borderRadius: "1rem", padding: "1rem", color: "white" }}>Desactivado</span>}
+                {rowData.activo ? <span style={{ backgroundColor: "green", borderRadius: "1rem", padding: "1rem", color: "white" }}>Activado</span> : <span style={{ backgroundColor: "red", borderRadius: "1rem", padding: "1rem", color: "white" }}>Desactivado</span>}
             </>
         );
     };
 
-    const handleCodigo = (e) => {
+    const handleCodigo = () => {
         const votanteService = new VotanteService();
         votanteService.getCodigo(institucion.id).then((res) => setCodigo(res));
     };
@@ -406,7 +407,7 @@ const Votante = () => {
                         {votante.image && <img src={`assets/demo/images/votante/${votante.image}`} alt={votante.image} width="150" className="mt-0 mx-auto mb-5 block shadow-2" />}
                         <div className="field">
                             <label htmlFor="cedula">Cedula</label>
-                            {activeCedula === true ? <InputText id="cedula" value={votante.cedula} onChange={(e) => onNameChange(e, "cedula")} required autoFocus className={classNames({ "p-invalid": submitted && !votante.cedula })} /> : <h5>{votante.cedula}</h5>}
+                            {activeCedula === true ? <InputText id="cedula" value={votante.cedula} onChange={(e) => onNameChange(e, "cedula")} required autoFocus className={classNames({ "p-invalid": submitted && !votante.cedula })} /> : <h5 style={{ marginTop: "-0.001rem" }}>{votante.cedula}</h5>}
                             {submitted && !votante.cedula && <small className="p-invalid">Cedula es requerido</small>}
                         </div>
                         <div className="field">
@@ -435,10 +436,10 @@ const Votante = () => {
                             <Dropdown id="sexo" value={sexo} onChange={(e) => onSexoChange(e)} options={sexos} optionLabel="nombre" placeholder="Seleccione un sexo" required autoFocus className={classNames({ "p-invalid": submitted && !sexo.nombre })} />
                             {submitted && !sexo.nombre && <small className="p-invalid">Sexo no requerido</small>}
                         </div>
-                        <div className="field ">
-                            <label htmlFor="codigo">Codigo--</label>
+                        <div className="field flex " style={{ alignItems: "center", gap: "0.4rem" }}>
+                            <Button icon="pi pi-sync" className="p-button-rounded p-button-success mr-2" onClick={handleCodigo} />
+
                             <label htmlFor="codigo">{codigo}</label>
-                            <Button label="Generar codigo" icon="pi pi-plus" className="p-button-success mr-2" onClick={handleCodigo} />
                         </div>
                         <div className="field">
                             <InputSwitch checked={activo} onChange={(e) => setActivo(e.value)} color="primary" name="status" />

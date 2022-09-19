@@ -127,7 +127,7 @@ const FormularioDatosInstitucion = () => {
                     <Toast ref={toast} />
                     <h5>Datos de la institución</h5>
                     <div className="field">
-                        <label htmlFor="ruc">Ruc</label>
+                        <label htmlFor="ruc">Ruc-Usuario</label>
                         <br />
                         <label>{institucion?.ruc}</label>
                     </div>

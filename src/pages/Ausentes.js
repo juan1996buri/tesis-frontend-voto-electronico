@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
-import { Toast } from "primereact/toast";
 import { useHistory } from "react-router-dom";
 import { VotanteService } from "../service/VotanteService";
 import { Dropdown } from "primereact/dropdown";
@@ -16,14 +15,18 @@ const Ausentes = () => {
     const [grupos, setGrupos] = useState([]);
     const [votantes, setVotantes] = useState([]);
     const [activo, setActivo] = useState(false);
-    const toast = useRef(null);
     const dt = useRef(null);
 
     const data = JSON.parse(window.localStorage.getItem("institucion"));
     useEffect(() => {
         if (data) {
             const procesoEleccionService = new ProcesoEleccionService();
-            procesoEleccionService.getProcesosElecciones(data.ruc, setProcesoElecciones);
+            procesoEleccionService.getProcesosElecciones(data.ruc, setProcesoElecciones).then((res) => {
+                if (res === 401) {
+                    window.localStorage.removeItem("institucion");
+                    history.push("/");
+                }
+            });
         } else {
             history.push("/");
         }
@@ -38,16 +41,6 @@ const Ausentes = () => {
                 const votanteService = new VotanteService();
                 votanteService.getVotantes(data.ruc, setVotantes).then((_votantes) => {
                     if (_votantes !== 404) {
-                        /* _votantes
-                            .filter((_votante) => {
-                                let res = votos.find((voto) => {
-                                    return voto.votante.id == _votante.id;
-                                });
-                                return res == undefined;
-                            })
-                            .map((item) => {
-                                setVotantes((votantes) => votantes.concat(item));
-                            });*/
                         setVotantes(
                             _votantes.filter((_votante) => {
                                 let res = votos.find((voto) => {
@@ -129,7 +122,6 @@ const Ausentes = () => {
                 <div className="col-12">
                     {grupos.map((grupo) => (
                         <div className="card" key={grupo.id}>
-                            <Toast ref={toast} />
                             <div>
                                 <br />
                                 <DataTable

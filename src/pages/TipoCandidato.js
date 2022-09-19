@@ -9,7 +9,6 @@ import { Dialog } from "primereact/dialog";
 import { InputText } from "primereact/inputtext";
 import { useHistory } from "react-router-dom";
 import { FileUpload } from "primereact/fileupload";
-import { Dropdown } from "primereact/dropdown";
 import { TipoCandidatoService } from "../service/TipoCandidatoService";
 import { InstitucionService } from "../service/InstitucionService";
 

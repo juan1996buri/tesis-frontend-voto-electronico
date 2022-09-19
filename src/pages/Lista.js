@@ -12,8 +12,8 @@ import { FileUpload } from "primereact/fileupload";
 import { Dropdown } from "primereact/dropdown";
 import { ListaService } from "../service/ListaService";
 import { ProcesoEleccionService } from "../service/ProcesoEleccionService";
-import { InputSwitch } from "primereact/inputswitch";
 import { Image } from "primereact/image";
+import Avatar from "../images/Avatar.jpeg";
 
 const Lista = () => {
     const history = useHistory();
@@ -55,7 +55,7 @@ const Lista = () => {
 
     const openNew = () => {
         setProcesoEleccion({ ...procesoEleccion, ...procesoElecciones[0] });
-
+        setLogo(null);
         setLista(emptylista);
         setSubmitted(false);
         setListaDialog(true);
@@ -256,7 +256,7 @@ const Lista = () => {
         return (
             <>
                 <span className="p-column-title">Logo</span>
-                <img style={{ width: "12rem", height: "10rem" }} src={rowData.logo} alt="imagen" />
+                {rowData.logo === null ? <img style={{ width: "12rem", height: "10rem" }} src={Avatar} alt="imagen" /> : <img style={{ width: "12rem", height: "10rem" }} src={rowData.logo} alt="imagen" />}
             </>
         );
     };

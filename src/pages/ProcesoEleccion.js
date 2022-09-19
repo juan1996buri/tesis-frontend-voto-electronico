@@ -260,7 +260,7 @@ const ProcesoEleccion = () => {
         return (
             <>
                 <span className="p-column-title">Estado</span>
-                {rowData.activo ? <span style={{ backgroundColor: "red", borderRadius: "1rem", padding: "1rem", color: "white" }}>Activado</span> : <span style={{ backgroundColor: "green", borderRadius: "1rem", padding: "1rem", color: "white" }}>Desactivado</span>}
+                {rowData.activo ? <span style={{ backgroundColor: "green", borderRadius: "1rem", padding: "1rem", color: "white" }}>Activado</span> : <span style={{ backgroundColor: "red", borderRadius: "1rem", padding: "1rem", color: "white" }}>Desactivado</span>}
             </>
         );
     };

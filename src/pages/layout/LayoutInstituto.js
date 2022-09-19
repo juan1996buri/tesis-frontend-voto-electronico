@@ -176,6 +176,7 @@ const LayoutInstituto = () => {
             label: "Reportes ",
             items: [
                 { label: "Padrones", icon: "pi pi-fw pi-user-edit", to: `${url}/padrones` },
+
                 { label: "Ausentes", icon: "pi pi-fw pi-user-edit", to: `${url}/ausentes` },
             ],
         },
