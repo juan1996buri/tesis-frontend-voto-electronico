@@ -101,7 +101,7 @@ const ProcesoEleccion = () => {
                 });
                 const index = findIndexById(procesoEleccion.id);
                 _procesoElecciones[index] = _procesoEleccion;
-                toast.current.show({ severity: "success", summary: "Successful", detail: "procesoEleccion Updated", life: 3000 });
+                toast.current.show({ severity: "success", summary: "Successful", detail: "Proceso de elección actualizado", life: 3000 });
                 setProcesoElecciones(_procesoElecciones);
             } else {
                 procesoEleccioneservice.postProcesoEleccion(procesoEleccion).then((res) => {
@@ -206,8 +206,8 @@ const ProcesoEleccion = () => {
         return (
             <React.Fragment>
                 <div className="my-2">
-                    <Button label="New" icon="pi pi-plus" className="p-button-success mr-2" onClick={openNew} />
-                    <Button label="Delete" icon="pi pi-trash" className="p-button-danger" onClick={confirmDeleteSelected} disabled={!selectedProcesoElecciones || !selectedProcesoElecciones.length} />
+                    <Button label="Nuevo" icon="pi pi-plus" className="p-button-success mr-2" onClick={openNew} />
+                    <Button label="Eliminar" icon="pi pi-trash" className="p-button-danger" onClick={confirmDeleteSelected} disabled={!selectedProcesoElecciones || !selectedProcesoElecciones.length} />
                 </div>
             </React.Fragment>
         );
@@ -276,30 +276,30 @@ const ProcesoEleccion = () => {
 
     const header = (
         <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-            <h5 className="m-0">Manage procesoElecciones</h5>
+            <h5 className="m-0">Procesos de elecciones</h5>
             <span className="block mt-2 md:mt-0 p-input-icon-left">
                 <i className="pi pi-search" />
-                <InputText type="search" onInput={(e) => setGlobalFilter(e.target.value)} placeholder="Search..." />
+                <InputText type="search" onInput={(e) => setGlobalFilter(e.target.value)} placeholder="Buscar..." />
             </span>
         </div>
     );
 
     const procesoEleccionDialogFooter = (
         <>
-            <Button label="Cancel" icon="pi pi-times" className="p-button-text" onClick={hideDialog} />
-            <Button label="Save" icon="pi pi-check" className="p-button-text" onClick={saveprocesoEleccion} />
+            <Button label="Cancelar" icon="pi pi-times" className="p-button-text" onClick={hideDialog} />
+            <Button label="Guardar" icon="pi pi-check" className="p-button-text" onClick={saveprocesoEleccion} />
         </>
     );
     const deleteProcesoEleccionDialogFooter = (
         <>
             <Button label="No" icon="pi pi-times" className="p-button-text" onClick={hideDeleteProcesoEleccionDialog} />
-            <Button label="Yes" icon="pi pi-check" className="p-button-text" onClick={deleteProcesoEleccion} />
+            <Button label="Si" icon="pi pi-check" className="p-button-text" onClick={deleteProcesoEleccion} />
         </>
     );
     const deleteProcesoEleccionesDialogFooter = (
         <>
             <Button label="No" icon="pi pi-times" className="p-button-text" onClick={hideDeleteProcesoEleccionesDialog} />
-            <Button label="Yes" icon="pi pi-check" className="p-button-text" onClick={deleteSelectedProcesoElecciones} />
+            <Button label="Si" icon="pi pi-check" className="p-button-text" onClick={deleteSelectedProcesoElecciones} />
         </>
     );
 
@@ -323,7 +323,7 @@ const ProcesoEleccion = () => {
                         paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} procesoElecciones"
                         globalFilter={globalFilter}
-                        emptyMessage="No procesoElecciones found."
+                        emptyMessage="No existe procesos de elecciones"
                         header={header}
                         responsiveLayout="scroll"
                     >

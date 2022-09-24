@@ -154,7 +154,7 @@ const LayoutInstituto = () => {
         },
         {
             label: "Proceso Electoral ",
-            items: [{ label: "Proceso Eleccion", icon: "pi pi-fw pi-user-edit", to: `${url}/procesoEleccion` }],
+            items: [{ label: "Proceso Elección", icon: "pi pi-fw pi-user-edit", to: `${url}/procesoEleccion` }],
         },
         {
             label: "Votantes ",
@@ -164,7 +164,7 @@ const LayoutInstituto = () => {
             label: "Candidatos ",
             items: [
                 { label: "Lista", icon: "pi pi-fw pi-user-edit", to: `${url}/listas` },
-                { label: "Tipo Candidato", icon: "pi pi-fw pi-user-edit", to: `${url}/tipoCandidato` },
+                { label: "Cargos", icon: "pi pi-fw pi-user-edit", to: `${url}/tipoCandidato` },
                 {
                     label: "Candidatos",
                     icon: "pi pi-fw pi-user-edit",

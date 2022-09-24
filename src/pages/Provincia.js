@@ -79,7 +79,7 @@ const Provincia = () => {
                 });
                 const index = findIndexById(provincia.id);
                 _provincias[index] = _provincia;
-                toast.current.show({ severity: "success", summary: "Successful", detail: "provincia Updated", life: 3000 });
+                toast.current.show({ severity: "success", summary: "Successful", detail: "Provincia actualizado", life: 3000 });
                 setProvincias(_provincias);
             } else {
                 provinciaService.postProvince(provincia).then((res) => {
@@ -92,7 +92,7 @@ const Provincia = () => {
                     }
                 });
 
-                toast.current.show({ severity: "success", summary: "Successful", detail: "provincia Created", life: 3000 });
+                toast.current.show({ severity: "success", summary: "Successful", detail: "Provincia creado", life: 3000 });
             }
 
             setProvinciaDialog(false);
@@ -115,7 +115,7 @@ const Provincia = () => {
         let _provincias;
         provinciaService.deleteProvincia(provincia.id).then((res) => {
             if (res === 500) {
-                toast.current.show({ severity: "error", summary: "Error Message", detail: "provincia no eliminada", life: 3000 });
+                toast.current.show({ severity: "error", summary: "Error Message", detail: "Provincia no eliminada", life: 3000 });
             } else if (res === 401) {
                 history.push("/");
                 window.localStorage.removeItem("institucion");
@@ -123,7 +123,7 @@ const Provincia = () => {
                 _provincias = provincias.filter((val) => val.id !== provincia.id);
                 setProvincias(_provincias);
                 setProvincia(emptyprovincia);
-                toast.current.show({ severity: "success", summary: "Successful", detail: "provincia eliminada", life: 3000 });
+                toast.current.show({ severity: "success", summary: "Successful", detail: "Provincia eliminada", life: 3000 });
             }
         });
         setDeleteProvinciaDialog(false);
@@ -155,7 +155,7 @@ const Provincia = () => {
         selectedprovincias.map((res) =>
             provinciaService.deleteProvincia(res.id).then((res) => {
                 if (res === 500) {
-                    toast.current.show({ severity: "error", summary: "Error Message", detail: "provincias no eliminadas", life: 3000 });
+                    toast.current.show({ severity: "error", summary: "Error Message", detail: "Provincias no eliminadas", life: 3000 });
                 } else if (res === 401) {
                     window.localStorage.removeItem("institucion");
                     history.push("/");
@@ -163,7 +163,7 @@ const Provincia = () => {
                     _provincias = provincias.filter((val) => !selectedprovincias.includes(val));
                     setProvincias(_provincias);
                     setSelectedprovincias(null);
-                    toast.current.show({ severity: "success", summary: "Successful", detail: "provincias eliminadas", life: 3000 });
+                    toast.current.show({ severity: "success", summary: "Successful", detail: "Provincias eliminadas", life: 3000 });
                 }
             })
         );
@@ -182,8 +182,8 @@ const Provincia = () => {
         return (
             <React.Fragment>
                 <div className="my-2">
-                    <Button label="New" icon="pi pi-plus" className="p-button-success mr-2" onClick={openNew} />
-                    <Button label="Delete" icon="pi pi-trash" className="p-button-danger" onClick={confirmDeleteSelected} disabled={!selectedprovincias || !selectedprovincias.length} />
+                    <Button label="Nuevo" icon="pi pi-plus" className="p-button-success mr-2" onClick={openNew} />
+                    <Button label="Eliminar" icon="pi pi-trash" className="p-button-danger" onClick={confirmDeleteSelected} disabled={!selectedprovincias || !selectedprovincias.length} />
                 </div>
             </React.Fragment>
         );
@@ -227,30 +227,30 @@ const Provincia = () => {
 
     const header = (
         <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-            <h5 className="m-0">Manage provincias</h5>
+            <h5 className="m-0">Provincias</h5>
             <span className="block mt-2 md:mt-0 p-input-icon-left">
                 <i className="pi pi-search" />
-                <InputText type="search" onInput={(e) => setGlobalFilter(e.target.value)} placeholder="Search..." />
+                <InputText type="search" onInput={(e) => setGlobalFilter(e.target.value)} placeholder="Buscar..." />
             </span>
         </div>
     );
 
     const provinciaDialogFooter = (
         <>
-            <Button label="Cancel" icon="pi pi-times" className="p-button-text" onClick={hideDialog} />
-            <Button label="Save" icon="pi pi-check" className="p-button-text" onClick={saveprovincia} />
+            <Button label="Cancelar" icon="pi pi-times" className="p-button-text" onClick={hideDialog} />
+            <Button label="Guardar" icon="pi pi-check" className="p-button-text" onClick={saveprovincia} />
         </>
     );
     const deleteProvinciaDialogFooter = (
         <>
             <Button label="No" icon="pi pi-times" className="p-button-text" onClick={hideDeleteProvinciaDialog} />
-            <Button label="Yes" icon="pi pi-check" className="p-button-text" onClick={deleteProvincia} />
+            <Button label="Si" icon="pi pi-check" className="p-button-text" onClick={deleteProvincia} />
         </>
     );
     const deleteProvinciasDialogFooter = (
         <>
             <Button label="No" icon="pi pi-times" className="p-button-text" onClick={hideDeleteProvinciasDialog} />
-            <Button label="Yes" icon="pi pi-check" className="p-button-text" onClick={deleteSelectedprovincias} />
+            <Button label="Si" icon="pi pi-check" className="p-button-text" onClick={deleteSelectedprovincias} />
         </>
     );
 
@@ -274,7 +274,7 @@ const Provincia = () => {
                         paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} provincias"
                         globalFilter={globalFilter}
-                        emptyMessage="No provincias found."
+                        emptyMessage="No existe provincias"
                         header={header}
                         responsiveLayout="scroll"
                     >
@@ -285,7 +285,7 @@ const Provincia = () => {
                         <Column body={actionBodyTemplate}></Column>
                     </DataTable>
 
-                    <Dialog visible={provinciaDialog} style={{ width: "450px" }} header="provincia" modal className="p-fluid" footer={provinciaDialogFooter} onHide={hideDialog}>
+                    <Dialog visible={provinciaDialog} style={{ width: "450px" }} header="Provincia" modal className="p-fluid" footer={provinciaDialogFooter} onHide={hideDialog}>
                         {provincia.image && <img src={`assets/demo/images/provincia/${provincia.image}`} alt={provincia.image} width="150" className="mt-0 mx-auto mb-5 block shadow-2" />}
                         <div className="field">
                             <label htmlFor="nombre">Nombre</label>

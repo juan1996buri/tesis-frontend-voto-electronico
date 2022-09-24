@@ -106,7 +106,7 @@ const Lista = () => {
                 });
                 const index = findIndexById(lista.id);
                 _listas[index] = _lista;
-                toast.current.show({ severity: "success", summary: "Successful", detail: "lista Updated", life: 3000 });
+                toast.current.show({ severity: "success", summary: "Successful", detail: "Lista actualizada", life: 3000 });
                 setListas(_listas);
             } else {
                 listaService.postLista(lista).then((res) => {
@@ -119,7 +119,7 @@ const Lista = () => {
                     }
                 });
 
-                toast.current.show({ severity: "success", summary: "Successful", detail: "lista Created", life: 3000 });
+                toast.current.show({ severity: "success", summary: "Successful", detail: "Lista creada", life: 3000 });
             }
             setListaDialog(false);
             setLista(emptylista);
@@ -174,7 +174,7 @@ const Lista = () => {
         selectedlistas.map((res) =>
             listaService.deleteLista(res.id).then((res) => {
                 if (res === 500) {
-                    toast.current.show({ severity: "error", summary: "Error Message", detail: "listas no eliminadas", life: 3000 });
+                    toast.current.show({ severity: "error", summary: "Error Message", detail: "Listas no eliminadas", life: 3000 });
                 } else if (res === 401) {
                     window.localStorage.removeItem("institucion");
                     history.push("/");
@@ -182,7 +182,7 @@ const Lista = () => {
                     _listas = listas.filter((val) => !selectedlistas.includes(val));
                     setListas(_listas);
                     setSelectedlistas(null);
-                    toast.current.show({ severity: "success", summary: "Successful", detail: "listas eliminadas", life: 3000 });
+                    toast.current.show({ severity: "success", summary: "Successful", detail: "Listas eliminadas", life: 3000 });
                 }
             })
         );
@@ -219,8 +219,8 @@ const Lista = () => {
         return (
             <React.Fragment>
                 <div className="my-2">
-                    <Button label="New" icon="pi pi-plus" className="p-button-success mr-2" onClick={openNew} />
-                    <Button label="Delete" icon="pi pi-trash" className="p-button-danger" onClick={confirmDeleteSelected} disabled={!selectedlistas || !selectedlistas.length} />
+                    <Button label="Nuevo" icon="pi pi-plus" className="p-button-success mr-2" onClick={openNew} />
+                    <Button label="Eliminar" icon="pi pi-trash" className="p-button-danger" onClick={confirmDeleteSelected} disabled={!selectedlistas || !selectedlistas.length} />
                 </div>
             </React.Fragment>
         );
@@ -263,7 +263,7 @@ const Lista = () => {
     const procesoBodyTemplate = (rowData) => {
         return (
             <>
-                <span className="p-column-title">Nombre</span>
+                <span className="p-column-title">ProcesoEleccion</span>
                 {rowData.procesoEleccion.nombre}
             </>
         );
@@ -280,30 +280,30 @@ const Lista = () => {
 
     const header = (
         <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-            <h5 className="m-0">Manage listas</h5>
+            <h5 className="m-0">Listas</h5>
             <span className="block mt-2 md:mt-0 p-input-icon-left">
                 <i className="pi pi-search" />
-                <InputText type="search" onInput={(e) => setGlobalFilter(e.target.value)} placeholder="Search..." />
+                <InputText type="search" onInput={(e) => setGlobalFilter(e.target.value)} placeholder="Buscar..." />
             </span>
         </div>
     );
 
     const listaDialogFooter = (
         <>
-            <Button label="Cancel" icon="pi pi-times" className="p-button-text" onClick={hideDialog} />
-            <Button label="Save" icon="pi pi-check" className="p-button-text" onClick={savelista} />
+            <Button label="Cencelar" icon="pi pi-times" className="p-button-text" onClick={hideDialog} />
+            <Button label="Guardar" icon="pi pi-check" className="p-button-text" onClick={savelista} />
         </>
     );
     const deleteListaDialogFooter = (
         <>
             <Button label="No" icon="pi pi-times" className="p-button-text" onClick={hideDeleteListaDialog} />
-            <Button label="Yes" icon="pi pi-check" className="p-button-text" onClick={deleteLista} />
+            <Button label="Si" icon="pi pi-check" className="p-button-text" onClick={deleteLista} />
         </>
     );
     const deleteListasDialogFooter = (
         <>
             <Button label="No" icon="pi pi-times" className="p-button-text" onClick={hideDeleteListasDialog} />
-            <Button label="Yes" icon="pi pi-check" className="p-button-text" onClick={deleteSelectedlistas} />
+            <Button label="Si" icon="pi pi-check" className="p-button-text" onClick={deleteSelectedlistas} />
         </>
     );
 
@@ -327,20 +327,20 @@ const Lista = () => {
                         paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} listas"
                         globalFilter={globalFilter}
-                        emptyMessage="No se encuentra ninguna lista"
+                        emptyMessage="No existen listas"
                         header={header}
                         responsiveLayout="scroll"
                     >
                         <Column selectionMode="multiple" headerStyle={{ width: "3rem" }}></Column>
                         <Column field="id" header="id" sortable body={codeBodyTemplate} headerStyle={{ width: "14%", minWidth: "10rem" }}></Column>
                         <Column field="nombre" header="Nombre" sortable body={nombreBodyTemplate} headerStyle={{ width: "14%", minWidth: "10rem" }}></Column>
-                        <Column field="proceso" header="Proceso" sortable body={procesoBodyTemplate} headerStyle={{ width: "14%", minWidth: "10rem" }}></Column>
+                        <Column field="procesoEleccion" header="Proceso de elección" sortable body={procesoBodyTemplate} headerStyle={{ width: "14%", minWidth: "10rem" }}></Column>
                         <Column field="logo" header="Logo" sortable body={logoCandidatoBodyTemplate} headerStyle={{ width: "14%", minWidth: "10rem" }}></Column>
 
                         <Column body={actionBodyTemplate}></Column>
                     </DataTable>
 
-                    <Dialog visible={listaDialog} style={{ width: "450px" }} header="lista" modal className="p-fluid" footer={listaDialogFooter} onHide={hideDialog}>
+                    <Dialog visible={listaDialog} style={{ width: "450px" }} header="Lista" modal className="p-fluid" footer={listaDialogFooter} onHide={hideDialog}>
                         {lista.image && <img src={`assets/demo/images/lista/${lista.image}`} alt={lista.image} width="150" className="mt-0 mx-auto mb-5 block shadow-2" />}
                         <div className="field">
                             <label htmlFor="nombre">Nombre</label>
@@ -348,7 +348,7 @@ const Lista = () => {
                             {submitted && !lista.nombre && <small className="p-invalid">Numero es requerido</small>}
                         </div>
                         <div className="field">
-                            <label htmlFor="provincia">Proceso Elección</label>
+                            <label htmlFor="provincia">Proceso de elección</label>
                             <Dropdown
                                 id="nombre"
                                 name="procesoEleccion"
@@ -356,12 +356,12 @@ const Lista = () => {
                                 onChange={(e) => onProcesoEleccion(e)}
                                 options={procesoElecciones}
                                 optionLabel="nombre"
-                                placeholder="Seleccione un proceso eleccion"
+                                placeholder="Seleccione un proceso de eleccion"
                                 required
                                 autoFocus
                                 className={classNames({ "p-invalid": submitted && !procesoEleccion.nombre })}
                             />
-                            {submitted && !procesoEleccion.nombre && <small className="p-invalid">Proceso eleccion es requerido</small>}
+                            {submitted && !procesoEleccion.nombre && <small className="p-invalid">Proceso de elección es requerido</small>}
                         </div>
                         <div className="field">
                             <Image src={logo === "" ? lista?.logo : logo} alt="Image Text" width="400px" />

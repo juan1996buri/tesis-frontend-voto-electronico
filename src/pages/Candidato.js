@@ -103,7 +103,7 @@ const Candidato = () => {
                 });
                 const index = findIndexById(candidato.id);
                 _candidatos[index] = _candidato;
-                toast.current.show({ severity: "success", summary: "Successful", detail: "candidato actualizado", life: 3000 });
+                toast.current.show({ severity: "success", summary: "Successful", detail: "Candidato actualizado", life: 3000 });
                 setCandidatos(_candidatos);
             } else {
                 candidatoService.postCandidato(candidato).then((res) => {
@@ -116,7 +116,7 @@ const Candidato = () => {
                     }
                 });
 
-                toast.current.show({ severity: "success", summary: "Successful", detail: "candidato creado", life: 3000 });
+                toast.current.show({ severity: "success", summary: "Successful", detail: "Candidato creado", life: 3000 });
             }
 
             setCandidatoDialog(false);
@@ -143,7 +143,7 @@ const Candidato = () => {
         let _candidatos;
         candidatoService.deleteCandidato(candidato.id).then((res) => {
             if (res === 500) {
-                toast.current.show({ severity: "error", summary: "Error Message", detail: "candidato no eliminada", life: 3000 });
+                toast.current.show({ severity: "error", summary: "Error Message", detail: "Candidato no eliminado", life: 3000 });
             } else if (res === 401) {
                 history.push("/");
                 window.localStorage.removeItem("institucion");
@@ -151,7 +151,7 @@ const Candidato = () => {
                 _candidatos = candidatos.filter((val) => val.id !== candidato.id);
                 setCandidatos(_candidatos);
                 setCandidato(emptycandidato);
-                toast.current.show({ severity: "success", summary: "Successful", detail: "candidato eliminada", life: 3000 });
+                toast.current.show({ severity: "success", summary: "Successful", detail: "Candidato eliminado", life: 3000 });
             }
         });
         setDeleteCandidatoDialog(false);
@@ -215,7 +215,7 @@ const Candidato = () => {
         selectedCandidatos.map((res) =>
             candidatoService.deleteCandidato(res.id).then((res) => {
                 if (res === 500) {
-                    toast.current.show({ severity: "error", summary: "Error Message", detail: "candidatos no eliminadas", life: 3000 });
+                    toast.current.show({ severity: "error", summary: "Error Message", detail: "Candidatos no eliminados", life: 3000 });
                 } else if (res === 401) {
                     window.localStorage.removeItem("institucion");
                     history.push("/");
@@ -223,7 +223,7 @@ const Candidato = () => {
                     _candidatos = candidatos.filter((val) => !selectedCandidatos.includes(val));
                     setCandidatos(_candidatos);
                     setSelectedCandidatos(null);
-                    toast.current.show({ severity: "success", summary: "Successful", detail: "candidatos eliminadas", life: 3000 });
+                    toast.current.show({ severity: "success", summary: "Successful", detail: "Candidatos eliminados", life: 3000 });
                 }
             })
         );
@@ -234,8 +234,8 @@ const Candidato = () => {
         return (
             <React.Fragment>
                 <div className="my-2">
-                    <Button label="New" icon="pi pi-plus" className="p-button-success mr-2" onClick={openNew} />
-                    <Button label="Delete" icon="pi pi-trash" className="p-button-danger" onClick={confirmDeleteSelected} disabled={!selectedCandidatos || !selectedCandidatos.length} />
+                    <Button label="Nuevo" icon="pi pi-plus" className="p-button-success mr-2" onClick={openNew} />
+                    <Button label="Eliminar" icon="pi pi-trash" className="p-button-danger" onClick={confirmDeleteSelected} disabled={!selectedCandidatos || !selectedCandidatos.length} />
                 </div>
             </React.Fragment>
         );
@@ -286,7 +286,7 @@ const Candidato = () => {
     const candidatoBodyTemplate = (rowData) => {
         return (
             <>
-                <span className="p-column-title">Nombre</span>
+                <span className="p-column-title">Candidato</span>
                 {rowData.nombre}
             </>
         );
@@ -303,30 +303,30 @@ const Candidato = () => {
 
     const header = (
         <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-            <h5 className="m-0">Administrador de candidatos</h5>
+            <h5 className="m-0">Candidatos</h5>
             <span className="block mt-2 md:mt-0 p-input-icon-left">
                 <i className="pi pi-search" />
-                <InputText type="search" onInput={(e) => setGlobalFilter(e.target.value)} placeholder="Search..." />
+                <InputText type="search" onInput={(e) => setGlobalFilter(e.target.value)} placeholder="Buscar..." />
             </span>
         </div>
     );
 
     const candidatoDialogFooter = (
         <>
-            <Button label="Cancel" icon="pi pi-times" className="p-button-text" onClick={hideDialog} />
-            <Button label="Save" icon="pi pi-check" className="p-button-text" onClick={savecandidato} />
+            <Button label="Cancelar" icon="pi pi-times" className="p-button-text" onClick={hideDialog} />
+            <Button label="Guardar" icon="pi pi-check" className="p-button-text" onClick={savecandidato} />
         </>
     );
     const deleteCandidatoDialogFooter = (
         <>
             <Button label="No" icon="pi pi-times" className="p-button-text" onClick={hideDeleteCandidatoDialog} />
-            <Button label="Yes" icon="pi pi-check" className="p-button-text" onClick={deleteCandidato} />
+            <Button label="Si" icon="pi pi-check" className="p-button-text" onClick={deleteCandidato} />
         </>
     );
     const deleteCandidatosDialogFooter = (
         <>
             <Button label="No" icon="pi pi-times" className="p-button-text" onClick={hideDeleteCandidatosDialog} />
-            <Button label="Yes" icon="pi pi-check" className="p-button-text" onClick={deleteSelectedCandidatos} />
+            <Button label="Si" icon="pi pi-check" className="p-button-text" onClick={deleteSelectedCandidatos} />
         </>
     );
 
@@ -350,7 +350,7 @@ const Candidato = () => {
                         paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} candidatos"
                         globalFilter={globalFilter}
-                        emptyMessage="No candidatos found."
+                        emptyMessage="No existe candidatos"
                         header={header}
                         responsiveLayout="scroll"
                     >
@@ -364,20 +364,19 @@ const Candidato = () => {
                         <Column body={actionBodyTemplate}></Column>
                     </DataTable>
 
-                    <Dialog visible={candidatoDialog} style={{ width: "450px" }} header="candidato" modal className="p-fluid" footer={candidatoDialogFooter} onHide={hideDialog}>
+                    <Dialog visible={candidatoDialog} style={{ width: "450px" }} header="Candidato" modal className="p-fluid" footer={candidatoDialogFooter} onHide={hideDialog}>
                         {candidato.image && <img src={`assets/demo/images/candidato/${candidato.image}`} alt={candidato.image} width="150" className="mt-0 mx-auto mb-5 block shadow-2" />}
-
                         <div className="field">
-                            <label htmlFor="lista">Lista</label>
-                            <Dropdown id="lista" name="lista" value={lista} onChange={(e) => onLista(e)} options={listas} optionLabel="nombre" placeholder="Seleccione un proceso eleccion" required autoFocus className={classNames({ "p-invalid": submitted && !lista.nombre })} />
-                            {submitted && !lista.nombre && <small className="p-invalid">Lista es requerido</small>}
-                        </div>
-
-                        <div className="field">
-                            <label htmlFor="candidato">Candidato</label>
+                            <label htmlFor="candidato">Nombre</label>
                             <InputText id="candidato" value={candidato.nombre} onChange={(e) => onNameChange(e, "nombre")} required autoFocus className={classNames({ "p-invalid": submitted && !candidato.nombre })} />
                             {submitted && !candidato.nombre && <small className="p-invalid">Nombre es requiredo</small>}
                         </div>
+                        <div className="field">
+                            <label htmlFor="lista">Lista</label>
+                            <Dropdown id="lista" name="lista" value={lista} onChange={(e) => onLista(e)} options={listas} optionLabel="nombre" placeholder="Seleccione una lista" required autoFocus className={classNames({ "p-invalid": submitted && !lista.nombre })} />
+                            {submitted && !lista.nombre && <small className="p-invalid">Lista es requerida</small>}
+                        </div>
+
                         <div className="field">
                             <label htmlFor="tipoCandidato">Cargo</label>
                             <Dropdown
@@ -387,7 +386,7 @@ const Candidato = () => {
                                 onChange={(e) => onTipoCandidato(e)}
                                 options={tipoCandidatos}
                                 optionLabel="nombre"
-                                placeholder="Seleccione un candidato"
+                                placeholder="Seleccione un cargo"
                                 required
                                 autoFocus
                                 className={classNames({ "p-invalid": submitted && !tipoCandidato.nombre })}
@@ -407,7 +406,7 @@ const Candidato = () => {
                             <i className="pi pi-exclamation-triangle mr-3" style={{ fontSize: "2rem" }} />
                             {candidato && (
                                 <span>
-                                    ¿Está seguro que desea eliminar esta candidato? <b>{candidato.name}</b>
+                                    ¿Está seguro que desea eliminar este candidato? <b>{candidato.name}</b>
                                 </span>
                             )}
                         </div>
@@ -416,7 +415,7 @@ const Candidato = () => {
                     <Dialog visible={deleteCandidatosDialog} style={{ width: "450px" }} header="Confirm" modal footer={deleteCandidatosDialogFooter} onHide={hideDeleteCandidatosDialog}>
                         <div className="flex align-items-center justify-content-center">
                             <i className="pi pi-exclamation-triangle mr-3" style={{ fontSize: "2rem" }} />
-                            {candidato && <span>¿Está seguro que desea eliminar las candidatos seleccionadas?</span>}
+                            {candidato && <span>¿Está seguro que desea eliminar los candidatos seleccionados?</span>}
                         </div>
                     </Dialog>
                 </div>

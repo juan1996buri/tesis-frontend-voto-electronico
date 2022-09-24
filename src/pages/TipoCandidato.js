@@ -83,7 +83,7 @@ const TipoCandidato = () => {
                 });
                 const index = findIndexById(tipoCandidato.id);
                 _tipoCandidatos[index] = _tipoCandidato;
-                toast.current.show({ severity: "success", summary: "Successful", detail: "tipoCandidato Updated", life: 3000 });
+                toast.current.show({ severity: "success", summary: "Successful", detail: "Cargo actualizado", life: 3000 });
                 setTipoCandidatos(_tipoCandidatos);
             } else {
                 tipoCandidatoService.postTipoCandidato(tipoCandidato).then((res) => {
@@ -95,7 +95,7 @@ const TipoCandidato = () => {
                         setTipoCandidatos(_tipoCandidatos);
                     }
                 });
-                toast.current.show({ severity: "success", summary: "Successful", detail: "tipoCandidato Created", life: 3000 });
+                toast.current.show({ severity: "success", summary: "Successful", detail: "Cargo creado", life: 3000 });
             }
 
             setTipoCandidatoDialog(false);
@@ -118,7 +118,7 @@ const TipoCandidato = () => {
         let _tipoCandidatos;
         tipoCandidatoService.deleteTipoCandidato(tipoCandidato.id).then((res) => {
             if (res === 500) {
-                toast.current.show({ severity: "error", summary: "Error Message", detail: "tipoCandidato no eliminada", life: 3000 });
+                toast.current.show({ severity: "error", summary: "Error Message", detail: "Cargo no eliminado", life: 3000 });
             } else if (res === 401) {
                 history.push("/");
                 window.localStorage.removeItem("institucion");
@@ -126,7 +126,7 @@ const TipoCandidato = () => {
                 _tipoCandidatos = tipoCandidatos.filter((val) => val.id !== tipoCandidato.id);
                 setTipoCandidatos(_tipoCandidatos);
                 setTipoCandidato(emptytipoCandidato);
-                toast.current.show({ severity: "success", summary: "Successful", detail: "tipoCandidato eliminada", life: 3000 });
+                toast.current.show({ severity: "success", summary: "Successful", detail: "Cargo eliminado", life: 3000 });
             }
         });
         setDeleteTipoCandidatoDialog(false);
@@ -158,7 +158,7 @@ const TipoCandidato = () => {
         selectedTipoCandidatos.map((res) =>
             tipoCandidatoService.deleteTipoCandidato(res.id).then((res) => {
                 if (res === 500) {
-                    toast.current.show({ severity: "error", summary: "Error Message", detail: "tipoCandidatos no eliminadas", life: 3000 });
+                    toast.current.show({ severity: "error", summary: "Error Message", detail: "Cargos no eliminados", life: 3000 });
                 } else if (res === 401) {
                     window.localStorage.removeItem("institucion");
                     history.push("/");
@@ -166,7 +166,7 @@ const TipoCandidato = () => {
                     _tipoCandidatos = tipoCandidatos.filter((val) => !selectedTipoCandidatos.includes(val));
                     setTipoCandidatos(_tipoCandidatos);
                     setSelectedTipoCandidatos(null);
-                    toast.current.show({ severity: "success", summary: "Successful", detail: "tipoCandidatos eliminadas", life: 3000 });
+                    toast.current.show({ severity: "success", summary: "Successful", detail: "Cargos eliminados", life: 3000 });
                 }
             })
         );
@@ -185,8 +185,8 @@ const TipoCandidato = () => {
         return (
             <React.Fragment>
                 <div className="my-2">
-                    <Button label="New" icon="pi pi-plus" className="p-button-success mr-2" onClick={openNew} />
-                    <Button label="Delete" icon="pi pi-trash" className="p-button-danger" onClick={confirmDeleteSelected} disabled={!selectedTipoCandidatos || !selectedTipoCandidatos.length} />
+                    <Button label="Nuevo" icon="pi pi-plus" className="p-button-success mr-2" onClick={openNew} />
+                    <Button label="Eliminar" icon="pi pi-trash" className="p-button-danger" onClick={confirmDeleteSelected} disabled={!selectedTipoCandidatos || !selectedTipoCandidatos.length} />
                 </div>
             </React.Fragment>
         );
@@ -210,7 +210,7 @@ const TipoCandidato = () => {
         );
     };
 
-    const numberBodyTemplate = (rowData) => {
+    const nombreBodyTemplate = (rowData) => {
         return (
             <>
                 <span className="p-column-title">Nombre</span>
@@ -230,30 +230,30 @@ const TipoCandidato = () => {
 
     const header = (
         <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-            <h5 className="m-0">Manage tipoCandidatos</h5>
+            <h5 className="m-0">Cargos</h5>
             <span className="block mt-2 md:mt-0 p-input-icon-left">
                 <i className="pi pi-search" />
-                <InputText type="search" onInput={(e) => setGlobalFilter(e.target.value)} placeholder="Search..." />
+                <InputText type="search" onInput={(e) => setGlobalFilter(e.target.value)} placeholder="Buscar..." />
             </span>
         </div>
     );
 
     const tipoCandidatoDialogFooter = (
         <>
-            <Button label="Cancel" icon="pi pi-times" className="p-button-text" onClick={hideDialog} />
-            <Button label="Save" icon="pi pi-check" className="p-button-text" onClick={savetipoCandidato} />
+            <Button label="Cancelar" icon="pi pi-times" className="p-button-text" onClick={hideDialog} />
+            <Button label="Guardar" icon="pi pi-check" className="p-button-text" onClick={savetipoCandidato} />
         </>
     );
     const deleteTipoCandidatoDialogFooter = (
         <>
             <Button label="No" icon="pi pi-times" className="p-button-text" onClick={hideDeleteTipoCandidatoDialog} />
-            <Button label="Yes" icon="pi pi-check" className="p-button-text" onClick={deleteTipoCandidato} />
+            <Button label="Si" icon="pi pi-check" className="p-button-text" onClick={deleteTipoCandidato} />
         </>
     );
     const deleteTipoCandidatosDialogFooter = (
         <>
             <Button label="No" icon="pi pi-times" className="p-button-text" onClick={hideDeleteTipoCandidatosDialog} />
-            <Button label="Yes" icon="pi pi-check" className="p-button-text" onClick={deleteSelectedTipoCandidatos} />
+            <Button label="Si" icon="pi pi-check" className="p-button-text" onClick={deleteSelectedTipoCandidatos} />
         </>
     );
 
@@ -277,18 +277,18 @@ const TipoCandidato = () => {
                         paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} tipoCandidatos"
                         globalFilter={globalFilter}
-                        emptyMessage="No existe tipos de candidatos"
+                        emptyMessage="No existe cargos"
                         header={header}
                         responsiveLayout="scroll"
                     >
                         <Column selectionMode="multiple" headerStyle={{ width: "3rem" }}></Column>
                         <Column field="id" header="id" sortable body={codeBodyTemplate} headerStyle={{ width: "14%", minWidth: "10rem" }}></Column>
-                        <Column field="nombre" header="Nombre" sortable body={numberBodyTemplate} headerStyle={{ width: "14%", minWidth: "10rem" }}></Column>
+                        <Column field="nombre" header="Nombre" sortable body={nombreBodyTemplate} headerStyle={{ width: "14%", minWidth: "10rem" }}></Column>
 
                         <Column body={actionBodyTemplate}></Column>
                     </DataTable>
 
-                    <Dialog visible={tipoCandidatoDialog} style={{ width: "450px" }} header="Tipo de candidato" modal className="p-fluid" footer={tipoCandidatoDialogFooter} onHide={hideDialog}>
+                    <Dialog visible={tipoCandidatoDialog} style={{ width: "450px" }} header="Cargo" modal className="p-fluid" footer={tipoCandidatoDialogFooter} onHide={hideDialog}>
                         {tipoCandidato.image && <img src={`assets/demo/images/tipoCandidato/${tipoCandidato.image}`} alt={tipoCandidato.image} width="150" className="mt-0 mx-auto mb-5 block shadow-2" />}
                         <div className="field">
                             <label htmlFor="nombre">Nombre</label>
@@ -302,7 +302,7 @@ const TipoCandidato = () => {
                             <i className="pi pi-exclamation-triangle mr-3" style={{ fontSize: "2rem" }} />
                             {tipoCandidato && (
                                 <span>
-                                    ¿Está seguro que desea eliminar esta tipoCandidato? <b>{tipoCandidato.name}</b>
+                                    ¿Está seguro que desea eliminar este cargo? <b>{tipoCandidato.name}</b>
                                 </span>
                             )}
                         </div>
@@ -311,7 +311,7 @@ const TipoCandidato = () => {
                     <Dialog visible={deleteTipoCandidatosDialog} style={{ width: "450px" }} header="Confirm" modal footer={deleteTipoCandidatosDialogFooter} onHide={hideDeleteTipoCandidatosDialog}>
                         <div className="flex align-items-center justify-content-center">
                             <i className="pi pi-exclamation-triangle mr-3" style={{ fontSize: "2rem" }} />
-                            {tipoCandidato && <span>¿Está seguro que desea eliminar las tipoCandidatos seleccionadas?</span>}
+                            {tipoCandidato && <span>¿Está seguro que desea eliminar los cargos seleccionados?</span>}
                         </div>
                     </Dialog>
                 </div>

@@ -118,7 +118,7 @@ const Votante = () => {
                 });
                 const index = findIndexById(votante.id);
                 _votantes[index] = _votante;
-                toast.current.show({ severity: "success", summary: "Successful", detail: "votante Updated", life: 3000 });
+                toast.current.show({ severity: "success", summary: "Successful", detail: "Votante actualizado", life: 3000 });
                 setVotantes(_votantes);
             } else {
                 votanteService.postVotante(votante).then((res) => {
@@ -131,7 +131,7 @@ const Votante = () => {
                     }
                 });
 
-                toast.current.show({ severity: "success", summary: "Successful", detail: "votante Created", life: 3000 });
+                toast.current.show({ severity: "success", summary: "Successful", detail: "Votante creado", life: 3000 });
             }
 
             setCodigo("");
@@ -166,7 +166,7 @@ const Votante = () => {
         let _votantes;
         votanteService.deleteVotante(votante.id).then((res) => {
             if (res === 500) {
-                toast.current.show({ severity: "error", summary: "Error Message", detail: "votante no eliminada", life: 3000 });
+                toast.current.show({ severity: "error", summary: "Error Message", detail: "votante no eliminado", life: 3000 });
             } else if (res === 401) {
                 history.push("/");
                 window.localStorage.removeItem("institucion");
@@ -174,7 +174,7 @@ const Votante = () => {
                 _votantes = votantes.filter((val) => val.id !== votante.id);
                 setVotantes(_votantes);
                 setVotante(emptyvotante);
-                toast.current.show({ severity: "success", summary: "Successful", detail: "votante eliminada", life: 3000 });
+                toast.current.show({ severity: "success", summary: "Successful", detail: "votante eliminado", life: 3000 });
             }
         });
         setDeleteVotanteDialog(false);
@@ -206,7 +206,7 @@ const Votante = () => {
         selectedvotantes.map((res) =>
             votanteService.deleteVotante(res.id).then((res) => {
                 if (res === 500) {
-                    toast.current.show({ severity: "error", summary: "Error Message", detail: "votantes no eliminadas", life: 3000 });
+                    toast.current.show({ severity: "error", summary: "Error Message", detail: "votantes no eliminados", life: 3000 });
                 } else if (res === 401) {
                     window.localStorage.removeItem("institucion");
                     history.push("/");
@@ -214,7 +214,7 @@ const Votante = () => {
                     _votantes = votantes.filter((val) => !selectedvotantes.includes(val));
                     setVotantes(_votantes);
                     setSelectedvotantes(null);
-                    toast.current.show({ severity: "success", summary: "Successful", detail: "votantes eliminadas", life: 3000 });
+                    toast.current.show({ severity: "success", summary: "Successful", detail: "votantes eliminados", life: 3000 });
                 }
             })
         );
@@ -233,8 +233,8 @@ const Votante = () => {
         return (
             <React.Fragment>
                 <div className="my-2">
-                    <Button label="New" icon="pi pi-plus" className="p-button-success mr-2" onClick={openNew} />
-                    <Button label="Delete" icon="pi pi-trash" className="p-button-danger" onClick={confirmDeleteSelected} disabled={!selectedvotantes || !selectedvotantes.length} />
+                    <Button label="Nuevo" icon="pi pi-plus" className="p-button-success mr-2" onClick={openNew} />
+                    <Button label="Eliminar" icon="pi pi-trash" className="p-button-danger" onClick={confirmDeleteSelected} disabled={!selectedvotantes || !selectedvotantes.length} />
                 </div>
             </React.Fragment>
         );
@@ -285,7 +285,7 @@ const Votante = () => {
     const cedulaBodyTemplate = (rowData) => {
         return (
             <>
-                <span className="p-column-title">Nombre</span>
+                <span className="p-column-title">Cedula</span>
                 {rowData.cedula}
             </>
         );
@@ -293,7 +293,7 @@ const Votante = () => {
     const celularBodyTemplate = (rowData) => {
         return (
             <>
-                <span className="p-column-title">Nombre</span>
+                <span className="p-column-title">Celular</span>
                 {rowData.celular}
             </>
         );
@@ -301,7 +301,7 @@ const Votante = () => {
     const sexoBodyTemplate = (rowData) => {
         return (
             <>
-                <span className="p-column-title">Nombre</span>
+                <span className="p-column-title">Sexo</span>
                 {rowData.sexo.nombre}
             </>
         );
@@ -309,7 +309,7 @@ const Votante = () => {
     const codigoBodyTemplate = (rowData) => {
         return (
             <>
-                <span className="p-column-title">Nombre</span>
+                <span className="p-column-title">Codigo</span>
                 {rowData.codigo}
             </>
         );
@@ -339,30 +339,30 @@ const Votante = () => {
 
     const header = (
         <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-            <h5 className="m-0">Administrador de votantes</h5>
+            <h5 className="m-0">Votantes</h5>
             <span className="block mt-2 md:mt-0 p-input-icon-left">
                 <i className="pi pi-search" />
-                <InputText type="search" onInput={(e) => setGlobalFilter(e.target.value)} placeholder="Search..." />
+                <InputText type="search" onInput={(e) => setGlobalFilter(e.target.value)} placeholder="Buscar..." />
             </span>
         </div>
     );
 
     const votanteDialogFooter = (
         <>
-            <Button label="Cancel" icon="pi pi-times" className="p-button-text" onClick={hideDialog} />
-            <Button label="Save" icon="pi pi-check" className="p-button-text" onClick={savevotante} />
+            <Button label="Cancelar" icon="pi pi-times" className="p-button-text" onClick={hideDialog} />
+            <Button label="Guardar" icon="pi pi-check" className="p-button-text" onClick={savevotante} />
         </>
     );
     const deleteVotanteDialogFooter = (
         <>
             <Button label="No" icon="pi pi-times" className="p-button-text" onClick={hideDeleteVotanteDialog} />
-            <Button label="Yes" icon="pi pi-check" className="p-button-text" onClick={deleteVotante} />
+            <Button label="Si" icon="pi pi-check" className="p-button-text" onClick={deleteVotante} />
         </>
     );
     const deleteVotantesDialogFooter = (
         <>
             <Button label="No" icon="pi pi-times" className="p-button-text" onClick={hideDeleteVotantesDialog} />
-            <Button label="Yes" icon="pi pi-check" className="p-button-text" onClick={deleteSelectedvotantes} />
+            <Button label="Si" icon="pi pi-check" className="p-button-text" onClick={deleteSelectedvotantes} />
         </>
     );
 
@@ -392,7 +392,7 @@ const Votante = () => {
                     >
                         <Column selectionMode="multiple" headerStyle={{ width: "3rem" }}></Column>
                         <Column field="id" header="id" sortable body={codeBodyTemplate} headerStyle={{ width: "14%", minWidth: "10rem" }}></Column>
-                        <Column field="cedula" header="Cedula" sortable body={cedulaBodyTemplate} headerStyle={{ width: "14%", minWidth: "10rem" }}></Column>
+                        <Column field="cedula" header="Cedula/Pasaporte" sortable body={cedulaBodyTemplate} headerStyle={{ width: "14%", minWidth: "10rem" }}></Column>
                         <Column field="nombre" header="Nombre" sortable body={nombreBodyTemplate} headerStyle={{ width: "14%", minWidth: "10rem" }}></Column>
                         <Column field="apellido" header="Apellido" sortable body={apellidoBodyTemplate} headerStyle={{ width: "14%", minWidth: "10rem" }}></Column>
                         <Column field="celular" header="Celular" sortable body={celularBodyTemplate} headerStyle={{ width: "14%", minWidth: "10rem" }}></Column>
@@ -406,7 +406,7 @@ const Votante = () => {
                     <Dialog visible={votanteDialog} style={{ width: "450px" }} header="Votante" modal className="p-fluid" footer={votanteDialogFooter} onHide={hideDialog}>
                         {votante.image && <img src={`assets/demo/images/votante/${votante.image}`} alt={votante.image} width="150" className="mt-0 mx-auto mb-5 block shadow-2" />}
                         <div className="field">
-                            <label htmlFor="cedula">Cedula</label>
+                            <label htmlFor="cedula">Cedula o Pasaporte</label>
                             {activeCedula === true ? <InputText id="cedula" value={votante.cedula} onChange={(e) => onNameChange(e, "cedula")} required autoFocus className={classNames({ "p-invalid": submitted && !votante.cedula })} /> : <h5 style={{ marginTop: "-0.001rem" }}>{votante.cedula}</h5>}
                             {submitted && !votante.cedula && <small className="p-invalid">Cedula es requerido</small>}
                         </div>
@@ -451,7 +451,7 @@ const Votante = () => {
                             <i className="pi pi-exclamation-triangle mr-3" style={{ fontSize: "2rem" }} />
                             {votante && (
                                 <span>
-                                    ¿Está seguro que desea eliminar esta votante? <b>{votante.name}</b>
+                                    ¿Está seguro que desea eliminar este votante? <b>{votante.name}</b>
                                 </span>
                             )}
                         </div>
@@ -460,7 +460,7 @@ const Votante = () => {
                     <Dialog visible={deleteVotantesDialog} style={{ width: "450px" }} header="Confirm" modal footer={deleteVotantesDialogFooter} onHide={hideDeleteVotantesDialog}>
                         <div className="flex align-items-center justify-content-center">
                             <i className="pi pi-exclamation-triangle mr-3" style={{ fontSize: "2rem" }} />
-                            {votante && <span>¿Está seguro que desea eliminar las votantes seleccionadas?</span>}
+                            {votante && <span>¿Está seguro que desea eliminar las votantes seleccionados?</span>}
                         </div>
                     </Dialog>
                 </div>

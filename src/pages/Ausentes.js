@@ -51,6 +51,9 @@ const Ausentes = () => {
                         );
                     }
                 });
+            } else {
+                const votanteService = new VotanteService();
+                votanteService.getVotantes(data.ruc, setVotantes);
             }
             const grupoService = new GrupoService();
             grupoService.getGrupos(data.ruc, setGrupos);

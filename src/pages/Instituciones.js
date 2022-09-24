@@ -86,7 +86,7 @@ const Institucion = () => {
                 });
                 const index = findIndexById(institucion.id);
                 _instituciones[index] = _institucion;
-                toast.current.show({ severity: "success", summary: "Successful", detail: "institucion Updated", life: 3000 });
+                toast.current.show({ severity: "success", summary: "Successful", detail: "Institución actualizado", life: 3000 });
             }
 
             setInstituciones(_instituciones);
@@ -197,7 +197,7 @@ const Institucion = () => {
 
     const header = (
         <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-            <h5 className="m-0">Manage instituciones</h5>
+            <h5 className="m-0">Instituciones</h5>
             <span className="block mt-2 md:mt-0 p-input-icon-left">
                 <i className="pi pi-search" />
                 <InputText type="search" onInput={(e) => setGlobalFilter(e.target.value)} placeholder="Search..." />
@@ -237,9 +237,9 @@ const Institucion = () => {
                         <Column field="id" header="id" sortable body={codeBodyTemplate} headerStyle={{ width: "14%", minWidth: "5rem" }}></Column>
                         <Column field="ruc" header="Ruc" sortable body={rucBodyTemplate} headerStyle={{ width: "14%", minWidth: "10rem" }}></Column>
                         <Column field="correo" header="Correo" sortable body={correoBodyTemplate} headerStyle={{ width: "14%", minWidth: "10rem" }}></Column>
-                        <Column field="direccion" header="Direccion" sortable body={direccionBodyTemplate} headerStyle={{ width: "14%", minWidth: "10rem" }}></Column>
+                        <Column field="direccion" header="Dirección" sortable body={direccionBodyTemplate} headerStyle={{ width: "14%", minWidth: "10rem" }}></Column>
                         <Column field="provincia/ciudad" header="Provincia/Ciudad" sortable body={ciudadProvinciaBodyTemplate} headerStyle={{ width: "14%", minWidth: "10rem" }}></Column>
-                        <Column field="tipoInstitucion" header="Tipo Institucion" sortable body={tipoInstitucionBodyTemplate} headerStyle={{ width: "14%", minWidth: "10rem" }}></Column>
+                        <Column field="tipoInstitucion" header="Tipo de institución" sortable body={tipoInstitucionBodyTemplate} headerStyle={{ width: "14%", minWidth: "10rem" }}></Column>
                         <Column field="estado" header="Estado" sortable body={activoBodyTemplate} headerStyle={{ width: "14%", minWidth: "10rem" }}></Column>
 
                         <Column body={actionBodyTemplate}></Column>

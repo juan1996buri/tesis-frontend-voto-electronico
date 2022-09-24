@@ -19,11 +19,18 @@ export class SexoService {
             });
     }
     postSexo(data) {
-        return axios.post(url, data, { headers: authHeader() }).catch(function (error) {
-            if (error.response) {
-                return error.response.status;
-            }
-        });
+        return axios
+            .post(url, data, { headers: authHeader() })
+            .then((res) => {
+                if (res.data.success) {
+                    return res.data.result;
+                }
+            })
+            .catch(function (error) {
+                if (error.response) {
+                    return error.response.status;
+                }
+            });
     }
     updateSexo(data) {
         return axios.put(url, data, { headers: authHeader() }).catch(function (error) {

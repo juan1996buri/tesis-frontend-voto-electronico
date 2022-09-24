@@ -9,7 +9,6 @@ import { Dialog } from "primereact/dialog";
 import { InputText } from "primereact/inputtext";
 import { useHistory } from "react-router-dom";
 import { FileUpload } from "primereact/fileupload";
-import { Dropdown } from "primereact/dropdown";
 import { SexoService } from "../service/SexoService";
 
 const Sexo = () => {
@@ -80,19 +79,22 @@ const Sexo = () => {
                 });
                 const index = findIndexById(sexo.id);
                 _sexos[index] = _sexo;
-                toast.current.show({ severity: "success", summary: "Successful", detail: "sexo Updated", life: 3000 });
+                setSexos(_sexos);
+                toast.current.show({ severity: "success", summary: "Successful", detail: "Sexo actualizado", life: 3000 });
             } else {
                 sexoService.postSexo(sexo).then((res) => {
                     if (res === 401) {
                         window.localStorage.removeItem("institucion");
                         history.push("/");
+                    } else {
+                        _sexos.push(res);
+                        setSexos(_sexos);
                     }
                 });
-                _sexos.push(_sexo);
-                toast.current.show({ severity: "success", summary: "Successful", detail: "sexo Created", life: 3000 });
+
+                toast.current.show({ severity: "success", summary: "Successful", detail: "Sexo creado", life: 3000 });
             }
 
-            setSexos(_sexos);
             setSexoDialog(false);
             setSexo(emptysexo);
         }
@@ -113,7 +115,7 @@ const Sexo = () => {
         let _sexos;
         sexoService.deleteSexo(sexo.id).then((res) => {
             if (res === 500) {
-                toast.current.show({ severity: "error", summary: "Error Message", detail: "sexo no eliminada", life: 3000 });
+                toast.current.show({ severity: "error", summary: "Error Message", detail: "Sexo no eliminado", life: 3000 });
             } else if (res === 401) {
                 history.push("/");
                 window.localStorage.removeItem("institucion");
@@ -121,7 +123,7 @@ const Sexo = () => {
                 _sexos = sexos.filter((val) => val.id !== sexo.id);
                 setSexos(_sexos);
                 setSexo(emptysexo);
-                toast.current.show({ severity: "success", summary: "Successful", detail: "sexo eliminada", life: 3000 });
+                toast.current.show({ severity: "success", summary: "Successful", detail: "Sexo eliminado", life: 3000 });
             }
         });
         setDeleteSexoDialog(false);
@@ -153,7 +155,7 @@ const Sexo = () => {
         selectedSexos.map((res) =>
             sexoService.deleteSexo(res.id).then((res) => {
                 if (res === 500) {
-                    toast.current.show({ severity: "error", summary: "Error Message", detail: "sexos no eliminadas", life: 3000 });
+                    toast.current.show({ severity: "error", summary: "Error Message", detail: "Sexos no eliminados", life: 3000 });
                 } else if (res === 401) {
                     window.localStorage.removeItem("institucion");
                     history.push("/");
@@ -161,7 +163,7 @@ const Sexo = () => {
                     _sexos = sexos.filter((val) => !selectedSexos.includes(val));
                     setSexos(_sexos);
                     setSelectedSexos(null);
-                    toast.current.show({ severity: "success", summary: "Successful", detail: "sexos eliminadas", life: 3000 });
+                    toast.current.show({ severity: "success", summary: "Successful", detail: "Sexos eliminados", life: 3000 });
                 }
             })
         );
@@ -180,8 +182,8 @@ const Sexo = () => {
         return (
             <React.Fragment>
                 <div className="my-2">
-                    <Button label="New" icon="pi pi-plus" className="p-button-success mr-2" onClick={openNew} />
-                    <Button label="Delete" icon="pi pi-trash" className="p-button-danger" onClick={confirmDeleteSelected} disabled={!selectedSexos || !selectedSexos.length} />
+                    <Button label="Nuevo" icon="pi pi-plus" className="p-button-success mr-2" onClick={openNew} />
+                    <Button label="Eliminar" icon="pi pi-trash" className="p-button-danger" onClick={confirmDeleteSelected} disabled={!selectedSexos || !selectedSexos.length} />
                 </div>
             </React.Fragment>
         );
@@ -225,30 +227,30 @@ const Sexo = () => {
 
     const header = (
         <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-            <h5 className="m-0">Manage sexos</h5>
+            <h5 className="m-0">Sexos</h5>
             <span className="block mt-2 md:mt-0 p-input-icon-left">
                 <i className="pi pi-search" />
-                <InputText type="search" onInput={(e) => setGlobalFilter(e.target.value)} placeholder="Search..." />
+                <InputText type="search" onInput={(e) => setGlobalFilter(e.target.value)} placeholder="Buscar..." />
             </span>
         </div>
     );
 
     const sexoDialogFooter = (
         <>
-            <Button label="Cancel" icon="pi pi-times" className="p-button-text" onClick={hideDialog} />
-            <Button label="Save" icon="pi pi-check" className="p-button-text" onClick={savesexo} />
+            <Button label="Cancelar" icon="pi pi-times" className="p-button-text" onClick={hideDialog} />
+            <Button label="Guardar" icon="pi pi-check" className="p-button-text" onClick={savesexo} />
         </>
     );
     const deleteSexoDialogFooter = (
         <>
             <Button label="No" icon="pi pi-times" className="p-button-text" onClick={hideDeleteSexoDialog} />
-            <Button label="Yes" icon="pi pi-check" className="p-button-text" onClick={deleteSexo} />
+            <Button label="Si" icon="pi pi-check" className="p-button-text" onClick={deleteSexo} />
         </>
     );
     const deleteSexosDialogFooter = (
         <>
             <Button label="No" icon="pi pi-times" className="p-button-text" onClick={hideDeleteSexosDialog} />
-            <Button label="Yes" icon="pi pi-check" className="p-button-text" onClick={deleteSelectedSexos} />
+            <Button label="Si" icon="pi pi-check" className="p-button-text" onClick={deleteSelectedSexos} />
         </>
     );
 
@@ -272,7 +274,7 @@ const Sexo = () => {
                         paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} sexos"
                         globalFilter={globalFilter}
-                        emptyMessage="No sexos found."
+                        emptyMessage="No existe los sexos"
                         header={header}
                         responsiveLayout="scroll"
                     >
@@ -283,7 +285,7 @@ const Sexo = () => {
                         <Column body={actionBodyTemplate}></Column>
                     </DataTable>
 
-                    <Dialog visible={sexoDialog} style={{ width: "450px" }} header="sexo" modal className="p-fluid" footer={sexoDialogFooter} onHide={hideDialog}>
+                    <Dialog visible={sexoDialog} style={{ width: "450px" }} header="Sexo" modal className="p-fluid" footer={sexoDialogFooter} onHide={hideDialog}>
                         {sexo.image && <img src={`assets/demo/images/sexo/${sexo.image}`} alt={sexo.image} width="150" className="mt-0 mx-auto mb-5 block shadow-2" />}
                         <div className="field">
                             <label htmlFor="nombre">Nombre</label>

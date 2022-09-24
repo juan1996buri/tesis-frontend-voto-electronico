@@ -9,7 +9,6 @@ import { Dialog } from "primereact/dialog";
 import { InputText } from "primereact/inputtext";
 import { useHistory } from "react-router-dom";
 import { FileUpload } from "primereact/fileupload";
-import { Dropdown } from "primereact/dropdown";
 import { TipoInstitucionService } from "../service/TipoInstitucionService";
 
 const TipoInstitucion = () => {
@@ -83,19 +82,22 @@ const TipoInstitucion = () => {
                 });
                 const index = findIndexById(tipoInstitucion.id);
                 _tipoInstitucions[index] = _tipoInstitucion;
-                toast.current.show({ severity: "success", summary: "Successful", detail: "tipoInstitucion Updated", life: 3000 });
+                setTipoInstitucions(_tipoInstitucions);
+
+                toast.current.show({ severity: "success", summary: "Successful", detail: "Tipo de institución actualizado", life: 3000 });
             } else {
                 tipoInstitucionService.postTipoInstitucion(tipoInstitucion).then((res) => {
                     if (res === 401) {
                         window.localStorage.removeItem("institucion");
                         history.push("/");
+                    } else {
+                        _tipoInstitucions.push(res);
+                        setTipoInstitucions(_tipoInstitucions);
                     }
                 });
-                _tipoInstitucions.push(_tipoInstitucion);
                 toast.current.show({ severity: "success", summary: "Successful", detail: "tipoInstitucion Created", life: 3000 });
             }
 
-            setTipoInstitucions(_tipoInstitucions);
             setTipoInstitucionDialog(false);
             setTipoInstitucion(emptytipoInstitucion);
         }
@@ -116,7 +118,7 @@ const TipoInstitucion = () => {
         let _tipoInstitucions;
         tipoInstitucionService.deleteTipoInstitucion(tipoInstitucion.id).then((res) => {
             if (res === 500) {
-                toast.current.show({ severity: "error", summary: "Error Message", detail: "tipoInstitucion no eliminada", life: 3000 });
+                toast.current.show({ severity: "error", summary: "Error Message", detail: "Tipo de institución no eliminado", life: 3000 });
             } else if (res === 401) {
                 history.push("/");
                 window.localStorage.removeItem("institucion");
@@ -124,7 +126,7 @@ const TipoInstitucion = () => {
                 _tipoInstitucions = tipoInstitucions.filter((val) => val.id !== tipoInstitucion.id);
                 setTipoInstitucions(_tipoInstitucions);
                 setTipoInstitucion(emptytipoInstitucion);
-                toast.current.show({ severity: "success", summary: "Successful", detail: "tipoInstitucion eliminada", life: 3000 });
+                toast.current.show({ severity: "success", summary: "Successful", detail: "Tipo de institución eliminado", life: 3000 });
             }
         });
         setDeleteTipoInstitucionDialog(false);
@@ -156,7 +158,7 @@ const TipoInstitucion = () => {
         selectedTipoInstitucions.map((res) =>
             tipoInstitucionService.deleteTipoInstitucion(res.id).then((res) => {
                 if (res === 500) {
-                    toast.current.show({ severity: "error", summary: "Error Message", detail: "tipoInstitucions no eliminadas", life: 3000 });
+                    toast.current.show({ severity: "error", summary: "Error Message", detail: "Tipo de instituciones no eliminados", life: 3000 });
                 } else if (res === 401) {
                     window.localStorage.removeItem("institucion");
                     history.push("/");
@@ -164,7 +166,7 @@ const TipoInstitucion = () => {
                     _tipoInstitucions = tipoInstitucions.filter((val) => !selectedTipoInstitucions.includes(val));
                     setTipoInstitucions(_tipoInstitucions);
                     setSelectedTipoInstitucions(null);
-                    toast.current.show({ severity: "success", summary: "Successful", detail: "tipoInstitucions eliminadas", life: 3000 });
+                    toast.current.show({ severity: "success", summary: "Successful", detail: "Tipo de instituciones eliminados", life: 3000 });
                 }
             })
         );
@@ -183,8 +185,8 @@ const TipoInstitucion = () => {
         return (
             <React.Fragment>
                 <div className="my-2">
-                    <Button label="New" icon="pi pi-plus" className="p-button-success mr-2" onClick={openNew} />
-                    <Button label="Delete" icon="pi pi-trash" className="p-button-danger" onClick={confirmDeleteSelected} disabled={!selectedTipoInstitucions || !selectedTipoInstitucions.length} />
+                    <Button label="Nuevo" icon="pi pi-plus" className="p-button-success mr-2" onClick={openNew} />
+                    <Button label="Eliminar" icon="pi pi-trash" className="p-button-danger" onClick={confirmDeleteSelected} disabled={!selectedTipoInstitucions || !selectedTipoInstitucions.length} />
                 </div>
             </React.Fragment>
         );
@@ -236,30 +238,30 @@ const TipoInstitucion = () => {
 
     const header = (
         <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-            <h5 className="m-0">Manage tipoInstitucions</h5>
+            <h5 className="m-0">Tipo de instituciones</h5>
             <span className="block mt-2 md:mt-0 p-input-icon-left">
                 <i className="pi pi-search" />
-                <InputText type="search" onInput={(e) => setGlobalFilter(e.target.value)} placeholder="Search..." />
+                <InputText type="search" onInput={(e) => setGlobalFilter(e.target.value)} placeholder="Buscar..." />
             </span>
         </div>
     );
 
     const tipoInstitucionDialogFooter = (
         <>
-            <Button label="Cancel" icon="pi pi-times" className="p-button-text" onClick={hideDialog} />
-            <Button label="Save" icon="pi pi-check" className="p-button-text" onClick={saveTipoInstitucion} />
+            <Button label="Cancelar" icon="pi pi-times" className="p-button-text" onClick={hideDialog} />
+            <Button label="Guardar" icon="pi pi-check" className="p-button-text" onClick={saveTipoInstitucion} />
         </>
     );
     const deleteTipoInstitucionDialogFooter = (
         <>
             <Button label="No" icon="pi pi-times" className="p-button-text" onClick={hideDeleteTipoInstitucionDialog} />
-            <Button label="Yes" icon="pi pi-check" className="p-button-text" onClick={deleteTipoInstitucion} />
+            <Button label="Si" icon="pi pi-check" className="p-button-text" onClick={deleteTipoInstitucion} />
         </>
     );
     const deleteTipoInstitucionsDialogFooter = (
         <>
             <Button label="No" icon="pi pi-times" className="p-button-text" onClick={hideDeleteTipoInstitucionsDialog} />
-            <Button label="Yes" icon="pi pi-check" className="p-button-text" onClick={deleteSelectedTipoInstitucions} />
+            <Button label="Si" icon="pi pi-check" className="p-button-text" onClick={deleteSelectedTipoInstitucions} />
         </>
     );
 
@@ -283,7 +285,7 @@ const TipoInstitucion = () => {
                         paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} tipoInstitucions"
                         globalFilter={globalFilter}
-                        emptyMessage="No tipoInstitucions found."
+                        emptyMessage="No existe tipos de instituciones"
                         header={header}
                         responsiveLayout="scroll"
                     >
@@ -303,7 +305,7 @@ const TipoInstitucion = () => {
                             {submitted && !tipoInstitucion.nombre && <small className="p-invalid">nombre es requerido</small>}
                         </div>
                         <div className="field">
-                            <label htmlFor="descripcion">Descipcion</label>
+                            <label htmlFor="descripcion">Descipción</label>
                             <InputText id="descripcion" value={tipoInstitucion.descripcion} onChange={(e) => onNameChange(e, "descripcion")} />
                         </div>
                     </Dialog>
@@ -313,7 +315,7 @@ const TipoInstitucion = () => {
                             <i className="pi pi-exclamation-triangle mr-3" style={{ fontSize: "2rem" }} />
                             {tipoInstitucion && (
                                 <span>
-                                    ¿Está seguro que desea eliminar esta tipoInstitucion? <b>{tipoInstitucion.name}</b>
+                                    ¿Está seguro que desea eliminar este tipo de institución? <b>{tipoInstitucion.name}</b>
                                 </span>
                             )}
                         </div>
@@ -322,7 +324,7 @@ const TipoInstitucion = () => {
                     <Dialog visible={deleteTipoInstitucionsDialog} style={{ width: "450px" }} header="Confirm" modal footer={deleteTipoInstitucionsDialogFooter} onHide={hideDeleteTipoInstitucionsDialog}>
                         <div className="flex align-items-center justify-content-center">
                             <i className="pi pi-exclamation-triangle mr-3" style={{ fontSize: "2rem" }} />
-                            {tipoInstitucion && <span>¿Está seguro que desea eliminar las tipoInstitucions seleccionadas?</span>}
+                            {tipoInstitucion && <span>¿Está seguro que desea eliminar los tipos de instituciones seleccionados?</span>}
                         </div>
                     </Dialog>
                 </div>

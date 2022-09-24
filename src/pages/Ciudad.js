@@ -90,7 +90,7 @@ const Ciudad = () => {
                 });
                 const index = findIndexById(ciudad.id);
                 _ciudades[index] = _ciudad;
-                toast.current.show({ severity: "success", summary: "Successful", detail: "ciudad Updated", life: 3000 });
+                toast.current.show({ severity: "success", summary: "Successful", detail: "Ciudad actualizada", life: 3000 });
                 setCiudades(_ciudades);
             } else {
                 ciudadeservice.postCiudad(ciudad).then((res) => {
@@ -103,7 +103,7 @@ const Ciudad = () => {
                     }
                 });
 
-                toast.current.show({ severity: "success", summary: "Successful", detail: "ciudad Created", life: 3000 });
+                toast.current.show({ severity: "success", summary: "Successful", detail: "Ciudad creada", life: 3000 });
             }
 
             setCiudadDialog(false);
@@ -126,7 +126,7 @@ const Ciudad = () => {
         let _ciudades;
         ciudadeservice.deleteCiudad(ciudad.id).then((res) => {
             if (res === 500) {
-                toast.current.show({ severity: "error", summary: "Error Message", detail: "ciudad no eliminada", life: 3000 });
+                toast.current.show({ severity: "error", summary: "Error Message", detail: "Ciudad no eliminada", life: 3000 });
             } else if (res === 401) {
                 history.push("/");
                 window.localStorage.removeItem("institucion");
@@ -134,7 +134,7 @@ const Ciudad = () => {
                 _ciudades = ciudades.filter((val) => val.id !== ciudad.id);
                 setCiudades(_ciudades);
                 setCiudad(emptyciudad);
-                toast.current.show({ severity: "success", summary: "Successful", detail: "ciudad eliminada", life: 3000 });
+                toast.current.show({ severity: "success", summary: "Successful", detail: "Ciudad eliminada", life: 3000 });
             }
         });
         setDeleteciudadDialog(false);
@@ -166,7 +166,7 @@ const Ciudad = () => {
         selectedciudades.map((res) =>
             ciudadeservice.deleteCiudad(res.id).then((res) => {
                 if (res === 500) {
-                    toast.current.show({ severity: "error", summary: "Error Message", detail: "ciudades no eliminadas", life: 3000 });
+                    toast.current.show({ severity: "error", summary: "Error Message", detail: "Ciudades no eliminadas", life: 3000 });
                 } else if (res === 401) {
                     window.localStorage.removeItem("institucion");
                     history.push("/");
@@ -174,7 +174,7 @@ const Ciudad = () => {
                     _ciudades = ciudades.filter((val) => !selectedciudades.includes(val));
                     setCiudades(_ciudades);
                     setSelectedciudades(null);
-                    toast.current.show({ severity: "success", summary: "Successful", detail: "ciudades eliminadas", life: 3000 });
+                    toast.current.show({ severity: "success", summary: "Successful", detail: "Ciudades eliminadas", life: 3000 });
                 }
             })
         );
@@ -193,8 +193,8 @@ const Ciudad = () => {
         return (
             <React.Fragment>
                 <div className="my-2">
-                    <Button label="New" icon="pi pi-plus" className="p-button-success mr-2" onClick={openNew} />
-                    <Button label="Delete" icon="pi pi-trash" className="p-button-danger" onClick={confirmDeleteSelected} disabled={!selectedciudades || !selectedciudades.length} />
+                    <Button label="Nuevo" icon="pi pi-plus" className="p-button-success mr-2" onClick={openNew} />
+                    <Button label="Eliminar" icon="pi pi-trash" className="p-button-danger" onClick={confirmDeleteSelected} disabled={!selectedciudades || !selectedciudades.length} />
                 </div>
             </React.Fragment>
         );
@@ -251,30 +251,30 @@ const Ciudad = () => {
 
     const header = (
         <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-            <h5 className="m-0">Administrador de ciudades</h5>
+            <h5 className="m-0">Ciudades</h5>
             <span className="block mt-2 md:mt-0 p-input-icon-left">
                 <i className="pi pi-search" />
-                <InputText type="search" onInput={(e) => setGlobalFilter(e.target.value)} placeholder="Search..." />
+                <InputText type="search" onInput={(e) => setGlobalFilter(e.target.value)} placeholder="Buscar..." />
             </span>
         </div>
     );
 
     const ciudadDialogFooter = (
         <>
-            <Button label="Cancel" icon="pi pi-times" className="p-button-text" onClick={hideDialog} />
-            <Button label="Save" icon="pi pi-check" className="p-button-text" onClick={saveciudad} />
+            <Button label="Cancelar" icon="pi pi-times" className="p-button-text" onClick={hideDialog} />
+            <Button label="Guardar" icon="pi pi-check" className="p-button-text" onClick={saveciudad} />
         </>
     );
     const deleteciudadDialogFooter = (
         <>
             <Button label="No" icon="pi pi-times" className="p-button-text" onClick={hideDeleteciudadDialog} />
-            <Button label="Yes" icon="pi pi-check" className="p-button-text" onClick={deleteciudad} />
+            <Button label="Si" icon="pi pi-check" className="p-button-text" onClick={deleteciudad} />
         </>
     );
     const deleteciudadesDialogFooter = (
         <>
             <Button label="No" icon="pi pi-times" className="p-button-text" onClick={hideDeleteciudadesDialog} />
-            <Button label="Yes" icon="pi pi-check" className="p-button-text" onClick={deleteSelectedciudades} />
+            <Button label="Si" icon="pi pi-check" className="p-button-text" onClick={deleteSelectedciudades} />
         </>
     );
 
@@ -310,7 +310,7 @@ const Ciudad = () => {
                         <Column body={actionBodyTemplate}></Column>
                     </DataTable>
 
-                    <Dialog visible={ciudadDialog} style={{ width: "450px" }} header="ciudad" modal className="p-fluid" footer={ciudadDialogFooter} onHide={hideDialog}>
+                    <Dialog visible={ciudadDialog} style={{ width: "450px" }} header="Ciudad" modal className="p-fluid" footer={ciudadDialogFooter} onHide={hideDialog}>
                         {ciudad.image && <img src={`assets/demo/images/ciudad/${ciudad.image}`} alt={ciudad.image} width="150" className="mt-0 mx-auto mb-5 block shadow-2" />}
                         <div className="field">
                             <label htmlFor="nombre">Nombre</label>

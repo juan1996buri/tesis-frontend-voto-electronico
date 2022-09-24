@@ -35,9 +35,9 @@ const LoginVotante = () => {
             <Toast ref={toast} />
             <div className="container_login_votante p-fluid">
                 <div className="item">
-                    <label htmlFor="password">Contraseña</label>
+                    <label htmlFor="password">Código</label>
                     <Password type={"number"} id="password" name="password" value={password} onChange={(e) => onInputChange(e)} toggleMask feedback={false} required autoFocus className={classNames({ "p-invalid ": submitted && !password })} />
-                    {submitted && !password && <small className="p-invalid">Se requiere una contraseña</small>}
+                    {submitted && !password && <small className="p-invalid">Se requiere un código</small>}
                 </div>
 
                 <div>
