@@ -12,6 +12,8 @@ import "../styles/register.css";
 import { Password } from "primereact/password";
 import { Toast } from "primereact/toast";
 import { UserService } from "../service/UserService";
+import logo from "../images/logo.png";
+import { fontSize } from "@mui/system";
 
 const RegistrarInstitucion = () => {
     const history = useHistory();
@@ -99,47 +101,68 @@ const RegistrarInstitucion = () => {
     };
 
     return (
-        <div className="container">
+        <div className="container_register_">
             <Toast ref={toast} />
             <div className="container_register p-fluid">
-                <div className="item field">
-                    <label htmlFor="ruc">Ruc</label>
-                    <InputText id="ruc" onChange={(e) => onInputChange(e, "ruc")} required autoFocus className={classNames({ "p-invalid ": submitted && !institucion.ruc })} />
-                    {submitted && !institucion.ruc && <small className="p-invalid">Se requiere un nombre</small>}
+                <div className="container_register_header">
+                    <img src={logo} style={{ width: "20rem" }} alt="logo" />
                 </div>
-                <div className="item field">
-                    <label htmlFor="correo">E-mail</label>
-                    <InputText id="correo" type={"email"} onChange={(e) => onInputChange(e, "correo")} required autoFocus className={classNames({ "p-invalid ": submitted && !institucion.correo })} />
-                    {submitted && !institucion.correo && <small className="p-invalid">Se requiere un nombre</small>}
-                </div>
-                <div className="item">
-                    <label htmlFor="nombre">Nombre</label>
-                    <InputText id="nombre" onChange={(e) => onInputChange(e, "nombre")} required autoFocus className={classNames({ "p-invalid ": submitted && !institucion.nombre })} />
-                    {submitted && !institucion.nombre && <small className="p-invalid">Se requiere un nombre</small>}
-                </div>
-                <div className="item">
-                    <label htmlFor="password">Contraseña</label>
-                    <Password id="password" value={password} onChange={(e) => setPassword(e.target.value)} toggleMask required autoFocus className={classNames({ "p-invalid ": submitted && !user.password })} />
-                </div>
-                <div className="item">
-                    <label htmlFor="password">Verificar contraseña</label>
-                    <Password id="password" value={repeatPassword} onChange={(e) => setRepeatPassword(e.target.value)} toggleMask required autoFocus className={classNames({ "p-invalid ": submitted && !user.password })} />
-                </div>
+                <div className="container_register_items">
+                    <div className="item field">
+                        <label style={{ fontSize: "1.5rem" }} htmlFor="ruc">
+                            Ruc
+                        </label>
+                        <InputText style={{ fontSize: "1.5rem" }} id="ruc" onChange={(e) => onInputChange(e, "ruc")} required autoFocus className={classNames({ "p-invalid ": submitted && !institucion.ruc })} />
+                        {submitted && !institucion.ruc && <small className="p-invalid">Se requiere un nombre</small>}
+                    </div>
+                    <div className="item field">
+                        <label htmlFor="correo" style={{ fontSize: "1.5rem" }}>
+                            E-mail
+                        </label>
+                        <InputText style={{ fontSize: "1.5rem" }} id="correo" type={"email"} onChange={(e) => onInputChange(e, "correo")} required autoFocus className={classNames({ "p-invalid ": submitted && !institucion.correo })} />
+                        {submitted && !institucion.correo && <small className="p-invalid">Se requiere un nombre</small>}
+                    </div>
+                    <div className="item">
+                        <label htmlFor="nombre" style={{ fontSize: "1.5rem" }}>
+                            Nombre
+                        </label>
+                        <InputText id="nombre" style={{ fontSize: "1.5rem" }} onChange={(e) => onInputChange(e, "nombre")} required autoFocus className={classNames({ "p-invalid ": submitted && !institucion.nombre })} />
+                        {submitted && !institucion.nombre && <small className="p-invalid">Se requiere un nombre</small>}
+                    </div>
+                    <div className="item">
+                        <label htmlFor="password" style={{ fontSize: "1.5rem" }}>
+                            Contraseña
+                        </label>
+                        <Password id="password" inputStyle={{ fontSize: "1.5rem" }} onChange={(e) => setPassword(e.target.value)} value={password} toggleMask required autoFocus className={classNames({ "p-invalid  ": submitted && !user.password })} />
+                    </div>
+                    <div className="item">
+                        <label htmlFor="password" style={{ fontSize: "1.5rem" }}>
+                            Verificar contraseña
+                        </label>
+                        <Password id="password" inputStyle={{ fontSize: "1.5rem" }} value={repeatPassword} onChange={(e) => setRepeatPassword(e.target.value)} toggleMask required autoFocus className={classNames({ "p-invalid ": submitted && !user.password })}></Password>
+                    </div>
 
-                <div className="item">
-                    <label htmlFor="provincia">Provincia</label>
-                    <Dropdown id="provincia" value={provincia} onChange={(e) => onProvinciaChange(e)} options={provincias} optionLabel="nombre" placeholder="Selecione provincia"></Dropdown>
-                </div>
-                <div className="item">
-                    <label htmlFor="ciudad">Ciudad</label>
-                    <Dropdown id="ciudad" value={ciudad} onChange={(e) => onCiudadChange(e)} options={ciudades?.filter((resp) => resp.provincia.id === provincia.id)} optionLabel="nombre" placeholder="Seleccione ciudad"></Dropdown>
-                </div>
-                <div className="item">
-                    <label htmlFor="tipoInstitucion">Tipo Institucion</label>
-                    <Dropdown id="tipoInstitucion" value={tipoInstitucion} onChange={(e) => onTipoInstitucionChange(e)} options={tiposInstituciones} optionLabel="nombre" placeholder="Seleccione tipo de institucion"></Dropdown>
-                </div>
-                <div className="actions">
-                    <Button label="Registrarse" icon="pi pi-check" className="p-button-blue " onClick={saveUser} />
+                    <div className="item">
+                        <label htmlFor="provincia" style={{ fontSize: "1.5rem" }}>
+                            Provincia
+                        </label>
+                        <Dropdown id="provincia" virtualScrollerOptions={{ fontSize: "1.5rem" }} panelStyle={{ fontSize: "1.5rem" }} value={provincia} onChange={(e) => onProvinciaChange(e)} options={provincias} optionLabel="nombre" placeholder="Selecione provincia"></Dropdown>
+                    </div>
+                    <div className="item">
+                        <label htmlFor="ciudad" style={{ fontSize: "1.5rem" }}>
+                            Ciudad
+                        </label>
+                        <Dropdown id="ciudad" inputStyle={{ fontSize: "1.5rem" }} value={ciudad} onChange={(e) => onCiudadChange(e)} options={ciudades?.filter((resp) => resp.provincia.id === provincia.id)} optionLabel="nombre" placeholder="Seleccione ciudad"></Dropdown>
+                    </div>
+                    <div className="item">
+                        <label htmlFor="tipoInstitucion" style={{ fontSize: "1.5rem" }}>
+                            Tipo Institucion
+                        </label>
+                        <Dropdown id="tipoInstitucion" style={{ fontSize: "1.5rem" }} value={tipoInstitucion} onChange={(e) => onTipoInstitucionChange(e)} options={tiposInstituciones} optionLabel="nombre" placeholder="Seleccione tipo de institucion"></Dropdown>
+                    </div>
+                    <div className="actions">
+                        <Button label="Registrarse" style={{ fontSize: "1.5rem" }} icon="pi pi-check" className="p-button-blue " onClick={saveUser} />
+                    </div>
                 </div>
             </div>
         </div>

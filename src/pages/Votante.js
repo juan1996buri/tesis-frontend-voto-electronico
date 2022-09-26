@@ -166,7 +166,7 @@ const Votante = () => {
         let _votantes;
         votanteService.deleteVotante(votante.id).then((res) => {
             if (res === 500) {
-                toast.current.show({ severity: "error", summary: "Error Message", detail: "votante no eliminado", life: 3000 });
+                toast.current.show({ severity: "error", summary: "Error Message", detail: "Votante no eliminado", life: 3000 });
             } else if (res === 401) {
                 history.push("/");
                 window.localStorage.removeItem("institucion");
@@ -174,7 +174,7 @@ const Votante = () => {
                 _votantes = votantes.filter((val) => val.id !== votante.id);
                 setVotantes(_votantes);
                 setVotante(emptyvotante);
-                toast.current.show({ severity: "success", summary: "Successful", detail: "votante eliminado", life: 3000 });
+                toast.current.show({ severity: "success", summary: "Successful", detail: "Votante eliminado", life: 3000 });
             }
         });
         setDeleteVotanteDialog(false);
@@ -206,7 +206,7 @@ const Votante = () => {
         selectedvotantes.map((res) =>
             votanteService.deleteVotante(res.id).then((res) => {
                 if (res === 500) {
-                    toast.current.show({ severity: "error", summary: "Error Message", detail: "votantes no eliminados", life: 3000 });
+                    toast.current.show({ severity: "error", summary: "Error Message", detail: "Votantes no eliminados", life: 3000 });
                 } else if (res === 401) {
                     window.localStorage.removeItem("institucion");
                     history.push("/");
@@ -214,7 +214,7 @@ const Votante = () => {
                     _votantes = votantes.filter((val) => !selectedvotantes.includes(val));
                     setVotantes(_votantes);
                     setSelectedvotantes(null);
-                    toast.current.show({ severity: "success", summary: "Successful", detail: "votantes eliminados", life: 3000 });
+                    toast.current.show({ severity: "success", summary: "Successful", detail: "Votantes eliminados", life: 3000 });
                 }
             })
         );

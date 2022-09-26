@@ -1,21 +1,23 @@
-.container {
-    background-color: rgb(212, 212, 211);
+.container_login_institucion {
+    background-color: rgb(6, 6, 128);
     width: 100vw;
     height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
+    position: relative;
+    overflow: hidden;
 }
 
-.container .container_login {
+.container_login___ {
     background-color: rgb(253, 252, 252);
     border-radius: 1rem;
     display: flex;
     padding: 4rem;
     flex-direction: column;
     justify-content: space-between;
-    width: 40rem;
-    height: 25rem;
+    width: 50rem;
+    height: 30rem;
 }
 
 .item {
@@ -32,15 +34,4 @@
 
 #registrarse {
     margin: 80%;
-}
-
-.container_login_votante {
-    background-color: rgb(253, 252, 252);
-    border-radius: 1rem;
-    display: flex;
-    padding: 6rem;
-    flex-direction: column;
-    justify-content: space-between;
-    width: 40rem;
-    height: 25rem;
 }

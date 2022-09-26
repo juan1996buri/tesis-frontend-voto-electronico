@@ -102,7 +102,7 @@ const Recinto = () => {
                 });
                 const index = findIndexById(recinto.id);
                 _recintos[index] = _recinto;
-                toast.current.show({ severity: "success", summary: "Successful", detail: "recinto Updated", life: 3000 });
+                toast.current.show({ severity: "success", summary: "Successful", detail: "Recinto actualizado", life: 3000 });
                 setRecintos(_recintos);
             } else {
                 recintoService.postRecinto(recinto).then((res) => {
@@ -115,7 +115,7 @@ const Recinto = () => {
                     }
                 });
 
-                toast.current.show({ severity: "success", summary: "Successful", detail: "recinto Created", life: 3000 });
+                toast.current.show({ severity: "success", summary: "Successful", detail: "Recinto creado", life: 3000 });
             }
 
             setRecintoDialog(false);
@@ -140,7 +140,7 @@ const Recinto = () => {
         const object = new RecintoService();
         object.deleteRecinto(recinto.id).then((res) => {
             if (res === 500) {
-                toast.current.show({ severity: "error", summary: "Error Message", detail: "recinto no eliminado", life: 3000 });
+                toast.current.show({ severity: "error", summary: "Error Message", detail: "Recinto no eliminado", life: 3000 });
             } else if (res === 401) {
                 history.push("/");
                 window.localStorage.removeItem("institucion");
@@ -148,7 +148,7 @@ const Recinto = () => {
                 _recintos = recintos.filter((val) => val.id !== recinto.id);
                 setRecintos(_recintos);
                 setRecinto(emptyRecinto);
-                toast.current.show({ severity: "success", summary: "Successful", detail: "recinto Deleted", life: 3000 });
+                toast.current.show({ severity: "success", summary: "Successful", detail: "Recinto eliminado", life: 3000 });
             }
         });
         setDeleterecintoDialog(false);
@@ -180,7 +180,7 @@ const Recinto = () => {
         selectedRecintos.map((res) =>
             object.deleteRecinto(res.id).then((res) => {
                 if (res === 500) {
-                    toast.current.show({ severity: "error", summary: "Error Message", detail: "recintos no eliminadas", life: 3000 });
+                    toast.current.show({ severity: "error", summary: "Error Message", detail: "Recintos no eliminados", life: 3000 });
                 } else if (res === 401) {
                     history.push("/");
                     window.localStorage.removeItem("institucion");
@@ -220,17 +220,14 @@ const Recinto = () => {
         setCiudad(ciudades.find((item) => item.provincia.id === e.value.id));
         const object = new CiudadService();
         object.getCiudades(setCiudades);
-        //getCiudades(setCiudades, id);
-
-        //setCiudades(ciudades.filter((item) => item.provincia.id === id));
     };
 
     const leftToolbarTemplate = () => {
         return (
             <React.Fragment>
                 <div className="my-2">
-                    <Button label="New" icon="pi pi-plus" className="p-button-success mr-2" onClick={openNew} />
-                    <Button label="Delete" icon="pi pi-trash" className="p-button-danger" onClick={confirmDeleteSelected} disabled={!selectedRecintos || !selectedRecintos.length} />
+                    <Button label="Nuevo" icon="pi pi-plus" className="p-button-success mr-2" onClick={openNew} />
+                    <Button label="Eliminar" icon="pi pi-trash" className="p-button-danger" onClick={confirmDeleteSelected} disabled={!selectedRecintos || !selectedRecintos.length} />
                 </div>
             </React.Fragment>
         );
@@ -275,8 +272,7 @@ const Recinto = () => {
         return (
             <>
                 <span className="p-column-title">Ciudad</span>
-                {rowData.ciudad.nombre} <br />
-                {rowData.ciudad.provincia.nombre}
+                {rowData.ciudad.provincia.nombre}-{rowData.ciudad.nombre} <br />
             </>
         );
     };
@@ -300,30 +296,30 @@ const Recinto = () => {
 
     const header = (
         <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-            <h5 className="m-0">Manage recintos</h5>
+            <h5 className="m-0">Recintos</h5>
             <span className="block mt-2 md:mt-0 p-input-icon-left">
                 <i className="pi pi-search" />
-                <InputText type="search" onInput={(e) => setGlobalFilter(e.target.value)} placeholder="Search..." />
+                <InputText type="search" onInput={(e) => setGlobalFilter(e.target.value)} placeholder="Buscar..." />
             </span>
         </div>
     );
 
     const recintoDialogFooter = (
         <>
-            <Button label="Cancel" icon="pi pi-times" className="p-button-text" onClick={hideDialog} />
-            <Button label="Save" icon="pi pi-check" className="p-button-text" onClick={saveRecinto} />
+            <Button label="Cancelar" icon="pi pi-times" className="p-button-text" onClick={hideDialog} />
+            <Button label="Guardar" icon="pi pi-check" className="p-button-text" onClick={saveRecinto} />
         </>
     );
     const deleterecintoDialogFooter = (
         <>
             <Button label="No" icon="pi pi-times" className="p-button-text" onClick={hideDeleterecintoDialog} />
-            <Button label="Yes" icon="pi pi-check" className="p-button-text" onClick={deleterecinto} />
+            <Button label="Si" icon="pi pi-check" className="p-button-text" onClick={deleterecinto} />
         </>
     );
     const deleterecintosDialogFooter = (
         <>
             <Button label="No" icon="pi pi-times" className="p-button-text" onClick={hideDeleterecintosDialog} />
-            <Button label="Yes" icon="pi pi-check" className="p-button-text" onClick={deleteSelectedRecintos} />
+            <Button label="Si" icon="pi pi-check" className="p-button-text" onClick={deleteSelectedRecintos} />
         </>
     );
 
@@ -353,8 +349,8 @@ const Recinto = () => {
                         <Column selectionMode="multiple" headerStyle={{ width: "3rem" }}></Column>
                         <Column field="id" header="id" sortable body={codeBodyTemplate} headerStyle={{ width: "14%", minWidth: "10rem" }}></Column>
                         <Column field="nombre" header="Nombre" sortable body={nameBodyTemplate} headerStyle={{ width: "14%", minWidth: "10rem" }}></Column>
-                        <Column field="ciudad" header="Ciudad/Direccion" sortable body={cityBodyTemplate} headerStyle={{ width: "14%", minWidth: "10rem" }}></Column>
-                        <Column field="direccion" header="Direccion" sortable body={directionBodyTemplate} headerStyle={{ width: "14%", minWidth: "10rem" }}></Column>
+                        <Column field="ciudad" header="Provincia/Ciudad" sortable body={cityBodyTemplate} headerStyle={{ width: "14%", minWidth: "10rem" }}></Column>
+                        <Column field="direccion" header="Dirección" sortable body={directionBodyTemplate} headerStyle={{ width: "14%", minWidth: "10rem" }}></Column>
                         <Column field="celular" header="Celular" sortable body={phoneBodyTemplate} headerStyle={{ width: "14%", minWidth: "10rem" }}></Column>
 
                         <Column body={actionBodyTemplate}></Column>
@@ -368,7 +364,7 @@ const Recinto = () => {
                             {submitted && !recinto.nombre && <small className="p-invalid">Nombre es requerido</small>}
                         </div>
                         <div className="field">
-                            <label htmlFor="direccion">Direccion</label>
+                            <label htmlFor="direccion">Dirección</label>
                             <InputText id="direccion" value={recinto.direccion} onChange={(e) => onDirectionChange(e, "direccion")} required autoFocus className={classNames({ "p-invalid": submitted && !recinto.direccion })} />
                             {submitted && !recinto.direccion && <small className="p-invalid">Direccion es requerido</small>}
                         </div>

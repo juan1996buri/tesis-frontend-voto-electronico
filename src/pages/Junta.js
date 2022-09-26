@@ -210,8 +210,8 @@ const Junta = () => {
         return (
             <React.Fragment>
                 <div className="my-2">
-                    <Button label="New" icon="pi pi-plus" className="p-button-success mr-2" onClick={openNew} />
-                    <Button label="Delete" icon="pi pi-trash" className="p-button-danger" onClick={confirmDeleteSelected} disabled={!selectedjuntas || !selectedjuntas.length} />
+                    <Button label="Nuevo" icon="pi pi-plus" className="p-button-success mr-2" onClick={openNew} />
+                    <Button label="Eliminar" icon="pi pi-trash" className="p-button-danger" onClick={confirmDeleteSelected} disabled={!selectedjuntas || !selectedjuntas.length} />
                 </div>
             </React.Fragment>
         );
@@ -288,10 +288,10 @@ const Junta = () => {
 
     const header = (
         <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-            <h5 className="m-0">Manage juntas</h5>
+            <h5 className="m-0">Juntas</h5>
             <span className="block mt-2 md:mt-0 p-input-icon-left">
                 <i className="pi pi-search" />
-                <InputText type="search" onInput={(e) => setGlobalFilter(e.target.value)} placeholder="Search..." />
+                <InputText type="search" onInput={(e) => setGlobalFilter(e.target.value)} placeholder="Buscar..." />
             </span>
         </div>
     );
@@ -341,7 +341,7 @@ const Junta = () => {
                     >
                         <Column selectionMode="multiple" headerStyle={{ width: "3rem" }}></Column>
                         <Column field="id" header="id" sortable body={codeBodyTemplate} headerStyle={{ width: "14%", minWidth: "10rem" }}></Column>
-                        <Column field="numero" header="Numero" sortable body={numberBodyTemplate} headerStyle={{ width: "14%", minWidth: "10rem" }}></Column>
+                        <Column field="numero" header="Número" sortable body={numberBodyTemplate} headerStyle={{ width: "14%", minWidth: "10rem" }}></Column>
                         <Column field="presidente" header="Presidente" sortable body={presidentBodyTemplate} headerStyle={{ width: "14%", minWidth: "10rem" }}></Column>
                         <Column field="vicePresidente" header="VicePresidente" sortable body={vicePresidentBodyTemplate} headerStyle={{ width: "14%", minWidth: "10rem" }}></Column>
                         <Column field="secretario" header="Secretario" sortable body={secretaryBodyTemplate} headerStyle={{ width: "14%", minWidth: "10rem" }}></Column>
@@ -353,7 +353,7 @@ const Junta = () => {
                     <Dialog visible={juntaDialog} style={{ width: "450px" }} header="junta" modal className="p-fluid" footer={juntaDialogFooter} onHide={hideDialog}>
                         {junta.image && <img src={`assets/demo/images/junta/${junta.image}`} alt={junta.image} width="150" className="mt-0 mx-auto mb-5 block shadow-2" />}
                         <div className="field">
-                            <label htmlFor="numero">Numero</label>
+                            <label htmlFor="numero">Número</label>
                             <InputText id="numero" value={junta.numero} onChange={(e) => onNameChange(e, "numero")} required autoFocus className={classNames({ "p-invalid": submitted && !junta.numero })} />
                             {submitted && !junta.numero && <small className="p-invalid">Numero es requerido</small>}
                         </div>

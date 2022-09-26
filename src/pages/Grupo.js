@@ -106,7 +106,7 @@ const Grupo = () => {
                     }
                 });
 
-                toast.current.show({ severity: "success", summary: "Successful", detail: "grupo Created", life: 3000 });
+                toast.current.show({ severity: "success", summary: "Successful", detail: "Grupo creado", life: 3000 });
             }
 
             setGrupoDialog(false);
@@ -130,7 +130,7 @@ const Grupo = () => {
         const object = new GrupoService();
         object.deleteGrupo(grupo.id).then((res) => {
             if (res === 500) {
-                toast.current.show({ severity: "error", summary: "Error Message", detail: "grupo no eliminado" });
+                toast.current.show({ severity: "error", summary: "Error Message", detail: "Grupo no eliminado" });
             } else if (res === 401) {
                 history.push("/");
                 window.localStorage.removeItem("institucion");
@@ -139,7 +139,7 @@ const Grupo = () => {
                 setGrupos(_grupos);
                 setDeletegrupoDialog(false);
                 setGrupo(emptygrupo);
-                toast.current.show({ severity: "success", summary: "Successful", detail: "grupo eliminado", life: 3000 });
+                toast.current.show({ severity: "success", summary: "Successful", detail: "Grupo eliminado", life: 3000 });
             }
         });
     };
@@ -170,7 +170,7 @@ const Grupo = () => {
         selectedgrupos.map((res) =>
             object.deleteGrupo(res.id).then((res) => {
                 if (res === 500) {
-                    toast.current.show({ severity: "error", summary: "Error Message", detail: "grupos no eliminado" });
+                    toast.current.show({ severity: "error", summary: "Error Message", detail: "Grupos no eliminado" });
                 } else if (res === 401) {
                     history.push("/");
                     window.localStorage.removeItem("institucion");
@@ -179,7 +179,7 @@ const Grupo = () => {
                     setGrupos(_grupos);
                     setDeletegruposDialog(false);
                     setSelectedgrupos(null);
-                    toast.current.show({ severity: "success", summary: "Successful", detail: "grupos Deleted", life: 3000 });
+                    toast.current.show({ severity: "success", summary: "Successful", detail: "Grupos eliminados", life: 3000 });
                 }
             })
         );
@@ -203,8 +203,8 @@ const Grupo = () => {
         return (
             <React.Fragment>
                 <div className="my-2">
-                    <Button label="New" icon="pi pi-plus" className="p-button-success mr-2" onClick={openNew} />
-                    <Button label="Delete" icon="pi pi-trash" className="p-button-danger" onClick={confirmDeleteSelected} disabled={!selectedgrupos || !selectedgrupos.length} />
+                    <Button label="Nuevo" icon="pi pi-plus" className="p-button-success mr-2" onClick={openNew} />
+                    <Button label="Eliminar" icon="pi pi-trash" className="p-button-danger" onClick={confirmDeleteSelected} disabled={!selectedgrupos || !selectedgrupos.length} />
                 </div>
             </React.Fragment>
         );
@@ -257,30 +257,30 @@ const Grupo = () => {
 
     const header = (
         <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-            <h5 className="m-0">Manage grupos</h5>
+            <h5 className="m-0">Grupos</h5>
             <span className="block mt-2 md:mt-0 p-input-icon-left">
                 <i className="pi pi-search" />
-                <InputText type="search" onInput={(e) => setGlobalFilter(e.target.value)} placeholder="Search..." />
+                <InputText type="search" onInput={(e) => setGlobalFilter(e.target.value)} placeholder="Buscar..." />
             </span>
         </div>
     );
 
     const grupoDialogFooter = (
         <>
-            <Button label="Cancel" icon="pi pi-times" className="p-button-text" onClick={hideDialog} />
-            <Button label="Save" icon="pi pi-check" className="p-button-text" onClick={savegrupo} />
+            <Button label="Cancelar" icon="pi pi-times" className="p-button-text" onClick={hideDialog} />
+            <Button label="Guardar" icon="pi pi-check" className="p-button-text" onClick={savegrupo} />
         </>
     );
     const deletegrupoDialogFooter = (
         <>
             <Button label="No" icon="pi pi-times" className="p-button-text" onClick={hideDeletegrupoDialog} />
-            <Button label="Yes" icon="pi pi-check" className="p-button-text" onClick={deletegrupo} />
+            <Button label="Si" icon="pi pi-check" className="p-button-text" onClick={deletegrupo} />
         </>
     );
     const deletegruposDialogFooter = (
         <>
             <Button label="No" icon="pi pi-times" className="p-button-text" onClick={hideDeletegruposDialog} />
-            <Button label="Yes" icon="pi pi-check" className="p-button-text" onClick={deleteSelectedgrupos} />
+            <Button label="Si" icon="pi pi-check" className="p-button-text" onClick={deleteSelectedgrupos} />
         </>
     );
 
@@ -304,7 +304,7 @@ const Grupo = () => {
                         paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} grupos"
                         globalFilter={globalFilter}
-                        emptyMessage="No grupos found."
+                        emptyMessage="No existe grupos"
                         header={header}
                         responsiveLayout="scroll"
                     >
