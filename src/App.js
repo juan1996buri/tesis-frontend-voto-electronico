@@ -5,16 +5,6 @@ import LayoutInstituto from "./pages/layout/LayoutInstituto";
 import LoginInstitucion from "./pages/LoginInstitucion";
 import RegistrarInstitucion from "./pages/RegistrarInstitucion";
 
-import PrimeReact from "primereact/api";
-
-import "primereact/resources/primereact.css";
-import "primeicons/primeicons.css";
-import "primeflex/primeflex.css";
-import "prismjs/themes/prism-coy.css";
-import "./assets/demo/flags/flags.css";
-import "./assets/demo/Demos.scss";
-import "./assets/layout/layout.scss";
-import "./App.scss";
 import OpcionesInicioSesion from "./pages/OpcionesInicioSesion";
 import LoginVotante from "./pages/LoginVotante";
 import NotFound from "./pages/NotFound";
@@ -23,10 +13,8 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import LayoutVotante from "./pages/layout/LayoutVotante";
 
 // <Route component={NotFound} />
-const App = () => {
-    // PrimeReact.ripple = true;
-    // const data = JSON.parse(window.localStorage.getItem("institucion"));
 
+const App = () => {
     return (
         <LocalizationProvider dateAdapter={AdapterDateFns}>
             <div>

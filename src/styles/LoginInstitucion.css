@@ -35,3 +35,7 @@
 #registrarse {
     margin: 80%;
 }
+.container_login_institucion_header {
+    text-align: center;
+    margin-top: -120px;
+}

@@ -9,16 +9,21 @@
     overflow: auto;
 }
 
-.container_register {
+.container_register__ {
     background-color: rgb(253, 252, 252);
     border-radius: 1rem;
     display: flex;
     padding: 4rem;
     justify-content: space-between;
     width: 60rem;
-    height: 70rem;
+    height: 72rem;
+}
+
+.container_register_header {
+    margin-top: 3rem;
 }
 .container_register_items {
+    margin-top: 3rem;
     display: flex;
     flex-direction: column;
     justify-content: space-between;

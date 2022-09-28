@@ -30,6 +30,19 @@ export class UserService {
             });
     }
 
+    postCambiarPassword(state) {
+        return axios
+            .post(url, state, { headers: authHeader() })
+            .then((res) => {
+                return res.status;
+            })
+            .catch(function (error) {
+                if (error.response) {
+                    return error.response.status;
+                }
+            });
+    }
+
     postUserLogin(state) {
         return axios
             .post(url + "login", state)

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import "../styles/Sufragar.css";
-import Nulo from "../images/Nulo.png";
 import { Button } from "primereact/button";
 import { useHistory } from "react-router-dom";
 import { VotanteService } from "../service/VotanteService";
@@ -9,6 +8,7 @@ import { CandidatoService } from "../service/CandidatoService";
 import { VotoService } from "../service/VotoService";
 import { ProcesoEleccionService } from "../service/ProcesoEleccionService";
 import Swal from "sweetalert2";
+import Avatar from "../images/Avatar.jpeg";
 
 const Sufragar = () => {
     const history = useHistory();
@@ -33,11 +33,11 @@ const Sufragar = () => {
             const procesoEleccion = new ProcesoEleccionService();
             votanteService.getVotante(data.cedula).then((votante) => {
                 setVotante(votante);
-                procesoEleccion.getProcesoEleccionAVotar(votante).then((proceso) => {
-                    setProcesoEleccion(proceso[0]);
-                    if (proceso[0]?.activo === true) {
+                procesoEleccion.getProcesoEleccionAVotar(votante).then((_procesos) => {
+                    setProcesoEleccion(_procesos[0]);
+                    if (_procesos[0]?.activo === true) {
                         listaService.getListasAVotar(votante).then((lista) => {
-                            const listaAVotar = lista.filter((item) => item.procesoEleccion.nombre === proceso[0].nombre);
+                            const listaAVotar = lista.filter((item) => item.procesoEleccion.id === _procesos[0].id);
                             setListas(listaAVotar);
                         });
                         candidatosService.getCandidatosAVotar(votante).then((candidato) => {
@@ -71,21 +71,6 @@ const Sufragar = () => {
                 }).then((res) => {
                     if (res.isConfirmed) {
                         window.localStorage.removeItem("institucion");
-
-                        history.push("/");
-                    }
-                });
-            } else {
-                Swal.fire({
-                    position: "center",
-                    icon: "error",
-                    title: "YA HAS VOTADO EN ESTE PRCESO",
-                    confirmButtonText: "SALIR",
-                    showConfirmButton: true,
-                }).then((res) => {
-                    if (res.isConfirmed) {
-                        window.localStorage.removeItem("institucion");
-
                         history.push("/");
                     }
                 });
@@ -95,7 +80,7 @@ const Sufragar = () => {
     return (
         <div className="container_sufragar">
             <div className="title-sufragar " style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "2rem" }}>
-                <img src={procesoEleccion.institucion?.logo} alt="logo" style={{ width: "3rem", height: "3rem", borderRadius: "50%" }} />
+                <img src={procesoEleccion.institucion?.logo === null ? Avatar : procesoEleccion.institucion?.logo} alt="logo" style={{ width: "3rem", height: "3rem", borderRadius: "50%" }} />
                 <h1 style={{ fontWeight: "bold" }}>{procesoEleccion.institucion?.nombre}</h1>
             </div>
             <div className="title-sufragar">

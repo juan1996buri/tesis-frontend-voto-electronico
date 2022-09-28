@@ -15,7 +15,11 @@ const Padron = () => {
     useEffect(() => {
         if (data) {
             const votanteService = new VotanteService();
-            votanteService.getVotantes(data.ruc, setVotantes).then((_votantes) => {});
+            votanteService.getVotantes(data.ruc, setVotantes).then((_votantes) => {
+                if (_votantes !== 404) {
+                    setVotantes(_votantes.filter((item) => item.activo === true));
+                }
+            });
 
             const grupoService = new GrupoService();
             grupoService.getGrupos(data.ruc, setGrupos);

@@ -158,7 +158,7 @@ const LayoutInstituto = () => {
         },
         {
             label: "Votantes ",
-            items: [{ label: "Votantes", icon: "pi pi-fw pi-user-edit", to: `${url}/votantes` }],
+            items: [{ label: "Usuarios", icon: "pi pi-fw pi-user-edit", to: `${url}/votantes` }],
         },
         {
             label: "Candidatos ",

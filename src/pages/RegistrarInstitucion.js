@@ -13,12 +13,11 @@ import { Password } from "primereact/password";
 import { Toast } from "primereact/toast";
 import { UserService } from "../service/UserService";
 import logo from "../images/logo.png";
-import { fontSize } from "@mui/system";
 
 const RegistrarInstitucion = () => {
     const history = useHistory();
     const toast = useRef(null);
-    const [user, setUser] = useState({ ruc: "", password: "" });
+    const user = { ruc: "", password: "" };
     const [submitted, setSubmitted] = useState(false);
     const [tipoInstitucion, setTipoInstitucion] = useState({});
     const [tiposInstituciones, setTipoInstituciones] = useState({});
@@ -57,6 +56,16 @@ const RegistrarInstitucion = () => {
         setInstitucion(_institucion);
     };
 
+    const onRucChange = (e, name) => {
+        let regex = new RegExp("^[1-9]*$");
+        if (regex.test(e.target.value)) {
+            const val = (e.target && e.target.value) || "";
+            let _institucion = { ...institucion };
+            _institucion[`${name}`] = val;
+            setInstitucion(_institucion);
+        }
+    };
+
     const saveUser = () => {
         setSubmitted(true);
         if (password !== repeatPassword) {
@@ -67,10 +76,6 @@ const RegistrarInstitucion = () => {
                 institucion.tipoInstitucion = tipoInstitucion;
                 user.password = password;
                 user.ruc = institucion.ruc;
-
-                console.log(institucion);
-                console.log(user);
-
                 const userService = new UserService();
                 const institucionService = new InstitucionService();
                 userService.postUser(user).then((res) =>
@@ -95,15 +100,16 @@ const RegistrarInstitucion = () => {
         const object = new CiudadService();
         object.getCiudades(setCiudades);
     };
+
     const onTipoInstitucionChange = (e) => {
         const { value } = e.target;
         setTipoInstitucion(value);
     };
 
     return (
-        <div className="container_register_">
+        <div className="container_register_ col-12 ">
             <Toast ref={toast} />
-            <div className="container_register p-fluid">
+            <div className="container_register__ p-fluid ">
                 <div className="container_register_header">
                     <img src={logo} style={{ width: "20rem" }} alt="logo" />
                 </div>
@@ -112,7 +118,7 @@ const RegistrarInstitucion = () => {
                         <label style={{ fontSize: "1.5rem" }} htmlFor="ruc">
                             Ruc
                         </label>
-                        <InputText style={{ fontSize: "1.5rem" }} id="ruc" onChange={(e) => onInputChange(e, "ruc")} required autoFocus className={classNames({ "p-invalid ": submitted && !institucion.ruc })} />
+                        <InputText style={{ fontSize: "1.5rem" }} id="ruc" value={institucion.ruc} onChange={(e) => onRucChange(e, "ruc")} required autoFocus className={classNames({ "p-invalid ": submitted && !institucion.ruc })} />
                         {submitted && !institucion.ruc && <small className="p-invalid">Se requiere un nombre</small>}
                     </div>
                     <div className="item field">
@@ -142,21 +148,21 @@ const RegistrarInstitucion = () => {
                         <Password id="password" inputStyle={{ fontSize: "1.5rem" }} value={repeatPassword} onChange={(e) => setRepeatPassword(e.target.value)} toggleMask required autoFocus className={classNames({ "p-invalid ": submitted && !user.password })}></Password>
                     </div>
 
-                    <div className="item">
+                    <div className="item_provincia">
                         <label htmlFor="provincia" style={{ fontSize: "1.5rem" }}>
                             Provincia
                         </label>
-                        <Dropdown id="provincia" virtualScrollerOptions={{ fontSize: "1.5rem" }} panelStyle={{ fontSize: "1.5rem" }} value={provincia} onChange={(e) => onProvinciaChange(e)} options={provincias} optionLabel="nombre" placeholder="Selecione provincia"></Dropdown>
+                        <Dropdown id="provincia" value={provincia} onChange={(e) => onProvinciaChange(e)} options={provincias} optionLabel="nombre" placeholder="Selecione provincia"></Dropdown>
                     </div>
                     <div className="item">
                         <label htmlFor="ciudad" style={{ fontSize: "1.5rem" }}>
                             Ciudad
                         </label>
-                        <Dropdown id="ciudad" inputStyle={{ fontSize: "1.5rem" }} value={ciudad} onChange={(e) => onCiudadChange(e)} options={ciudades?.filter((resp) => resp.provincia.id === provincia.id)} optionLabel="nombre" placeholder="Seleccione ciudad"></Dropdown>
+                        <Dropdown id="ciudad" value={ciudad} onChange={(e) => onCiudadChange(e)} options={ciudades?.filter((resp) => resp.provincia.id === provincia.id)} optionLabel="nombre" placeholder="Seleccione ciudad"></Dropdown>
                     </div>
                     <div className="item">
                         <label htmlFor="tipoInstitucion" style={{ fontSize: "1.5rem" }}>
-                            Tipo Institucion
+                            Tipo de institución
                         </label>
                         <Dropdown id="tipoInstitucion" style={{ fontSize: "1.5rem" }} value={tipoInstitucion} onChange={(e) => onTipoInstitucionChange(e)} options={tiposInstituciones} optionLabel="nombre" placeholder="Seleccione tipo de institucion"></Dropdown>
                     </div>

@@ -2,8 +2,6 @@ import axios from "axios";
 import authHeader from "./auth-header";
 
 const url = "http://localhost:9090/api/v1.0/votante/";
-//const config = authHeader();
-//const institucion = JSON.parse(localStorage.getItem("institucion"));
 
 export class VotanteService {
     getVotantes(ruc, state) {
@@ -64,6 +62,7 @@ export class VotanteService {
                             cedula: data.cedula,
                         })
                     );
+                    return data;
                 }
             })
             .catch(function (error) {

@@ -43,7 +43,7 @@ const LoginInstitucion = () => {
         <div className="container_login_institucion">
             <Toast ref={toast} />
             <div className="container_login___ p-fluid">
-                <div className="container_login_votante_header">
+                <div className="container_login_institucion_header">
                     <img src={logo} style={{ width: "17rem" }} alt="logo" />
                 </div>
                 <div className="item">
@@ -57,7 +57,20 @@ const LoginInstitucion = () => {
                     <label htmlFor="password" style={{ fontSize: "1.5rem" }}>
                         Contraseña
                     </label>
-                    <Password style={{ fontSize: "1.5rem" }} size={"12rem"} id="password" name="password" value={user?.password} onChange={(e) => onInputChange(e)} feedback={false} toggleMask required autoFocus className={classNames({ "p-invalid ": submitted && !user.password })} />
+                    <Password
+                        inputStyle={{ fontSize: "1.5rem" }}
+                        style={{ fontSize: "1.5rem" }}
+                        size={"12rem"}
+                        id="password"
+                        name="password"
+                        value={user?.password}
+                        onChange={(e) => onInputChange(e)}
+                        feedback={false}
+                        toggleMask
+                        required
+                        autoFocus
+                        className={classNames({ "p-invalid ": submitted && !user.password })}
+                    />
                     {submitted && !user.password && <small className="p-invalid">Se requiere una contraseña</small>}
                 </div>
                 <div className="item">

@@ -1,21 +1,23 @@
-.container_ {
+.container_op {
     background-color: rgb(6, 6, 128);
     width: 100vw;
     height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
+    position: relative;
+    overflow: hidden;
 }
 
-.container_ .container_opcion {
+.container_op .container_opcion {
     background-color: rgb(253, 252, 252);
     border-radius: 1rem;
     display: flex;
     padding: 4rem;
     flex-direction: column;
     justify-content: space-between;
-    width: 60rem;
-    height: 40rem;
+    width: 55rem;
+    height: 35rem;
     text-align: center;
     position: relative;
 }
@@ -23,16 +25,17 @@
     margin-top: -10rem;
 }
 
-.opcion {
+.opcion_ {
     width: 100%;
     border-style: solid;
     border-width: 2px;
     border-color: rgb(212, 212, 211);
     border-radius: 1rem;
     padding: 1rem;
+    height: 5.2rem;
 }
 
-.opcion:hover {
+.opcion_:hover {
     background-color: #f8ed13;
 }
 .container_item_opcion_ {

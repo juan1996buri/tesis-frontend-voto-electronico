@@ -41,8 +41,9 @@ const Ausentes = () => {
                 const votanteService = new VotanteService();
                 votanteService.getVotantes(data.ruc, setVotantes).then((_votantes) => {
                     if (_votantes !== 404) {
+                        let _activoVotantes = _votantes.filter((item) => item.activo === true);
                         setVotantes(
-                            _votantes.filter((_votante) => {
+                            _activoVotantes.filter((_votante) => {
                                 let res = votos.find((voto) => {
                                     return voto.votante.id === _votante.id;
                                 });
@@ -83,6 +84,14 @@ const Ausentes = () => {
             <>
                 <span className="p-column-title">Nombre</span>
                 {rowData.apellido}
+            </>
+        );
+    };
+    const codigoBodyTemplate = (rowData) => {
+        return (
+            <>
+                <span className="p-column-title">Codigo</span>
+                {rowData.codigo}
             </>
         );
     };
@@ -137,13 +146,14 @@ const Ausentes = () => {
                                     className="datatable-responsive"
                                     paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                                     currentPageReportTemplate="Showing {first} to {last} of {totalRecords} ausentes"
-                                    emptyMessage="No ausentes found."
+                                    emptyMessage="No existe ausentes"
                                     header={header(grupo)}
                                     responsiveLayout="scroll"
                                 >
                                     <Column field="id" header="id" sortable body={codeBodyTemplate} headerStyle={{ width: "14%", minWidth: "10rem" }}></Column>
                                     <Column field="nombre" header="Nombre" sortable body={nombreBodyTemplate} headerStyle={{ width: "14%", minWidth: "10rem" }}></Column>
                                     <Column field="apellido" header="Apellido" sortable body={apellidoBodyTemplate} headerStyle={{ width: "14%", minWidth: "10rem" }}></Column>
+                                    <Column field="codigo" header="Código" sortable body={codigoBodyTemplate} headerStyle={{ width: "14%", minWidth: "10rem" }}></Column>
                                     <Column field="junta" header="Junta" sortable body={juntaBodyTemplate} headerStyle={{ width: "14%", minWidth: "10rem" }}></Column>
                                     <Column field="recinto" header="Recinto" sortable body={recintoBodyTemplate} headerStyle={{ width: "14%", minWidth: "10rem" }}></Column>
 

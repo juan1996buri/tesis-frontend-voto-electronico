@@ -2,8 +2,6 @@ import axios from "axios";
 import authHeader from "./auth-header";
 
 const url = "http://localhost:9090/api/v1.0/voto/";
-//const config = authHeader();
-//const institucion = JSON.parse(localStorage.getItem("institucion"));
 
 export class VotoService {
     getVotos(ruc) {

@@ -26,16 +26,13 @@ const LayoutVotante = () => {
     const [layoutColorMode, setLayoutColorMode] = useState("light");
     const [inputStyle, setInputStyle] = useState("outlined");
     const [ripple, setRipple] = useState(false);
-    const [staticMenuInactive, setStaticMenuInactive] = useState(true);
     const [overlayMenuActive, setOverlayMenuActive] = useState(false);
     const [mobileMenuActive, setMobileMenuActive] = useState(false);
-    const [mobileTopbarMenuActive, setMobileTopbarMenuActive] = useState(false);
     const copyTooltipRef = useRef();
     const location = useLocation();
     PrimeReact.ripple = false;
 
     let menuClick = false;
-    let mobileTopbarMenuClick = false;
 
     const { path } = useRouteMatch();
 
@@ -74,11 +71,6 @@ const LayoutVotante = () => {
             setMobileMenuActive(false);
         }
 
-        if (!mobileTopbarMenuClick) {
-            setMobileTopbarMenuActive(false);
-        }
-
-        mobileTopbarMenuClick = false;
         menuClick = false;
     };
 
@@ -95,7 +87,7 @@ const LayoutVotante = () => {
     const wrapperClass = classNames("layout-wrapper", {
         "layout-overlay": layoutMode === "overlay",
         "layout-static": layoutMode === "static",
-        "layout-static-sidebar-inactive": staticMenuInactive && layoutMode === "static",
+        "layout-static-sidebar-inactive": true && layoutMode === "static",
         "layout-overlay-sidebar-active": overlayMenuActive && layoutMode === "overlay",
         "layout-mobile-sidebar-active": mobileMenuActive,
         "p-input-filled": inputStyle === "filled",

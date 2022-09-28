@@ -25,8 +25,8 @@
     padding: 4rem;
     flex-direction: column;
     justify-content: space-between;
-    width: 40rem;
-    height: 25rem;
+    width: 400px;
+    height: 250px;
 }
 
 .item {
@@ -57,5 +57,5 @@
 }
 .container_login_votante_header {
     text-align: center;
-    margin-top: -15rem;
+    margin-top: -130px;
 }

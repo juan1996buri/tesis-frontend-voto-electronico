@@ -221,14 +221,6 @@ const Votante = () => {
         setDeleteVotantesDialog(false);
     };
 
-    const onNameChange = (e, name) => {
-        const val = (e.target && e.target.value) || "";
-        let _votante = { ...votante };
-        _votante[`${name}`] = val;
-
-        setVotante(_votante);
-    };
-
     const leftToolbarTemplate = () => {
         return (
             <React.Fragment>
@@ -366,6 +358,33 @@ const Votante = () => {
         </>
     );
 
+    const onNameChange = (e, name) => {
+        let regex = new RegExp("^[a-zA-Z ]*$");
+        if (regex.test(e.target.value)) {
+            const val = (e.target && e.target.value) || "";
+            let _votante = { ...votante };
+            _votante[`${name}`] = val;
+            setVotante(_votante);
+        }
+    };
+
+    const onCedulaChange = (e, name) => {
+        const val = (e.target && e.target.value) || "";
+        let _votante = { ...votante };
+        _votante[`${name}`] = val;
+
+        setVotante(_votante);
+    };
+    const onCelularChange = (e, name) => {
+        let regex = new RegExp("^[1-9]*$");
+        if (regex.test(e.target.value)) {
+            const val = (e.target && e.target.value) || "";
+            let _votante = { ...votante };
+            _votante[`${name}`] = val;
+
+            setVotante(_votante);
+        }
+    };
     return (
         <div className="grid crud-demo">
             <div className="col-12">
@@ -406,13 +425,13 @@ const Votante = () => {
                     <Dialog visible={votanteDialog} style={{ width: "450px" }} header="Votante" modal className="p-fluid" footer={votanteDialogFooter} onHide={hideDialog}>
                         {votante.image && <img src={`assets/demo/images/votante/${votante.image}`} alt={votante.image} width="150" className="mt-0 mx-auto mb-5 block shadow-2" />}
                         <div className="field">
-                            <label htmlFor="cedula">Cedula o Pasaporte</label>
-                            {activeCedula === true ? <InputText id="cedula" value={votante.cedula} onChange={(e) => onNameChange(e, "cedula")} required autoFocus className={classNames({ "p-invalid": submitted && !votante.cedula })} /> : <h5 style={{ marginTop: "-0.001rem" }}>{votante.cedula}</h5>}
+                            <label htmlFor="cedula">Cédula o Pasaporte</label>
+                            {activeCedula === true ? <InputText id="cedula" value={votante.cedula} onChange={(e) => onCedulaChange(e, "cedula")} required autoFocus className={classNames({ "p-invalid": submitted && !votante.cedula })} /> : <h5 style={{ marginTop: "-0.001rem" }}>{votante.cedula}</h5>}
                             {submitted && !votante.cedula && <small className="p-invalid">Cedula es requerido</small>}
                         </div>
                         <div className="field">
                             <label htmlFor="nombre">Nombre</label>
-                            <InputText id="nombre" value={votante.nombre} onChange={(e) => onNameChange(e, "nombre")} required autoFocus className={classNames({ "p-invalid": submitted && !votante.nombre })} />
+                            <InputText type="text" id="nombre" value={votante.nombre} onChange={(e) => onNameChange(e, "nombre")} required autoFocus className={classNames({ "p-invalid": submitted && !votante.nombre })} />
                             {submitted && !votante.nombre && <small className="p-invalid">Nombre es requerido</small>}
                         </div>
                         <div className="field">
@@ -422,7 +441,7 @@ const Votante = () => {
                         </div>
                         <div className="field">
                             <label htmlFor="celular">Celular</label>
-                            <InputText id="celular" value={votante.celular} onChange={(e) => onNameChange(e, "celular")} required autoFocus className={classNames({ "p-invalid": submitted && !votante.celular })} />
+                            <InputText id="celular" value={votante.celular} onChange={(e) => onCelularChange(e, "celular")} required autoFocus className={classNames({ "p-invalid": submitted && !votante.celular })} />
                             {submitted && !votante.celular && <small className="p-invalid">Celular es requerido</small>}
                         </div>
 
