@@ -79,8 +79,8 @@ const Sufragar = () => {
     };
     return (
         <div className="container_sufragar">
-            <div className="title-sufragar " style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "2rem" }}>
-                <img src={procesoEleccion.institucion?.logo === null ? Avatar : procesoEleccion.institucion?.logo} alt="logo" style={{ width: "3rem", height: "3rem", borderRadius: "50%" }} />
+            <div className="title-sufragar " style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+                <img src={procesoEleccion.institucion?.logo === null ? Avatar : procesoEleccion.institucion?.logo} alt="logo" style={{ width: "7rem", height: "7rem", borderRadius: "50%" }} />
                 <h1 style={{ fontWeight: "bold" }}>{procesoEleccion.institucion?.nombre}</h1>
             </div>
             <div className="title-sufragar">

@@ -78,6 +78,8 @@ const TipoInstitucion = () => {
                     if (res === 401) {
                         window.localStorage.removeItem("institucion");
                         history.push("/");
+                    } else if (res === 500) {
+                        return toast.current.show({ severity: "error", summary: "Error Message", detail: "El tipo de institucion ya existe", life: 3000 });
                     }
                 });
                 const index = findIndexById(tipoInstitucion.id);
@@ -90,12 +92,14 @@ const TipoInstitucion = () => {
                     if (res === 401) {
                         window.localStorage.removeItem("institucion");
                         history.push("/");
+                    } else if (res === 500) {
+                        return toast.current.show({ severity: "error", summary: "Error Message", detail: "El tipo de institucion ya existe", life: 3000 });
                     } else {
+                        toast.current.show({ severity: "success", summary: "Successful", detail: "tipoInstitucion Created", life: 3000 });
                         _tipoInstitucions.push(res);
                         setTipoInstitucions(_tipoInstitucions);
                     }
                 });
-                toast.current.show({ severity: "success", summary: "Successful", detail: "tipoInstitucion Created", life: 3000 });
             }
 
             setTipoInstitucionDialog(false);

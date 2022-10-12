@@ -57,7 +57,7 @@ const RegistrarInstitucion = () => {
     };
 
     const onRucChange = (e, name) => {
-        let regex = new RegExp("^[1-9]*$");
+        let regex = new RegExp("^[0-9]*$");
         if (regex.test(e.target.value)) {
             const val = (e.target && e.target.value) || "";
             let _institucion = { ...institucion };

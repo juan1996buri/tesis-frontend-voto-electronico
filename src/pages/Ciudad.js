@@ -86,6 +86,8 @@ const Ciudad = () => {
                     if (res === 401) {
                         window.localStorage.removeItem("institucion");
                         history.push("/");
+                    } else if (res === 500) {
+                        return toast.current.show({ severity: "error", summary: "Error Message", detail: "Esta ciudad ya existe", life: 3000 });
                     }
                 });
                 const index = findIndexById(ciudad.id);
@@ -97,13 +99,14 @@ const Ciudad = () => {
                     if (res === 401) {
                         window.localStorage.removeItem("institucion");
                         history.push("/");
+                    } else if (res === 500) {
+                        toast.current.show({ severity: "error", summary: "Error Message", detail: "Esta ciudad ya existe", life: 3000 });
                     } else {
+                        toast.current.show({ severity: "success", summary: "Successful", detail: "Ciudad creada", life: 3000 });
                         _ciudades.push({ ...res });
                         setCiudades(_ciudades);
                     }
                 });
-
-                toast.current.show({ severity: "success", summary: "Successful", detail: "Ciudad creada", life: 3000 });
             }
 
             setCiudadDialog(false);

@@ -5,10 +5,17 @@ const url = "http://localhost:9090/api/v1.0/ciudad/";
 
 export class CiudadService {
     getCiudades = async (state) => {
-        return axios.get(url).then((resp) => {
-            state(resp.data.result);
-            return resp.data.result;
-        });
+        return axios
+            .get(url)
+            .then((resp) => {
+                state(resp.data.result);
+                return resp.data.result;
+            })
+            .catch(function (error) {
+                if (error.response) {
+                    return error.response.status;
+                }
+            });
     };
 
     postCiudad = async (provincia) => {
@@ -27,7 +34,11 @@ export class CiudadService {
     };
 
     updateCiudad = async (provincia) => {
-        return axios.put(url, provincia, { headers: authHeader() });
+        return axios.put(url, provincia, { headers: authHeader() }).catch(function (error) {
+            if (error.response) {
+                return error.response.status;
+            }
+        });
     };
 
     deleteCiudad = async (id) => {

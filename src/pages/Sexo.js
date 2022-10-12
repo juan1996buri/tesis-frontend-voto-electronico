@@ -75,6 +75,8 @@ const Sexo = () => {
                     if (res === 401) {
                         window.localStorage.removeItem("institucion");
                         history.push("/");
+                    } else if (res === 500) {
+                        return toast.current.show({ severity: "error", summary: "Error Message", detail: "El sexo ya existe", life: 3000 });
                     }
                 });
                 const index = findIndexById(sexo.id);
@@ -86,13 +88,14 @@ const Sexo = () => {
                     if (res === 401) {
                         window.localStorage.removeItem("institucion");
                         history.push("/");
+                    } else if (res === 500) {
+                        return toast.current.show({ severity: "error", summary: "Error Message", detail: "El sexo ya existe", life: 3000 });
                     } else {
+                        toast.current.show({ severity: "success", summary: "Successful", detail: "Sexo creado", life: 3000 });
                         _sexos.push(res);
                         setSexos(_sexos);
                     }
                 });
-
-                toast.current.show({ severity: "success", summary: "Successful", detail: "Sexo creado", life: 3000 });
             }
 
             setSexoDialog(false);

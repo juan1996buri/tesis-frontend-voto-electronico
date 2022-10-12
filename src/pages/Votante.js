@@ -109,7 +109,6 @@ const Votante = () => {
             let _votantes = [...votantes];
             let _votante = { ...votante };
             if (votante.id) {
-                console.log(votante);
                 votanteService.updateVotante(votante).then((res) => {
                     if (res === 401) {
                         window.localStorage.removeItem("institucion");
@@ -125,13 +124,15 @@ const Votante = () => {
                     if (res === 401) {
                         window.localStorage.removeItem("institucion");
                         history.push("/");
+                    } else if (res === 500) {
+                        toast.current.show({ severity: "error", summary: "Error Message", detail: "Este usuario ya existe", life: 3000 });
                     } else {
+                        toast.current.show({ severity: "success", summary: "Successful", detail: "Votante creado", life: 3000 });
+
                         _votantes.push({ ...res });
                         setVotantes(_votantes);
                     }
                 });
-
-                toast.current.show({ severity: "success", summary: "Successful", detail: "Votante creado", life: 3000 });
             }
 
             setCodigo("");
@@ -376,7 +377,7 @@ const Votante = () => {
         setVotante(_votante);
     };
     const onCelularChange = (e, name) => {
-        let regex = new RegExp("^[1-9]*$");
+        let regex = new RegExp("^[0-9]*$");
         if (regex.test(e.target.value)) {
             const val = (e.target && e.target.value) || "";
             let _votante = { ...votante };

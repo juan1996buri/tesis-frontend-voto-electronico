@@ -1,5 +1,6 @@
 .container_register_ {
-    background-color: rgb(6, 6, 128);
+    background-image: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), url(../images/Fondo5.jpg);
+    background-size: cover;
     width: 100vw;
     height: 100vh;
     display: flex;
